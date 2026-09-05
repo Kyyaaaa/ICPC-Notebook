@@ -1,3 +1,3 @@
 # ICPC Notebook
 
-Just a normal ICPC team's notebook. 
+Tks UIT Baka for the template
