@@ -1,13 +1,18 @@
 {
   "jobname": "Notebook",
   "md5": "3A4F8D88EA1EAC117F98223609194CB9",
-  "timestamp": "20260905111046",
+  "timestamp": "20260905160212",
   "cachefiles": [
     "215923540C9409E0F8870F34D298A0B5.highlight.minted",
     "3BB124293DAFB53D570FC292211B9634.highlight.minted",
+    "5532DC55E24061A97B6EB151F99500A7.highlight.minted",
+    "5DDF106B8F32F02FEA9315065D6E4E34.highlight.minted",
+    "888F42CA278E1084CD0547369498CC77.highlight.minted",
+    "B482F937C116222C01303DE3DC1A6CFD.highlight.minted",
     "D3A98C670D106A179BD83D26D92D6DBB.highlight.minted",
     "DB6DD6EBADB1B583B040E827D183DC99.highlight.minted",
     "E136A90FEC957345CCD7FE945368A440.highlight.minted",
+    "E9C276103B35C5E1D3D54B4474E9B042.highlight.minted",
     "_3A4F8D88EA1EAC117F98223609194CB9.index.minted",
     "perldoc.style.minted"
   ]
