@@ -1,9 +1,14 @@
 \contentsline {section}{\numberline {1}Template}{1}{}%
 \contentsline {section}{\numberline {2}Data Structure}{1}{}%
-\contentsline {section}{\numberline {3}Graphs}{1}{}%
-\contentsline {section}{\numberline {4}DP}{1}{}%
-\contentsline {section}{\numberline {5}Strings}{1}{}%
-\contentsline {section}{\numberline {6}Math}{1}{}%
-\contentsline {section}{\numberline {7}Geometry}{1}{}%
-\contentsline {section}{\numberline {8}Miscellaneous}{1}{}%
-\contentsline {section}{\numberline {9}Math Extra}{1}{}%
+\contentsline {subsection}{\numberline {2.1}Segment Tree Walk}{1}{}%
+\contentsline {subsection}{\numberline {2.2}Persistent Segment Tree}{1}{}%
+\contentsline {subsection}{\numberline {2.3}Trie}{1}{}%
+\contentsline {section}{\numberline {3}Graphs}{2}{}%
+\contentsline {subsection}{\numberline {3.1}2 SAT}{2}{}%
+\contentsline {subsection}{\numberline {3.2}LCA O(1)}{2}{}%
+\contentsline {section}{\numberline {4}DP}{3}{}%
+\contentsline {section}{\numberline {5}Strings}{3}{}%
+\contentsline {section}{\numberline {6}Math}{3}{}%
+\contentsline {section}{\numberline {7}Geometry}{3}{}%
+\contentsline {section}{\numberline {8}Miscellaneous}{3}{}%
+\contentsline {section}{\numberline {9}Math Extra}{3}{}%

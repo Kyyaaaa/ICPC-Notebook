@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.8.26)  26 AUG 2026 14:53
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.8.26)  5 SEP 2026 11:10
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**"d:/My file/ICPC_Notebook/ICPC-Notebook-Baka/Notebook.tex"
-(d:/My file/ICPC_Notebook/ICPC-Notebook-Baka/Notebook.tex
+**"d:/My file/ICPC_Notebook/ICPC-Notebook-Kayami/Notebook.tex"
+(d:/My file/ICPC_Notebook/ICPC-Notebook-Kayami/Notebook.tex
 LaTeX2e <2026-06-01>
 L3 programming layer <2026-07-20>
 (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/extsizes\extarticle.cls
@@ -458,18 +458,36 @@ Package: pdflscape-nometadata 2022-10-28 v0.13 Display of landscape pages in PDF
 Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
 )
 Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
-)) (Notebook.toc)
+)) (Notebook.toc
+LaTeX Font Info:    Trying to load font information for U+msa on input line 3.
+ (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 3.
+ (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+))
 \tf@toc=\write4
 \openout4 = `Notebook.toc'.
 
- [1{C:/Users/ADMIN/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}
+\pydata@fh@0=\write5
+\openout5 = `_3A4F8D88EA1EAC117F98223609194CB9.data.minted'.
+
+runsystem(latexminted config  --timestamp 20260905111058 3A4F8D88EA1EAC117F98223609194CB9)...executed.
+
+ (_3A4F8D88EA1EAC117F98223609194CB9.config.minted)
+runsystem(latexminted cleanconfig  --timestamp 20260905111058 3A4F8D88EA1EAC117F98223609194CB9)...executed.
+
+ (_minted/perldoc.style.minted) (_minted/3BB124293DAFB53D570FC292211B9634.highlight.minted
+LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <8> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 3.
+) (_minted/E136A90FEC957345CCD7FE945368A440.highlight.minted) (_minted/215923540C9409E0F8870F34D298A0B5.highlight.minted [1{C:/Users/ADMIN/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}
 
 
+]) (_minted/D3A98C670D106A179BD83D26D92D6DBB.highlight.minted) (_minted/DB6DD6EBADB1B583B040E827D183DC99.highlight.minted [2]) [3
 
 ] 
 enddocument/afterlastpage (AED): lastpage setting LastPage.
-runsystem(latexminted cleantemp  --timestamp 20260826145324 3A4F8D88EA1EAC117F98223609194CB9)...executed.
-
 (Notebook.aux)
  ***********
 LaTeX2e <2026-06-01>
@@ -477,17 +495,17 @@ L3 programming layer <2026-07-20>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 12011 strings out of 467501
- 253245 string characters out of 5408550
- 780798 words of memory out of 5000000
- 41091 multiletter control sequences out of 15000+600000
- 632639 words of font info for 47 fonts, out of 8000000 for 9000
+ 12376 strings out of 467501
+ 262286 string characters out of 5408550
+ 829325 words of memory out of 5000000
+ 41409 multiletter control sequences out of 15000+600000
+ 637471 words of font info for 64 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 101i,12n,107p,541b,353s stack positions out of 10000i,1000n,20000p,200000b,200000s
- <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx0800.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1095.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1000.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1200.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0800.pk>
-Output written on Notebook.pdf (1 page, 43094 bytes).
+ 101i,12n,107p,697b,941s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tctt0800.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt0800.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1000.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx0800.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1095.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1000.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1200.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0800.pk>
+Output written on Notebook.pdf (3 pages, 84919 bytes).
 PDF statistics:
- 149 PDF objects out of 1000 (max. 8388607)
+ 285 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
