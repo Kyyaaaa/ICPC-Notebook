@@ -1,76 +1,89 @@
-struct node {
-  node *l, *r;
-  int v;
+const int N = 3e5 + 5;
+const int LOG = 20; 
+const int MAX_NODES = N * 40;
 
-  node() {
-    l = r = nullptr;
-    v = 0;
+struct Node {
+  int left, right, v;
+  Node(int _left = 0, int _right = 0, int _v = 0) {
+    left = _left; 
+    right = _right; 
+    v = _v;
   }
-};
+} st[MAX_NODES];
 
-const int MAX_VAL = 300005;
-node *t[MAX_VAL];
+int cnt = 0;
+int ver[N], nver = 0;
 
-void refine(node *cur) {
-  cur->v = cur->l->v + cur->r->v;
+void refine(int id) {
+  st[id].v = st[st[id].left].v + st[st[id].right].v;
 }
 
-void build(node *cur, int l, int r) {
-  cur->l = new node();
-  cur->r = new node();
+int build(int l, int r) {
   if (l == r) {
-    return;
+    cnt++;
+    st[cnt] = Node(0, 0, 0);
+    return cnt;
   }
-  int mid = (l + r) / 2;
-  build(cur->l, l, mid);
-  build(cur->r, mid + 1, r);
+  int mid = (l + r) >> 1;
+  int cur = ++cnt;
+  st[cur].left = build(l, mid);
+  st[cur].right = build(mid + 1, r);
   refine(cur);
-}
-
-void update(node *cur, int l, int r, int u, int x) {
-  if (l == r) {
-    cur->v += x;
-    return;
-  }
-  int mid = (l + r) / 2;
-  if (u <= mid) {
-    node *old = cur->l;
-    cur->l = new node();
-    cur->l->l = old->l;
-    cur->l->r = old->r;
-    cur->l->v = old->v;
-    update(cur->l, l, mid, u, x);
-  } else {
-    node *old = cur->r;
-    cur->r = new node();
-    cur->r->l = old->l;
-    cur->r->r = old->r;
-    cur->r->v = old->v;
-    update(cur->r, mid + 1, r, u, x);
-  }
-  refine(cur);
-}
-
-node* update_version(node *prev_root, int l, int r, int pos, int val) {
-  node *cur = new node();
-  cur->l = prev_root->l;
-  cur->r = prev_root->r;
-  cur->v = prev_root->v;
-  update(cur, l, r, pos, val);
   return cur;
 }
 
-int query(node *cur, int l, int r, int u, int v) {
-  if (l > v || r < u) return 0;
-  if (l >= u && r <= v) return cur->v;
-  int mid = (l + r) / 2;
-  return query(cur->l, l, mid, u, v) + query(cur->r, mid + 1, r, u, v);
+int update(int id, int l, int r, int u, int x) {
+  if (l == r) {
+    cnt++;
+    st[cnt] = Node(0, 0, st[id].v + x); 
+    return cnt;
+  }
+  int mid = (l + r) >> 1;
+  int cur = ++cnt;
+  if (u <= mid) {
+    st[cur].left = update(st[id].left, l, mid, u, x);
+    st[cur].right = st[id].right;
+  } else {
+    st[cur].left = st[id].left;
+    st[cur].right = update(st[id].right, mid + 1, r, u, x);
+  }
+  refine(cur);
+  return cur;
 }
 
-int query_diff(node *rootR, node *rootL, int l, int r, int u, int v) {
+int get(int id, int l, int r, int u, int v) {
   if (l > v || r < u) return 0;
-  if (l >= u && r <= v) return rootR->v - rootL->v;
-  int mid = (l + r) / 2;
-  return query_diff(rootR->l, rootL->l, l, mid, u, v) 
-       + query_diff(rootR->r, rootL->r, mid + 1, r, u, v);
+  if (l >= u && r <= v) return st[id].v;
+  int mid = (l + r) >> 1;
+  return get(st[id].left, l, mid, u, v) + get(st[id].right, mid + 1, r, u, v);
 }
+
+void add_version(int l, int r, int u, int x) {
+  nver++;
+  ver[nver] = update(ver[nver - 1], l, r, u, x);
+}
+/*
+   USAGE EXAMPLE (Solving Distinct Values in Range - DQUERY):
+   
+   // 1. Initialize base tree
+   cnt = nver = 0;
+   ver[0] = build(1, n);
+   
+   // 2. Build versions tracking the latest occurrence of each value
+   for (int i = 1; i <= n; i++) {
+     // If value appeared before, remove its previous position
+     if (mark[a[i]] > 0) {
+       ver[nver] = update(ver[nver], 1, n, mark[a[i]], -1); 
+     }
+     
+     // Add current position
+     nver++;
+     ver[nver] = update(ver[nver - 1], 1, n, i, 1);
+     
+     iver[i] = ver[nver]; // iver[i] stores the version for prefix i
+     mark[a[i]] = i;
+   }
+   
+   // 3. Query distinct values in [L, R]
+   int ans = get(iver[R], 1, n, L, R);
+*/

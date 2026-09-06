@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.8.26)  5 SEP 2026 16:02
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.8.26)  6 SEP 2026 11:41
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -473,28 +473,26 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \pydata@fh@0=\write5
 \openout5 = `_3A4F8D88EA1EAC117F98223609194CB9.data.minted'.
 
-runsystem(latexminted config  --timestamp 20260905160221 3A4F8D88EA1EAC117F98223609194CB9)...executed.
+runsystem(latexminted config  --timestamp 20260906114107 3A4F8D88EA1EAC117F98223609194CB9)...executed.
 
  (_3A4F8D88EA1EAC117F98223609194CB9.config.minted)
-runsystem(latexminted cleanconfig  --timestamp 20260905160221 3A4F8D88EA1EAC117F98223609194CB9)...executed.
+runsystem(latexminted cleanconfig  --timestamp 20260906114107 3A4F8D88EA1EAC117F98223609194CB9)...executed.
 
  (_minted/perldoc.style.minted) (_minted/3BB124293DAFB53D570FC292211B9634.highlight.minted
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <8> not available
 (Font)              Font shape `T1/cmtt/m/n' tried instead on input line 3.
-) (_minted/E136A90FEC957345CCD7FE945368A440.highlight.minted) (_minted/215923540C9409E0F8870F34D298A0B5.highlight.minted [1{C:/Users/ADMIN/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}
+) (_minted/0A8E39ECDCDC3C7702F8C47B75DF3734.highlight.minted
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-]) (_minted/D3A98C670D106A179BD83D26D92D6DBB.highlight.minted) (_minted/DB6DD6EBADB1B583B040E827D183DC99.highlight.minted [2]) (_minted/B482F937C116222C01303DE3DC1A6CFD.highlight.minted) (_minted/888F42CA278E1084CD0547369498CC77.highlight.minted
-Overfull \hbox (44.87306pt too wide) in paragraph at lines 63--63
-\T1/cmtt/m/n/8 =========================================================================[]|  
- []
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [1{C:/Users/ADMIN/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}
 
 
-Overfull \hbox (44.87306pt too wide) in paragraph at lines 69--69
-|||[]\T1/cmtt/m/n/8 ========================================================================= 
- []
+]) (_minted/09B99E51AEA5080AEB4D13A7A37B41B1.highlight.minted) (_minted/8D851BE77CE80B4F5472AE1D880FB44A.highlight.minted [2]) (_minted/E7C9201B33947ADF2DDEAD61736DE1B0.highlight.minted) (_minted/9D62847EBC199B04EEC0CCA47AEFF2AB.highlight.minted) (_minted/D3A98C670D106A179BD83D26D92D6DBB.highlight.minted [3]) (_minted/DB6DD6EBADB1B583B040E827D183DC99.highlight.minted) (_minted/B482F937C116222C01303DE3DC1A6CFD.highlight.minted) (_minted/10038BDF7B57BBFC5322D416E1605345.highlight.minted [4]) (_minted/DFD205F159E4AA2ECB103254D788D1CE.highlight.minted) (_minted/DBA1FBF31604A7473FE5B2A25312F744.highlight.minted [5]) (_minted/5DDF106B8F32F02FEA9315065D6E4E34.highlight.minted) (_minted/E9C276103B35C5E1D3D54B4474E9B042.highlight.minted) (_minted/5532DC55E24061A97B6EB151F99500A7.highlight.minted [6]) [7
 
-) (_minted/5DDF106B8F32F02FEA9315065D6E4E34.highlight.minted [3]) (_minted/E9C276103B35C5E1D3D54B4474E9B042.highlight.minted) (_minted/5532DC55E24061A97B6EB151F99500A7.highlight.minted) [4] 
+] 
 enddocument/afterlastpage (AED): lastpage setting LastPage.
 (Notebook.aux)
  ***********
@@ -503,17 +501,17 @@ L3 programming layer <2026-07-20>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 12422 strings out of 467501
- 264809 string characters out of 5408550
- 829009 words of memory out of 5000000
- 41440 multiletter control sequences out of 15000+600000
+ 12467 strings out of 467501
+ 267310 string characters out of 5408550
+ 836632 words of memory out of 5000000
+ 41470 multiletter control sequences out of 15000+600000
  637471 words of font info for 64 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  101i,12n,107p,840b,941s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tctt0800.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt0800.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1000.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx0800.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1095.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1000.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1200.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0800.pk>
-Output written on Notebook.pdf (4 pages, 97255 bytes).
+Output written on Notebook.pdf (7 pages, 108850 bytes).
 PDF statistics:
- 313 PDF objects out of 1000 (max. 8388607)
+ 335 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -60,11 +60,11 @@
 \PYG{+w}{    }\PYG{n}{swap}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{);}
 \PYG{+w}{  }\PYG{p}{\PYGZcb{}}
 \PYG{p}{\PYGZcb{}}
-\PYG{c+cm}{/* =========================================================================}
+\PYG{c+cm}{/*}
 \PYG{c+cm}{   USAGE EXAMPLE:}
 \PYG{c+cm}{   dfs1(1, 1);}
 \PYG{c+cm}{   cnt = 0;}
 \PYG{c+cm}{   rebuild(1, 1);}
 \PYG{c+cm}{   // for(int i = 1; i \PYGZlt{}= n; i++) update(1, 1, n, in[i], a[i]);}
-\PYG{c+cm}{========================================================================= */}
+\PYG{c+cm}{*/}
 \end{MintedVerbatim}

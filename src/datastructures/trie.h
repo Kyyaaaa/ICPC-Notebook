@@ -1,61 +1,74 @@
 const int LOG_MAX = 29;
+const int MAX_NODES = 3e5 * 32;
 
 struct Node {
-  Node* c[2];
+  int c[2];
   int cnt;
 
   Node() {
-    c[0] = c[1] = nullptr;
+    c[0] = c[1] = 0;
     cnt = 0;
   }
 };
 
-void insert(Node* root, int val) {
-  Node* cur = root;
+Node trie[MAX_NODES];
+int node_cnt = 0;
+
+void init_trie() {
+  for (int i = 0; i <= node_cnt; i++) {
+    trie[i] = Node();
+  }
+  node_cnt = 0;
+}
+
+void insert(int val) {
+  int cur = 0;
   for (int i = LOG_MAX; i >= 0; i--) {
     int x = (val >> i) & 1;
-    if (cur->c[x] == nullptr) {
-      cur->c[x] = new Node();
+    if (trie[cur].c[x] == 0) {
+      trie[cur].c[x] = ++node_cnt;
     }
-    cur = cur->c[x];
-    cur->cnt++;
+    cur = trie[cur].c[x];
+    trie[cur].cnt++;
   }
 }
 
-bool search(Node* root, int val) {
-  Node* cur = root;
+bool search(int val) {
+  int cur = 0;
   for (int i = LOG_MAX; i >= 0; i--) {
     int x = (val >> i) & 1;
-    if (cur->c[x] == nullptr || cur->c[x]->cnt == 0) {
+    cur = trie[cur].c[x];
+    if (cur == 0 || trie[cur].cnt == 0) {
       return false;
     }
-    cur = cur->c[x];
   }
-  return cur->cnt > 0;
+  return trie[cur].cnt > 0;
 }
 
-int count_occurences(Node* root, int val) {
-  Node* cur = root;
+int count_occurences(int val) {
+  int cur = 0;
   for (int i = LOG_MAX; i >= 0; i--) {
     int x = (val >> i) & 1;
-    if (cur->c[x] == nullptr || cur->c[x]->cnt == 0) return 0;
-    cur = cur->c[x];
+    cur = trie[cur].c[x];
+    if (cur == 0 || trie[cur].cnt == 0) {
+      return 0;
+    }
   }
-  return cur->cnt;
+  return trie[cur].cnt;
 }
 
-void erase(Node* root, int val) {
-  if (!search(root, val)) return;
-  Node* cur = root;
+void erase(int val) {
+  if (!search(val)) return;
+  int cur = 0;
   for (int i = LOG_MAX; i >= 0; i--) {
     int x = (val >> i) & 1;
-    cur = cur->c[x];
-    cur->cnt--;
+    cur = trie[cur].c[x];
+    trie[cur].cnt--;
   }
 }
 
-void update(Node* root, int old_val, int new_val) {
-  if (!search(root, old_val)) return;
-  erase(root, old_val);
-  insert(root, new_val);
+void update(int old_val, int new_val) {
+  if (!search(old_val)) return;
+  erase(old_val);
+  insert(new_val);
 }
