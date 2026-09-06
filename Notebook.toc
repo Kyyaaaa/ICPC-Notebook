@@ -13,11 +13,14 @@
 \contentsline {subsection}{\numberline {3.4}Heavy Light Decomposition}{4}{}%
 \contentsline {subsection}{\numberline {3.5}Bellman Ford}{5}{}%
 \contentsline {subsection}{\numberline {3.6}Floyd}{5}{}%
-\contentsline {section}{\numberline {4}DP}{6}{}%
-\contentsline {subsection}{\numberline {4.1}DP Digit Optimization 1}{6}{}%
-\contentsline {subsection}{\numberline {4.2}DP Digit Optimization 2}{6}{}%
-\contentsline {subsection}{\numberline {4.3}DP SoS}{6}{}%
-\contentsline {section}{\numberline {5}Strings}{7}{}%
-\contentsline {section}{\numberline {6}Math}{7}{}%
-\contentsline {section}{\numberline {7}Geometry}{7}{}%
-\contentsline {section}{\numberline {8}Miscellaneous}{7}{}%
+\contentsline {subsection}{\numberline {3.7}Ford Fulkerson}{6}{}%
+\contentsline {subsection}{\numberline {3.8}Dinic}{7}{}%
+\contentsline {subsection}{\numberline {3.9}Dsu On Tree(Sack)}{8}{}%
+\contentsline {section}{\numberline {4}DP}{9}{}%
+\contentsline {subsection}{\numberline {4.1}DP Digit Optimization 1}{9}{}%
+\contentsline {subsection}{\numberline {4.2}DP Digit Optimization 2}{9}{}%
+\contentsline {subsection}{\numberline {4.3}DP SoS}{9}{}%
+\contentsline {section}{\numberline {5}Strings}{10}{}%
+\contentsline {section}{\numberline {6}Math}{10}{}%
+\contentsline {section}{\numberline {7}Geometry}{10}{}%
+\contentsline {section}{\numberline {8}Miscellaneous}{10}{}%
