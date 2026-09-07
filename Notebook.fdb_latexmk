@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1788712338.15478 "d:/My file/ICPC_Notebook/ICPC-Notebook-Kayami/Notebook.tex" "Notebook.pdf" "Notebook" 1788712345.89619 0
+["pdflatex"] 1788747736.58301 "d:/My file/ICPC_Notebook/ICPC-Notebook-Kayami/Notebook.tex" "Notebook.pdf" "Notebook" 1788747742.28237 0
   "C:/Users/ADMIN/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1787729125 89969 e95579120a3aa0ebc21d2737ca2ba701 ""
   "C:/Users/ADMIN/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx0800.pk" 1787729174 19872 4a3aad4f72eea3b5ec862d495fc8d95d ""
   "C:/Users/ADMIN/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1000.pk" 1787729167 25420 390c70581f60d2676f0dc9abb42a7128 ""
@@ -103,12 +103,13 @@
   "C:/Users/ADMIN/AppData/Local/Programs/MiKTeX/tex/latex/tools/shellesc.sty" 1780057721 4121 1503ad2db5fca16b5825ec11b972acda ""
   "C:/Users/ADMIN/AppData/Local/Programs/MiKTeX/tex/latex/upquote/upquote.sty" 1335534756 1088 517e01cde97c1c0baf72e69d43aa5a2e ""
   "C:/Users/ADMIN/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
-  "Notebook.aux" 1788712345 3288 f41a0377afd4011ffb140dd4eb33c2d2 "pdflatex"
-  "Notebook.tex" 1788712327 3250 96fafcdaeae6490b64a1420cd0d94fbd ""
-  "Notebook.toc" 1788712345 1629 4080eb15e3b17b5b1542136190c16749 "pdflatex"
+  "Notebook.aux" 1788747742 3398 893a257c3764ea43b3941ac507cf1dc2 "pdflatex"
+  "Notebook.tex" 1788747727 3243 dccf1d709c828cb2496e65a01f6f8858 ""
+  "Notebook.toc" 1788747742 1698 92229b78ae891360d69b608a3fce1e75 "pdflatex"
   "_minted/09B99E51AEA5080AEB4D13A7A37B41B1.highlight.minted" 1788668187 8299 278e194c19ba56cc08222f5886f8fa61 ""
   "_minted/0A8E39ECDCDC3C7702F8C47B75DF3734.highlight.minted" 1788667943 10221 5915f154ff99ba299355b4f5c1c9c718 ""
   "_minted/10038BDF7B57BBFC5322D416E1605345.highlight.minted" 1788668244 7573 82ed4508d39a8a1010893cb88e91b352 ""
+  "_minted/26BC2A81D50AD471A17BFD88110C4D58.highlight.minted" 1788747734 6058 52b8f1b9c8e9fa2e80cf40c1643b9aab ""
   "_minted/3BB124293DAFB53D570FC292211B9634.highlight.minted" 1788578509 2582 07e85f9fca996550dd7dc9ab569d6942 ""
   "_minted/4154E0AFC1CA3569CD74DD36B72AF7EF.highlight.minted" 1788711782 18070 ce1e771b729e1286c113d97779e0d0de ""
   "_minted/5532DC55E24061A97B6EB151F99500A7.highlight.minted" 1788595993 5184 9f40bfce9a82abbcffeba150fc0f1ab5 ""
@@ -124,9 +125,9 @@
   "_minted/DFD205F159E4AA2ECB103254D788D1CE.highlight.minted" 1788665157 5952 823fde6a28aaf5777986a597f96c419c ""
   "_minted/E7C9201B33947ADF2DDEAD61736DE1B0.highlight.minted" 1788669394 5463 51954e491f905566f402e09abef7dce8 ""
   "_minted/E9C276103B35C5E1D3D54B4474E9B042.highlight.minted" 1788583990 6423 0cbb544d623915fd9c0b882d95670af1 ""
-  "_minted/_3A4F8D88EA1EAC117F98223609194CB9.index.minted" 1788712337 1261 4b384eacda68802178295693a7b72950 ""
+  "_minted/_3A4F8D88EA1EAC117F98223609194CB9.index.minted" 1788747736 1319 431f67ae76844f830c59358013729bd6 ""
   "_minted/perldoc.style.minted" 1787729161 6176 9e1bc3196ac392a9373aed3b2b942df0 ""
-  "d:/My file/ICPC_Notebook/ICPC-Notebook-Kayami/Notebook.tex" 1788712327 3250 96fafcdaeae6490b64a1420cd0d94fbd ""
+  "d:/My file/ICPC_Notebook/ICPC-Notebook-Kayami/Notebook.tex" 1788747727 3243 dccf1d709c828cb2496e65a01f6f8858 ""
   "src/datastructures/fenwick_tree.h" 1788669360 1125 310ed65eef9eeb95388f1b67cf4e19ce ""
   "src/datastructures/fenwick_tree_2d.h" 1788669643 1953 be6f9a2763587e64b6c76e6573b49d4e ""
   "src/datastructures/persistent_segment_tree.h" 1788667937 2144 9d1824135d1acf881211a30ad4dad695 ""
@@ -145,6 +146,7 @@
   "src/graphs/dsu_on_tree(Sack).h" 1788712301 3233 9b491f01272b4f72479930eabe2e628a ""
   "src/graphs/ford-fulkerson.h" 1788711561 4775 54515837c693cfa408c048404fc20c91 ""
   "src/graphs/heavy_light_decomposition.h" 1788668238 1311 66a279646985691c3704bcdc1ededd04 ""
+  "src/math/extended_euclid.h" 1788747724 1558 83881f8d000be933c9bcddeba4fd2bec ""
   "teamnote.sty" 1787727116 2764 a2bc9d05e4c2230f81c5acfe83079c27 ""
   (generated)
   "Notebook.aux"

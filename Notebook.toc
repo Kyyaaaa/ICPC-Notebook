@@ -22,5 +22,6 @@
 \contentsline {subsection}{\numberline {4.3}DP SoS}{9}{}%
 \contentsline {section}{\numberline {5}Strings}{10}{}%
 \contentsline {section}{\numberline {6}Math}{10}{}%
+\contentsline {subsection}{\numberline {6.1}Extended Eauclid}{10}{}%
 \contentsline {section}{\numberline {7}Geometry}{10}{}%
 \contentsline {section}{\numberline {8}Miscellaneous}{10}{}%
