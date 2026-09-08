@@ -272,6 +272,11 @@ INPUT .\src\graphs\dinic.h
 INPUT .\_minted\4154E0AFC1CA3569CD74DD36B72AF7EF.highlight.minted
 INPUT .\_minted\4154E0AFC1CA3569CD74DD36B72AF7EF.highlight.minted
 INPUT _minted\4154E0AFC1CA3569CD74DD36B72AF7EF.highlight.minted
+INPUT .\src\graphs\min_cost_max_flow.h
+INPUT .\src\graphs\min_cost_max_flow.h
+INPUT .\_minted\C31B4180380E20871CEF0B3613CD84D6.highlight.minted
+INPUT .\_minted\C31B4180380E20871CEF0B3613CD84D6.highlight.minted
+INPUT _minted\C31B4180380E20871CEF0B3613CD84D6.highlight.minted
 INPUT .\src\graphs\dsu_on_tree(Sack).h
 INPUT .\src\graphs\dsu_on_tree(Sack).h
 INPUT .\_minted\8DB8E87AF1E703E0A6894EE31BB675B3.highlight.minted
