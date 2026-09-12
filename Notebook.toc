@@ -6,23 +6,24 @@
 \contentsline {subsection}{\numberline {2.4}Persistent Trie}{2}{}%
 \contentsline {subsection}{\numberline {2.5}Fenwick Tree}{3}{}%
 \contentsline {subsection}{\numberline {2.6}Fenwick Tree 2D}{3}{}%
-\contentsline {section}{\numberline {3}Graphs}{3}{}%
-\contentsline {subsection}{\numberline {3.1}2 SAT}{3}{}%
-\contentsline {subsection}{\numberline {3.2}LCA O(1)}{4}{}%
-\contentsline {subsection}{\numberline {3.3}Centroid Decomposition}{4}{}%
-\contentsline {subsection}{\numberline {3.4}Heavy Light Decomposition}{4}{}%
-\contentsline {subsection}{\numberline {3.5}Bellman Ford}{5}{}%
-\contentsline {subsection}{\numberline {3.6}Floyd}{5}{}%
-\contentsline {subsection}{\numberline {3.7}Ford Fulkerson}{6}{}%
-\contentsline {subsection}{\numberline {3.8}Dinic}{7}{}%
-\contentsline {subsection}{\numberline {3.9}Min Cost Max Flow}{8}{}%
-\contentsline {subsection}{\numberline {3.10}Dsu On Tree(Sack)}{9}{}%
-\contentsline {section}{\numberline {4}DP}{10}{}%
-\contentsline {subsection}{\numberline {4.1}DP Digit Optimization 1}{10}{}%
-\contentsline {subsection}{\numberline {4.2}DP Digit Optimization 2}{10}{}%
+\contentsline {subsection}{\numberline {2.7}XOR Basis}{3}{}%
+\contentsline {section}{\numberline {3}Graphs}{4}{}%
+\contentsline {subsection}{\numberline {3.1}2 SAT}{4}{}%
+\contentsline {subsection}{\numberline {3.2}LCA O(1)}{5}{}%
+\contentsline {subsection}{\numberline {3.3}Centroid Decomposition}{5}{}%
+\contentsline {subsection}{\numberline {3.4}Heavy Light Decomposition}{5}{}%
+\contentsline {subsection}{\numberline {3.5}Bellman Ford}{6}{}%
+\contentsline {subsection}{\numberline {3.6}Floyd}{6}{}%
+\contentsline {subsection}{\numberline {3.7}Ford Fulkerson}{7}{}%
+\contentsline {subsection}{\numberline {3.8}Dinic}{8}{}%
+\contentsline {subsection}{\numberline {3.9}Min Cost Max Flow}{9}{}%
+\contentsline {subsection}{\numberline {3.10}Dsu On Tree(Sack)}{10}{}%
+\contentsline {section}{\numberline {4}DP}{11}{}%
+\contentsline {subsection}{\numberline {4.1}DP Digit Optimization 1}{11}{}%
+\contentsline {subsection}{\numberline {4.2}DP Digit Optimization 2}{11}{}%
 \contentsline {subsection}{\numberline {4.3}DP SoS}{11}{}%
-\contentsline {section}{\numberline {5}Strings}{11}{}%
-\contentsline {section}{\numberline {6}Math}{11}{}%
-\contentsline {subsection}{\numberline {6.1}Extended Euclid}{11}{}%
-\contentsline {section}{\numberline {7}Geometry}{11}{}%
-\contentsline {section}{\numberline {8}Miscellaneous}{11}{}%
+\contentsline {section}{\numberline {5}Strings}{12}{}%
+\contentsline {section}{\numberline {6}Math}{12}{}%
+\contentsline {subsection}{\numberline {6.1}Extended Euclid}{12}{}%
+\contentsline {section}{\numberline {7}Geometry}{12}{}%
+\contentsline {section}{\numberline {8}Miscellaneous}{12}{}%
