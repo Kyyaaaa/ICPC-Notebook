@@ -13,7 +13,7 @@
 \contentsline {subsection}{\numberline {3.3}Centroid Decomposition}{5}{}%
 \contentsline {subsection}{\numberline {3.4}Heavy Light Decomposition}{6}{}%
 \contentsline {subsection}{\numberline {3.5}Bellman Ford}{6}{}%
-\contentsline {subsection}{\numberline {3.6}Floyd}{7}{}%
+\contentsline {subsection}{\numberline {3.6}Floyd}{6}{}%
 \contentsline {subsection}{\numberline {3.7}Ford Fulkerson}{7}{}%
 \contentsline {subsection}{\numberline {3.8}Dinic}{8}{}%
 \contentsline {subsection}{\numberline {3.9}Min Cost Max Flow}{9}{}%

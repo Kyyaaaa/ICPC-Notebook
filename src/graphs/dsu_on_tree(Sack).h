@@ -1,4 +1,4 @@
-/* =========================================================================
+/*
    DSU ON TREE (SACK)
    
    Idea:
@@ -14,7 +14,7 @@
       - Add the data of the light children and the current node itself.
       - Answer queries for the current node.
       - If the current node is a light child (`keep == false`), CLEAR all its data.
-========================================================================= */
+*/
 
 const int N = 2e5 + 5;
 vector<int> G[N];
