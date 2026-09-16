@@ -7,23 +7,29 @@
 \contentsline {subsection}{\numberline {2.5}Fenwick Tree}{3}{}%
 \contentsline {subsection}{\numberline {2.6}Fenwick Tree 2D}{3}{}%
 \contentsline {subsection}{\numberline {2.7}XOR Basis}{3}{}%
-\contentsline {section}{\numberline {3}Graphs}{5}{}%
-\contentsline {subsection}{\numberline {3.1}2 SAT}{5}{}%
-\contentsline {subsection}{\numberline {3.2}LCA O(1)}{5}{}%
-\contentsline {subsection}{\numberline {3.3}Centroid Decomposition}{5}{}%
-\contentsline {subsection}{\numberline {3.4}Heavy Light Decomposition}{6}{}%
-\contentsline {subsection}{\numberline {3.5}Bellman Ford}{6}{}%
-\contentsline {subsection}{\numberline {3.6}Floyd}{6}{}%
-\contentsline {subsection}{\numberline {3.7}Ford Fulkerson}{7}{}%
-\contentsline {subsection}{\numberline {3.8}Dinic}{8}{}%
-\contentsline {subsection}{\numberline {3.9}Min Cost Max Flow}{9}{}%
-\contentsline {subsection}{\numberline {3.10}Dsu On Tree(Sack)}{10}{}%
-\contentsline {section}{\numberline {4}DP}{11}{}%
-\contentsline {subsection}{\numberline {4.1}DP Digit Optimization 1}{11}{}%
-\contentsline {subsection}{\numberline {4.2}DP Digit Optimization 2}{11}{}%
-\contentsline {subsection}{\numberline {4.3}DP SoS}{12}{}%
-\contentsline {section}{\numberline {5}Strings}{12}{}%
-\contentsline {section}{\numberline {6}Math}{12}{}%
-\contentsline {subsection}{\numberline {6.1}Extended Euclid}{12}{}%
-\contentsline {section}{\numberline {7}Geometry}{12}{}%
-\contentsline {section}{\numberline {8}Miscellaneous}{12}{}%
+\contentsline {subsection}{\numberline {2.8}DSU Rollback}{5}{}%
+\contentsline {subsection}{\numberline {2.9}Ordered Set}{5}{}%
+\contentsline {section}{\numberline {3}Graphs}{6}{}%
+\contentsline {subsection}{\numberline {3.1}2 SAT}{6}{}%
+\contentsline {subsection}{\numberline {3.2}LCA O(1)}{7}{}%
+\contentsline {subsection}{\numberline {3.3}Centroid Decomposition}{7}{}%
+\contentsline {subsection}{\numberline {3.4}Heavy Light Decomposition}{7}{}%
+\contentsline {subsection}{\numberline {3.5}Bellman Ford}{8}{}%
+\contentsline {subsection}{\numberline {3.6}Floyd}{8}{}%
+\contentsline {subsection}{\numberline {3.7}Ford Fulkerson}{8}{}%
+\contentsline {subsection}{\numberline {3.8}Dinic}{10}{}%
+\contentsline {subsection}{\numberline {3.9}Min Cost Max Flow}{11}{}%
+\contentsline {subsection}{\numberline {3.10}Dsu On Tree(Sack)}{12}{}%
+\contentsline {section}{\numberline {4}DP}{13}{}%
+\contentsline {subsection}{\numberline {4.1}DP Digit Optimization 1}{13}{}%
+\contentsline {subsection}{\numberline {4.2}DP Digit Optimization 2}{13}{}%
+\contentsline {subsection}{\numberline {4.3}DP SoS}{13}{}%
+\contentsline {section}{\numberline {5}Strings}{13}{}%
+\contentsline {subsection}{\numberline {5.1}KMP}{13}{}%
+\contentsline {subsection}{\numberline {5.2}Z Function}{14}{}%
+\contentsline {subsection}{\numberline {5.3}Suffix Array}{14}{}%
+\contentsline {subsection}{\numberline {5.4}Aho Corasick}{15}{}%
+\contentsline {section}{\numberline {6}Math}{16}{}%
+\contentsline {subsection}{\numberline {6.1}Extended Euclid}{16}{}%
+\contentsline {section}{\numberline {7}Geometry}{16}{}%
+\contentsline {section}{\numberline {8}Miscellaneous}{16}{}%

@@ -1,0 +1,148 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   AHO\PYGZhy{}CORASICK AUTOMATON}
+\PYG{c+cm}{   Idea:}
+\PYG{c+cm}{   \PYGZhy{} Multi\PYGZhy{}pattern string search algorithm. }
+\PYG{c+cm}{   \PYGZhy{} Constructs a Trie from a set of patterns and adds:}
+\PYG{c+cm}{     1. Failure Links (`fail`): Where to go when a character mismatch occurs.}
+\PYG{c+cm}{     2. Output Links (`output`): Direct link to the nearest valid pattern }
+\PYG{c+cm}{        ending in the failure chain (handles overlapping/substring patterns).}
+\PYG{c+cm}{   \PYGZhy{} OPTIMIZATION: We convert the Trie into a Deterministic Finite Automaton }
+\PYG{c+cm}{     (DFA). Transition `next[c]` either points to the actual child OR the }
+\PYG{c+cm}{     fallback state in O(1).}
+\PYG{c+cm}{     }
+\PYG{c+cm}{   Complexity:}
+\PYG{c+cm}{   \PYGZhy{} Build Time: O(Sum of pattern lengths * Alphabet Size)}
+\PYG{c+cm}{   \PYGZhy{} Search Time: O(Length of Text + Number of Matches)}
+\PYG{c+cm}{*/}
+
+\PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{ALPHABET}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{26}\PYG{p}{;}
+\PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{char}\PYG{+w}{ }\PYG{n}{BASE\PYGZus{}CHAR}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}a\PYGZsq{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// Change to \PYGZsq{}A\PYGZsq{} or \PYGZsq{}0\PYGZsq{} depending on the problem}
+
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{ACNode}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{next}\PYG{p}{[}\PYG{n}{ALPHABET}\PYG{p}{];}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{fail}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{output}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// Also known as dict\PYGZus{}link (points to the nearest terminal node)}
+\PYG{+w}{  }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{pattern\PYGZus{}ids}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// IDs of patterns that end exactly at this node}
+
+\PYG{+w}{  }\PYG{n}{ACNode}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{fill}\PYG{p}{(}\PYG{n}{begin}\PYG{p}{(}\PYG{n}{next}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{end}\PYG{p}{(}\PYG{n}{next}\PYG{p}{),}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{fail}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{output}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{};}
+
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{AhoCorasick}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{ACNode}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{n}{AhoCorasick}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{t}\PYG{p}{.}\PYG{n}{emplace\PYGZus{}back}\PYG{p}{();}\PYG{+w}{ }\PYG{c+c1}{// Root node at index 0}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// 1. Insert a pattern into the Trie}
+\PYG{+w}{  }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{insert}\PYG{p}{(}\PYG{k}{const}\PYG{+w}{ }\PYG{n}{string}\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{n}{s}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{id}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{cur}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{char}\PYG{+w}{ }\PYG{n}{c}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{s}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{v}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{c}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{BASE\PYGZus{}CHAR}\PYG{p}{;}
+\PYG{+w}{      }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{t}\PYG{p}{[}\PYG{n}{cur}\PYG{p}{].}\PYG{n}{next}\PYG{p}{[}\PYG{n}{v}\PYG{p}{])}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{t}\PYG{p}{[}\PYG{n}{cur}\PYG{p}{].}\PYG{n}{next}\PYG{p}{[}\PYG{n}{v}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{.}\PYG{n}{size}\PYG{p}{();}
+\PYG{+w}{        }\PYG{n}{t}\PYG{p}{.}\PYG{n}{emplace\PYGZus{}back}\PYG{p}{();}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{      }\PYG{n}{cur}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{cur}\PYG{p}{].}\PYG{n}{next}\PYG{p}{[}\PYG{n}{v}\PYG{p}{];}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{n}{t}\PYG{p}{[}\PYG{n}{cur}\PYG{p}{].}\PYG{n}{pattern\PYGZus{}ids}\PYG{p}{.}\PYG{n}{push\PYGZus{}back}\PYG{p}{(}\PYG{n}{id}\PYG{p}{);}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// 2. Build Failure and Output links via BFS}
+\PYG{+w}{  }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{build}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{queue}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{q}\PYG{p}{;}
+\PYG{+w}{    }
+\PYG{+w}{    }\PYG{c+c1}{// Initialize root\PYGZsq{}s children}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{ALPHABET}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{t}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{].}\PYG{n}{next}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{t}\PYG{p}{[}\PYG{n}{t}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{].}\PYG{n}{next}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]].}\PYG{n}{fail}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{q}\PYG{p}{.}\PYG{n}{push}\PYG{p}{(}\PYG{n}{t}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{].}\PYG{n}{next}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]);}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{    }\PYG{k}{while}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{q}\PYG{p}{.}\PYG{n}{empty}\PYG{p}{())}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{u}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{q}\PYG{p}{.}\PYG{n}{front}\PYG{p}{();}
+\PYG{+w}{      }\PYG{n}{q}\PYG{p}{.}\PYG{n}{pop}\PYG{p}{();}
+
+\PYG{+w}{      }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{ALPHABET}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{v}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{u}\PYG{p}{].}\PYG{n}{next}\PYG{p}{[}\PYG{n}{i}\PYG{p}{];}
+\PYG{+w}{        }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{v}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{          }\PYG{c+c1}{// If child exists, set its failure link to the child of u\PYGZsq{}s fail node}
+\PYG{+w}{          }\PYG{n}{t}\PYG{p}{[}\PYG{n}{v}\PYG{p}{].}\PYG{n}{fail}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{t}\PYG{p}{[}\PYG{n}{u}\PYG{p}{].}\PYG{n}{fail}\PYG{p}{].}\PYG{n}{next}\PYG{p}{[}\PYG{n}{i}\PYG{p}{];}
+\PYG{+w}{          }
+\PYG{+w}{          }\PYG{c+c1}{// Optimization: Output link points to the nearest pattern end}
+\PYG{+w}{          }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{t}\PYG{p}{[}\PYG{n}{t}\PYG{p}{[}\PYG{n}{v}\PYG{p}{].}\PYG{n}{fail}\PYG{p}{].}\PYG{n}{pattern\PYGZus{}ids}\PYG{p}{.}\PYG{n}{empty}\PYG{p}{())}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{t}\PYG{p}{[}\PYG{n}{v}\PYG{p}{].}\PYG{n}{output}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{v}\PYG{p}{].}\PYG{n}{fail}\PYG{p}{;}
+\PYG{+w}{          }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{k}{else}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{t}\PYG{p}{[}\PYG{n}{v}\PYG{p}{].}\PYG{n}{output}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{t}\PYG{p}{[}\PYG{n}{v}\PYG{p}{].}\PYG{n}{fail}\PYG{p}{].}\PYG{n}{output}\PYG{p}{;}
+\PYG{+w}{          }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{          }
+\PYG{+w}{          }\PYG{n}{q}\PYG{p}{.}\PYG{n}{push}\PYG{p}{(}\PYG{n}{v}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{k}{else}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{          }\PYG{c+c1}{// Trie Automaton Optimization: If child doesn\PYGZsq{}t exist, }
+\PYG{+w}{          }\PYG{c+c1}{// point directly to the fallback state. This makes text traversal O(1).}
+\PYG{+w}{          }\PYG{n}{t}\PYG{p}{[}\PYG{n}{u}\PYG{p}{].}\PYG{n}{next}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{t}\PYG{p}{[}\PYG{n}{u}\PYG{p}{].}\PYG{n}{fail}\PYG{p}{].}\PYG{n}{next}\PYG{p}{[}\PYG{n}{i}\PYG{p}{];}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// 3. Search for patterns in the given text}
+\PYG{+w}{  }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{search}\PYG{p}{(}\PYG{k}{const}\PYG{+w}{ }\PYG{n}{string}\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{n}{text}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{cur}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{text}\PYG{p}{.}\PYG{n}{length}\PYG{p}{();}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{c}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{text}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{BASE\PYGZus{}CHAR}\PYG{p}{;}
+\PYG{+w}{      }\PYG{n}{cur}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{cur}\PYG{p}{].}\PYG{n}{next}\PYG{p}{[}\PYG{n}{c}\PYG{p}{];}\PYG{+w}{ }\PYG{c+c1}{// O(1) transition due to Automaton optimization}
+
+\PYG{+w}{      }\PYG{c+c1}{// Traverse output links to find all patterns ending at current position i}
+\PYG{+w}{      }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{temp}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{cur}\PYG{p}{;}
+\PYG{+w}{      }\PYG{k}{while}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{temp}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{id}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{temp}\PYG{p}{].}\PYG{n}{pattern\PYGZus{}ids}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{          }\PYG{c+c1}{// You can store or process the match here}
+\PYG{+w}{          }\PYG{n}{cout}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Pattern ID \PYGZdq{}}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{n}{id}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{} ends at index \PYGZdq{}}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{c+c1}{// Jump to the next valid pattern in the failure chain}
+\PYG{+w}{        }\PYG{c+c1}{// If the current node doesn\PYGZsq{}t have an end word but has an output link,}
+\PYG{+w}{        }\PYG{c+c1}{// this safely jumps to it.}
+\PYG{+w}{        }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{t}\PYG{p}{[}\PYG{n}{temp}\PYG{p}{].}\PYG{n}{pattern\PYGZus{}ids}\PYG{p}{.}\PYG{n}{empty}\PYG{p}{())}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{          }\PYG{n}{temp}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{temp}\PYG{p}{].}\PYG{n}{output}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{k}{else}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{          }\PYG{n}{temp}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{temp}\PYG{p}{].}\PYG{n}{output}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{};}
+
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   USAGE EXAMPLE:}
+\PYG{c+cm}{   }
+\PYG{c+cm}{   signed main() \PYGZob{}}
+\PYG{c+cm}{     AhoCorasick ac;}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     vector\PYGZlt{}string\PYGZgt{} patterns = \PYGZob{}\PYGZdq{}he\PYGZdq{}, \PYGZdq{}she\PYGZdq{}, \PYGZdq{}his\PYGZdq{}, \PYGZdq{}hers\PYGZdq{}\PYGZcb{};}
+\PYG{c+cm}{     for (int i = 0; i \PYGZlt{} patterns.size(); i++) \PYGZob{}}
+\PYG{c+cm}{       ac.insert(patterns[i], i);}
+\PYG{c+cm}{     \PYGZcb{}}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // MUST call build() after inserting all patterns and before searching}
+\PYG{c+cm}{     ac.build();}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     string text = \PYGZdq{}ushers\PYGZdq{};}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}Searching in text: \PYGZdq{} \PYGZlt{}\PYGZlt{} text \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{};}
+\PYG{c+cm}{     ac.search(text);}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // Output expected:}
+\PYG{c+cm}{     // Pattern ID 1 (\PYGZdq{}she\PYGZdq{}) ends at index 3}
+\PYG{c+cm}{     // Pattern ID 0 (\PYGZdq{}he\PYGZdq{}) ends at index 3}
+\PYG{c+cm}{     // Pattern ID 3 (\PYGZdq{}hers\PYGZdq{}) ends at index 5}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     return 0;}
+\PYG{c+cm}{   \PYGZcb{}}
+\PYG{c+cm}{*/}
+\end{MintedVerbatim}

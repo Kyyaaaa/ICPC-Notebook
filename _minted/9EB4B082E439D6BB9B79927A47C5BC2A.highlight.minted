@@ -1,0 +1,85 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   GNU PBDS ORDERED SET (Policy\PYGZhy{}Based Data Structure)}
+\PYG{c+cm}{   }
+\PYG{c+cm}{   Idea:}
+\PYG{c+cm}{   \PYGZhy{} A balanced binary search tree (Red\PYGZhy{}Black Tree) with order statistics.}
+\PYG{c+cm}{   \PYGZhy{} Works exactly like std::set but with two additional O(log N) functions:}
+\PYG{c+cm}{     1. find\PYGZus{}by\PYGZus{}order(k): returns an iterator to the k\PYGZhy{}th smallest element (0\PYGZhy{}indexed).}
+\PYG{c+cm}{     2. order\PYGZus{}of\PYGZus{}key(x): returns the number of elements strictly smaller than x.}
+\PYG{c+cm}{     }
+\PYG{c+cm}{   IMPORTANT FOR MULTISET:}
+\PYG{c+cm}{   \PYGZhy{} Do NOT use `less\PYGZus{}equal\PYGZlt{}T\PYGZgt{}` for multiset if you need to use `.erase()`. }
+\PYG{c+cm}{     It will delete ALL occurrences of the value, or break the tree structure.}
+\PYG{c+cm}{   \PYGZhy{} The best and safest way to implement an ordered\PYGZus{}multiset is to use }
+\PYG{c+cm}{     `pair\PYGZlt{}T, int\PYGZgt{}` where the second element is a unique counter/ID.}
+\PYG{c+cm}{*/}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZlt{}ext/pb\PYGZus{}ds/assoc\PYGZus{}container.hpp\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZlt{}ext/pb\PYGZus{}ds/tree\PYGZus{}policy.hpp\PYGZgt{}}
+
+\PYG{k}{using}\PYG{+w}{ }\PYG{k}{namespace}\PYG{+w}{ }\PYG{n+nn}{std}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{k}{namespace}\PYG{+w}{ }\PYG{n+nn}{\PYGZus{}\PYGZus{}gnu\PYGZus{}pbds}\PYG{p}{;}
+
+\PYG{c+c1}{// 1. Ordered Set (Distinct elements only)}
+\PYG{k}{template}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{k}{typename}\PYG{+w}{ }\PYG{n+nc}{T}\PYG{o}{\PYGZgt{}}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n}{ordered\PYGZus{}set}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{tree}\PYG{o}{\PYGZlt{}}\PYG{n}{T}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{null\PYGZus{}type}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{less}\PYG{o}{\PYGZlt{}}\PYG{n}{T}\PYG{o}{\PYGZgt{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{rb\PYGZus{}tree\PYGZus{}tag}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{tree\PYGZus{}order\PYGZus{}statistics\PYGZus{}node\PYGZus{}update}\PYG{o}{\PYGZgt{}}\PYG{p}{;}
+
+\PYG{c+c1}{// 2. Ordered Multiset (Allows duplicates safely by using pair\PYGZlt{}T, int\PYGZgt{})}
+\PYG{k}{template}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{k}{typename}\PYG{+w}{ }\PYG{n+nc}{T}\PYG{o}{\PYGZgt{}}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n}{ordered\PYGZus{}multiset}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{tree}\PYG{o}{\PYGZlt{}}\PYG{n}{pair}\PYG{o}{\PYGZlt{}}\PYG{n}{T}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{null\PYGZus{}type}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{less}\PYG{o}{\PYGZlt{}}\PYG{n}{pair}\PYG{o}{\PYGZlt{}}\PYG{n}{T}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}\PYGZgt{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{rb\PYGZus{}tree\PYGZus{}tag}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{tree\PYGZus{}order\PYGZus{}statistics\PYGZus{}node\PYGZus{}update}\PYG{o}{\PYGZgt{}}\PYG{p}{;}
+
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   USAGE EXAMPLE:}
+\PYG{c+cm}{   }
+\PYG{c+cm}{   signed main() \PYGZob{}}
+\PYG{c+cm}{     // \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{c+cm}{     // EXAMPLE 1: ORDERED SET (Distinct Elements)}
+\PYG{c+cm}{     // \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{c+cm}{     ordered\PYGZus{}set\PYGZlt{}int\PYGZgt{} os;}
+\PYG{c+cm}{     os.insert(10);}
+\PYG{c+cm}{     os.insert(30);}
+\PYG{c+cm}{     os.insert(20);}
+\PYG{c+cm}{     os.insert(30); // Ignored, as 30 is already present}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // find\PYGZus{}by\PYGZus{}order(k): Returns iterator to the k\PYGZhy{}th smallest element (0\PYGZhy{}indexed)}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} *os.find\PYGZus{}by\PYGZus{}order(0) \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // Output: 10}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} *os.find\PYGZus{}by\PYGZus{}order(2) \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // Output: 30}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // order\PYGZus{}of\PYGZus{}key(x): Returns the number of elements STRICTLY smaller than x}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} os.order\PYGZus{}of\PYGZus{}key(25) \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{};  // Output: 2 (10 and 20)}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} os.order\PYGZus{}of\PYGZus{}key(20) \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{};  // Output: 1 (only 10)}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     os.erase(20); // Erases 20 normally}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{c+cm}{     // EXAMPLE 2: ORDERED MULTISET (With Duplicates)}
+\PYG{c+cm}{     // \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{c+cm}{     ordered\PYGZus{}multiset\PYGZlt{}int\PYGZgt{} oms;}
+\PYG{c+cm}{     int timer = 0; // Unique ID counter to distinguish duplicates}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // Insert: use pair \PYGZob{}value, ++timer\PYGZcb{}}
+\PYG{c+cm}{     oms.insert(\PYGZob{}10, ++timer\PYGZcb{});}
+\PYG{c+cm}{     oms.insert(\PYGZob{}20, ++timer\PYGZcb{});}
+\PYG{c+cm}{     oms.insert(\PYGZob{}20, ++timer\PYGZcb{});}
+\PYG{c+cm}{     oms.insert(\PYGZob{}30, ++timer\PYGZcb{});}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // order\PYGZus{}of\PYGZus{}key: just pass \PYGZob{}value, \PYGZhy{}1\PYGZcb{} to get count of elements \PYGZlt{} value}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} oms.order\PYGZus{}of\PYGZus{}key(\PYGZob{}20, \PYGZhy{}1\PYGZcb{}) \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // Output: 1 (only \PYGZob{}10\PYGZcb{})}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} oms.order\PYGZus{}of\PYGZus{}key(\PYGZob{}30, \PYGZhy{}1\PYGZcb{}) \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // Output: 3 (\PYGZob{}10\PYGZcb{}, \PYGZob{}20\PYGZcb{}, \PYGZob{}20\PYGZcb{})}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // find\PYGZus{}by\PYGZus{}order works exactly the same, but returns a pair}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} oms.find\PYGZus{}by\PYGZus{}order(1)\PYGZhy{}\PYGZgt{}first \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // Output: 20}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} oms.find\PYGZus{}by\PYGZus{}order(2)\PYGZhy{}\PYGZgt{}first \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // Output: 20}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // Erase one occurrence of 20: }
+\PYG{c+cm}{     // Find its iterator using lower\PYGZus{}bound with \PYGZhy{}1, then erase the iterator}
+\PYG{c+cm}{     auto it = oms.lower\PYGZus{}bound(\PYGZob{}20, \PYGZhy{}1\PYGZcb{});}
+\PYG{c+cm}{     if (it != oms.end() \PYGZam{}\PYGZam{} it\PYGZhy{}\PYGZgt{}first == 20) \PYGZob{}}
+\PYG{c+cm}{       oms.erase(it);}
+\PYG{c+cm}{     \PYGZcb{}}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     return 0;}
+\PYG{c+cm}{   \PYGZcb{}}
+\PYG{c+cm}{*/}
+\end{MintedVerbatim}

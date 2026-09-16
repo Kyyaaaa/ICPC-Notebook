@@ -1,0 +1,108 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   DISJOINT SET UNION WITH ROLLBACK}
+\PYG{c+cm}{   Idea:}
+\PYG{c+cm}{   \PYGZhy{} Supports union of two sets and rolling back to a previous state.}
+\PYG{c+cm}{   \PYGZhy{} STRICT RULE: NO PATH COMPRESSION! Path compression destroys the tree }
+\PYG{c+cm}{     structure, making it impossible to undo operations efficiently.}
+\PYG{c+cm}{   \PYGZhy{} We only use \PYGZdq{}Union by Size\PYGZdq{}. This guarantees that the tree depth }
+\PYG{c+cm}{     never exceeds O(log N).}
+\PYG{c+cm}{   Complexity:}
+\PYG{c+cm}{   \PYGZhy{} find\PYGZus{}set: O(log N)}
+\PYG{c+cm}{   \PYGZhy{} union\PYGZus{}sets: O(log N)}
+\PYG{c+cm}{   \PYGZhy{} rollback: O(1) per undone operation}
+\PYG{c+cm}{*/}
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{DSU\PYGZus{}Rollback}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{parent}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{sz}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{components}\PYG{p}{;}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{c+c1}{// Stores the history of unions as pairs \PYGZob{}child, parent\PYGZcb{}}
+\PYG{+w}{  }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{pair}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}\PYGZgt{}}\PYG{+w}{ }\PYG{n}{history}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{n}{DSU\PYGZus{}Rollback}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{parent}\PYG{p}{.}\PYG{n}{assign}\PYG{p}{(}\PYG{n}{n}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{sz}\PYG{p}{.}\PYG{n}{assign}\PYG{p}{(}\PYG{n}{n}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{components}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{n}{parent}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Find set WITHOUT path compression}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{find\PYGZus{}set}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{v}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{while}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{v}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{parent}\PYG{p}{[}\PYG{n}{v}\PYG{p}{])}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{n}{v}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{parent}\PYG{p}{[}\PYG{n}{v}\PYG{p}{];}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{v}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Union two sets by size and record the operation}
+\PYG{+w}{  }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{union\PYGZus{}sets}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{a}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{b}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{a}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{find\PYGZus{}set}\PYG{p}{(}\PYG{n}{a}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{b}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{find\PYGZus{}set}\PYG{p}{(}\PYG{n}{b}\PYG{p}{);}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{a}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{b}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{n+nb}{false}\PYG{p}{;}
+
+\PYG{+w}{    }\PYG{c+c1}{// Union by size: always attach the smaller tree (a) to the larger one (b)}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{sz}\PYG{p}{[}\PYG{n}{a}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{sz}\PYG{p}{[}\PYG{n}{b}\PYG{p}{])}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{n}{swap}\PYG{p}{(}\PYG{n}{a}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{b}\PYG{p}{);}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{    }\PYG{c+c1}{// Perform union}
+\PYG{+w}{    }\PYG{n}{parent}\PYG{p}{[}\PYG{n}{a}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{b}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{sz}\PYG{p}{[}\PYG{n}{b}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{sz}\PYG{p}{[}\PYG{n}{a}\PYG{p}{];}
+\PYG{+w}{    }\PYG{n}{components}\PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{p}{;}
+\PYG{+w}{    }
+\PYG{+w}{    }\PYG{c+c1}{// Record the operation: \PYGZsq{}a\PYGZsq{} became a child of \PYGZsq{}b\PYGZsq{}}
+\PYG{+w}{    }\PYG{n}{history}\PYG{p}{.}\PYG{n}{push\PYGZus{}back}\PYG{p}{(\PYGZob{}}\PYG{n}{a}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{b}\PYG{p}{\PYGZcb{});}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{n+nb}{true}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Take a snapshot of the current state (returns the size of the history stack)}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{snapshot}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{history}\PYG{p}{.}\PYG{n}{size}\PYG{p}{();}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Rollback operations until the history stack size is equal to `checkpoint`}
+\PYG{+w}{  }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{rollback}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{checkpoint}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{while}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{history}\PYG{p}{.}\PYG{n}{size}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{checkpoint}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{a}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{history}\PYG{p}{.}\PYG{n}{back}\PYG{p}{().}\PYG{n}{first}\PYG{p}{;}
+\PYG{+w}{      }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{b}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{history}\PYG{p}{.}\PYG{n}{back}\PYG{p}{().}\PYG{n}{second}\PYG{p}{;}
+\PYG{+w}{      }\PYG{n}{history}\PYG{p}{.}\PYG{n}{pop\PYGZus{}back}\PYG{p}{();}
+
+\PYG{+w}{      }\PYG{c+c1}{// Undo the union operation}
+\PYG{+w}{      }\PYG{n}{sz}\PYG{p}{[}\PYG{n}{b}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZhy{}=}\PYG{+w}{ }\PYG{n}{sz}\PYG{p}{[}\PYG{n}{a}\PYG{p}{];}
+\PYG{+w}{      }\PYG{n}{parent}\PYG{p}{[}\PYG{n}{a}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{a}\PYG{p}{;}
+\PYG{+w}{      }\PYG{n}{components}\PYG{o}{++}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{};}
+
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   USAGE EXAMPLE (Dynamic Connectivity / Divide \PYGZam{} Conquer on Time):}
+\PYG{c+cm}{   }
+\PYG{c+cm}{   signed main() \PYGZob{}}
+\PYG{c+cm}{     int n = 5;}
+\PYG{c+cm}{     DSU\PYGZus{}Rollback dsu(n);}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     dsu.union\PYGZus{}sets(1, 2);}
+\PYG{c+cm}{     dsu.union\PYGZus{}sets(3, 4);}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}Components: \PYGZdq{} \PYGZlt{}\PYGZlt{} dsu.components \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // Output: 3}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // 1. Save the current state}
+\PYG{c+cm}{     int checkpoint = dsu.snapshot();}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // 2. Do some temporary unions}
+\PYG{c+cm}{     dsu.union\PYGZus{}sets(2, 3);}
+\PYG{c+cm}{     dsu.union\PYGZus{}sets(4, 5);}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}Components after temp unions: \PYGZdq{} \PYGZlt{}\PYGZlt{} dsu.components \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // Output: 1}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // 3. Rollback to the saved state}
+\PYG{c+cm}{     dsu.rollback(checkpoint);}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // The state is perfectly restored!}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}Components after rollback: \PYGZdq{} \PYGZlt{}\PYGZlt{} dsu.components \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // Output: 3}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     return 0;}
+\PYG{c+cm}{   \PYGZcb{}}
+\PYG{c+cm}{*/}
+\end{MintedVerbatim}
