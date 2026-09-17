@@ -1,0 +1,102 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   DIVIDE AND CONQUER DP OPTIMIZATION}
+\PYG{c+cm}{   }
+\PYG{c+cm}{   Idea:}
+\PYG{c+cm}{   \PYGZhy{} Optimizes DP equations of the form:}
+\PYG{c+cm}{     dp[i][j] = min\PYGZus{}\PYGZob{}k \PYGZlt{} j\PYGZcb{} (dp[i\PYGZhy{}1][k] + cost(k+1, j))}
+\PYG{c+cm}{   \PYGZhy{} Condition: The optimal split point `opt(i, j)` must be monotonic, }
+\PYG{c+cm}{     meaning: opt(i, j) \PYGZlt{}= opt(i, j+1).}
+\PYG{c+cm}{   \PYGZhy{} This monotonicity allows us to use Divide \PYGZam{} Conquer: if we know the }
+\PYG{c+cm}{     optimal split point for mid is `opt\PYGZus{}mid`, then the split point for }
+\PYG{c+cm}{     any j \PYGZlt{} mid is \PYGZlt{}= opt\PYGZus{}mid, and for any j \PYGZgt{} mid is \PYGZgt{}= opt\PYGZus{}mid.}
+\PYG{c+cm}{     }
+\PYG{c+cm}{   Complexity:}
+\PYG{c+cm}{   \PYGZhy{} Original DP: O(K * N\PYGZca{}2)}
+\PYG{c+cm}{   \PYGZhy{} D\PYGZam{}C Optimized: O(K * N log N)}
+\PYG{c+cm}{   }
+\PYG{c+cm}{   Memory Optimization:}
+\PYG{c+cm}{   \PYGZhy{} We only need the DP state from the previous phase (i \PYGZhy{} 1), so we can }
+\PYG{c+cm}{     use two 1D arrays: `dp\PYGZus{}before` and `dp\PYGZus{}current`.}
+\PYG{c+cm}{*/}
+\PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{LINF}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mf}{1e18}\PYG{p}{;}
+
+\PYG{c+c1}{// DP arrays (1\PYGZhy{}indexed for the items)}
+\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{dp\PYGZus{}before}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{dp\PYGZus{}current}\PYG{p}{;}
+
+\PYG{c+c1}{// 1. Problem\PYGZhy{}specific cost function}
+\PYG{c+c1}{// Note: To keep the overall complexity O(K * N log N), this cost function }
+\PYG{c+c1}{// MUST be calculable in O(1). Usually done via prefix sums or sliding window.}
+\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n+nf}{cost}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{l}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{l}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{  }\PYG{c+c1}{// TODO: Replace with the actual O(1) cost logic of the problem}
+\PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+c1}{// 2. Divide and Conquer recursive function}
+\PYG{c+c1}{// l, r: the range of `j` we are currently computing dp\PYGZus{}current[j] for.}
+\PYG{c+c1}{// optl, optr: the valid range of the optimal split point `k` for this range.}
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{compute}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{l}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{optl}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{optr}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{l}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{return}\PYG{p}{;}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{mid}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{l}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{r}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{l}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{;}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{c+c1}{// We want to find the optimal split point `k` for dp\PYGZus{}current[mid]}
+\PYG{+w}{  }\PYG{n}{pair}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{best}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n}{LINF}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{\PYGZhy{}1}\PYG{p}{\PYGZcb{};}\PYG{+w}{ }
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{c+c1}{// k is the end of the previous segment, so the new segment is [k+1, mid].}
+\PYG{+w}{  }\PYG{c+c1}{// Note: k must be strictly less than `mid` if we require non\PYGZhy{}empty segments,}
+\PYG{+w}{  }\PYG{c+c1}{// or k \PYGZlt{}= mid depending on the problem formulation.}
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{k}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{optl}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{k}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{min}\PYG{p}{(}\PYG{n}{mid}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{optr}\PYG{p}{);}\PYG{+w}{ }\PYG{n}{k}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{// Check if the previous state is valid}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{dp\PYGZus{}before}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{LINF}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{current\PYGZus{}val}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{dp\PYGZus{}before}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{cost}\PYG{p}{(}\PYG{n}{k}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{mid}\PYG{p}{);}
+\PYG{+w}{      }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{current\PYGZus{}val}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{best}\PYG{p}{.}\PYG{n}{first}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{best}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n}{current\PYGZus{}val}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{k}\PYG{p}{\PYGZcb{};}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{n}{dp\PYGZus{}current}\PYG{p}{[}\PYG{n}{mid}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{best}\PYG{p}{.}\PYG{n}{first}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{opt}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{best}\PYG{p}{.}\PYG{n}{second}\PYG{p}{;}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{c+c1}{// 3. Recurse for the left and right halves using the discovered monotonicity}
+\PYG{+w}{  }\PYG{c+c1}{// For j \PYGZlt{} mid, optimal k is in [optl, opt]}
+\PYG{+w}{  }\PYG{n}{compute}\PYG{p}{(}\PYG{n}{l}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{mid}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{optl}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{opt}\PYG{p}{);}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{c+c1}{// For j \PYGZgt{} mid, optimal k is in [opt, optr]}
+\PYG{+w}{  }\PYG{n}{compute}\PYG{p}{(}\PYG{n}{mid}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{opt}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{optr}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   USAGE EXAMPLE:}
+\PYG{c+cm}{   }
+\PYG{c+cm}{   signed main() \PYGZob{}}
+\PYG{c+cm}{     int n = 1000; // Number of elements}
+\PYG{c+cm}{     int K = 10;   // Number of partitions}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     dp\PYGZus{}before.assign(n + 1, LINF);}
+\PYG{c+cm}{     dp\PYGZus{}current.assign(n + 1, LINF);}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // Base case for 0 partitions}
+\PYG{c+cm}{     dp\PYGZus{}before[0] = 0; }
+\PYG{c+cm}{     // dp\PYGZus{}before[x \PYGZgt{} 0] is LINF because we can\PYGZsq{}t partition x items into 0 parts}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     for (int i = 1; i \PYGZlt{}= K; i++) \PYGZob{}}
+\PYG{c+cm}{       // Reset current DP array for the new partition step}
+\PYG{c+cm}{       fill(dp\PYGZus{}current.begin(), dp\PYGZus{}current.end(), LINF);}
+\PYG{c+cm}{       }
+\PYG{c+cm}{       // Compute dp\PYGZus{}current[1...n], knowing optimal k is in [0...n\PYGZhy{}1]}
+\PYG{c+cm}{       compute(1, n, 0, n \PYGZhy{} 1);}
+\PYG{c+cm}{       }
+\PYG{c+cm}{       // Move current row to before row for the next iteration}
+\PYG{c+cm}{       dp\PYGZus{}before = dp\PYGZus{}current;}
+\PYG{c+cm}{     \PYGZcb{}}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}Min cost to partition \PYGZdq{} \PYGZlt{}\PYGZlt{} n \PYGZlt{}\PYGZlt{} \PYGZdq{} items into \PYGZdq{} \PYGZlt{}\PYGZlt{} K }
+\PYG{c+cm}{          \PYGZlt{}\PYGZlt{} \PYGZdq{} parts is: \PYGZdq{} \PYGZlt{}\PYGZlt{} dp\PYGZus{}current[n] \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{};}
+\PYG{c+cm}{          }
+\PYG{c+cm}{     return 0;}
+\PYG{c+cm}{   \PYGZcb{}}
+\PYG{c+cm}{*/}
+\end{MintedVerbatim}

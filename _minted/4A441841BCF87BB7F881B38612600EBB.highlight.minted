@@ -1,0 +1,203 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   MO\PYGZsq{}S ALGORITHM ON TREES (WITH UPDATES \PYGZhy{} 3D MO)}
+\PYG{c+cm}{   Idea:}
+\PYG{c+cm}{   \PYGZhy{} Flattens the tree into an array using Euler Tour. Each node appears }
+\PYG{c+cm}{     exactly TWICE: when we enter it (tin) and when we leave it (tout).}
+\PYG{c+cm}{   \PYGZhy{} A node is considered \PYGZdq{}in the current path\PYGZdq{} if it appears exactly ONCE }
+\PYG{c+cm}{     in our active range [L, R]. We maintain a boolean array `f[u]` to }
+\PYG{c+cm}{     toggle the presence of node `u`.}
+\PYG{c+cm}{     }
+\PYG{c+cm}{   Query Translation (Path from U to V, assuming tin[U] \PYGZlt{} tin[V]):}
+\PYG{c+cm}{   \PYGZhy{} Case 1: U is an ancestor of V. }
+\PYG{c+cm}{             Query range: [tin[U], tin[V]]. LCA is already included.}
+\PYG{c+cm}{   \PYGZhy{} Case 2: U is NOT an ancestor of V.}
+\PYG{c+cm}{             Query range: [tout[U], tin[V]]. LCA is NOT in this range, }
+\PYG{c+cm}{             so we must manually add/remove the LCA during the query.}
+\PYG{c+cm}{   Complexity:}
+\PYG{c+cm}{   \PYGZhy{} Without updates (2D Mo): Block size = N / sqrt(Q), Time = O(N * sqrt(Q))}
+\PYG{c+cm}{   \PYGZhy{} With updates (3D Mo): Block size = N\PYGZca{}(2/3), Time = O(N\PYGZca{}(5/3))}
+\PYG{c+cm}{*/}
+\PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{N}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mf}{2e5}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{p}{;}
+\PYG{c+c1}{// For 3D Mo (with updates), BLOCK size should be roughly N\PYGZca{}(2/3). }
+\PYG{c+c1}{// For N = 100,000, N\PYGZca{}(2/3) is approx 2150.}
+\PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{BLOCK}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{2150}\PYG{p}{;}\PYG{+w}{ }
+
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{q}\PYG{p}{;}
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{a}\PYG{p}{[}\PYG{n}{N}\PYG{p}{];}
+\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{G}\PYG{p}{[}\PYG{n}{N}\PYG{p}{];}
+
+\PYG{c+c1}{// Euler Tour \PYGZam{} LCA}
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{tin}\PYG{p}{[}\PYG{n}{N}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{tout}\PYG{p}{[}\PYG{n}{N}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{timer}\PYG{p}{;}
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{tour}\PYG{p}{[}\PYG{n}{N}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{];}\PYG{+w}{ }\PYG{c+c1}{// Needs to be 2 * N because each node appears twice}
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{up}\PYG{p}{[}\PYG{l+m+mi}{18}\PYG{p}{][}\PYG{n}{N}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{depth}\PYG{p}{[}\PYG{n}{N}\PYG{p}{];}
+
+\PYG{c+c1}{// Mo\PYGZsq{}s State}
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{freq}\PYG{p}{[}\PYG{n}{N}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{distinct\PYGZus{}count}\PYG{p}{;}
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{f}\PYG{p}{[}\PYG{n}{N}\PYG{p}{];}\PYG{+w}{ }\PYG{c+c1}{// f[x] = 1 if node x is currently in the path, 0 otherwise}
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{ans}\PYG{p}{[}\PYG{n}{N}\PYG{p}{];}
+
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{Query}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{l}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{lca\PYGZus{}idx}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{id}\PYG{p}{;}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{k}{operator}\PYG{o}{\PYGZlt{}}\PYG{p}{(}\PYG{k}{const}\PYG{+w}{ }\PYG{n}{Query}\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{n}{other}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{const}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{bl}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{l}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{n}{BLOCK}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{br}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{r}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{n}{BLOCK}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{obl}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{other}\PYG{p}{.}\PYG{n}{l}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{n}{BLOCK}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{obr}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{other}\PYG{p}{.}\PYG{n}{r}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{n}{BLOCK}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{bl}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{obl}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{bl}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{obl}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{br}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{obr}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{bl}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{?}\PYG{+w}{ }\PYG{n}{br}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{obr}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{br}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{obr}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{br}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{?}\PYG{+w}{ }\PYG{n}{t}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{other}\PYG{p}{.}\PYG{n}{t}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{t}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{other}\PYG{p}{.}\PYG{n}{t}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{};}
+
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{Update}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{new\PYGZus{}val}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{old\PYGZus{}val}\PYG{p}{;}
+\PYG{p}{\PYGZcb{};}
+
+\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{Query}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{queries}\PYG{p}{;}
+\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{Update}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{updates}\PYG{p}{;}
+
+\PYG{c+c1}{// 1. Build Euler Tour and LCA table}
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{dfs}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{par}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{n}{up}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{][}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{par}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{l+m+mi}{18}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{up}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{][}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{l+m+mi}{\PYGZhy{}1}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{n}{up}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{up}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{][}\PYG{n}{up}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{][}\PYG{n}{u}\PYG{p}{]];}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{k}{else}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{n}{up}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{\PYGZhy{}1}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{n}{tin}\PYG{p}{[}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{o}{++}\PYG{n}{timer}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{tour}\PYG{p}{[}\PYG{n}{timer}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{;}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{v}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{G}\PYG{p}{[}\PYG{n}{u}\PYG{p}{])}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{v}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{par}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{n}{depth}\PYG{p}{[}\PYG{n}{v}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{depth}\PYG{p}{[}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{      }\PYG{n}{dfs}\PYG{p}{(}\PYG{n}{v}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{);}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{n}{tout}\PYG{p}{[}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{o}{++}\PYG{n}{timer}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{tour}\PYG{p}{[}\PYG{n}{timer}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n+nf}{get\PYGZus{}lca}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{v}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{depth}\PYG{p}{[}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{depth}\PYG{p}{[}\PYG{n}{v}\PYG{p}{])}\PYG{+w}{ }\PYG{n}{swap}\PYG{p}{(}\PYG{n}{u}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{v}\PYG{p}{);}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{delta}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{depth}\PYG{p}{[}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{depth}\PYG{p}{[}\PYG{n}{v}\PYG{p}{];}
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{l+m+mi}{18}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{((}\PYG{n}{delta}\PYG{+w}{ }\PYG{o}{\PYGZgt{}\PYGZgt{}}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{u}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{up}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{n}{u}\PYG{p}{];}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{u}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{v}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{17}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZgt{}=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{up}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{up}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{n}{v}\PYG{p}{])}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{n}{u}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{up}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{n}{u}\PYG{p}{];}
+\PYG{+w}{      }\PYG{n}{v}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{up}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{n}{v}\PYG{p}{];}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{up}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{][}\PYG{n}{u}\PYG{p}{];}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+c1}{// 2. State Manipulation Functions}
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{add}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{val}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{++}\PYG{n}{freq}\PYG{p}{[}\PYG{n}{val}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{distinct\PYGZus{}count}\PYG{o}{++}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{sub}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{val}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{freq}\PYG{p}{[}\PYG{n}{val}\PYG{p}{]}\PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{distinct\PYGZus{}count}\PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+c1}{// Toggle a node: if it\PYGZsq{}s already in the path, remove it. Otherwise, add it.}
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{toggle}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{idx}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{tour}\PYG{p}{[}\PYG{n}{idx}\PYG{p}{];}
+\PYG{+w}{  }\PYG{n}{f}\PYG{p}{[}\PYG{n}{x}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZca{}=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{f}\PYG{p}{[}\PYG{n}{x}\PYG{p}{])}\PYG{+w}{ }\PYG{n}{add}\PYG{p}{(}\PYG{n}{a}\PYG{p}{[}\PYG{n}{x}\PYG{p}{]);}
+\PYG{+w}{  }\PYG{k}{else}\PYG{+w}{ }\PYG{n}{sub}\PYG{p}{(}\PYG{n}{a}\PYG{p}{[}\PYG{n}{x}\PYG{p}{]);}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+c1}{// Apply point update dynamically}
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{apply\PYGZus{}update}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{val}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{old\PYGZus{}val}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{f}\PYG{p}{[}\PYG{n}{x}\PYG{p}{])}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{add}\PYG{p}{(}\PYG{n}{val}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{sub}\PYG{p}{(}\PYG{n}{old\PYGZus{}val}\PYG{p}{);}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{n}{a}\PYG{p}{[}\PYG{n}{x}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{val}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   USAGE EXAMPLE:}
+\PYG{c+cm}{   }
+\PYG{c+cm}{   signed main() \PYGZob{}}
+\PYG{c+cm}{     // ... Read N, Q, array `a`, and tree edges ...}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     timer = 0;}
+\PYG{c+cm}{     memset(up, \PYGZhy{}1, sizeof(up));}
+\PYG{c+cm}{     depth[1] = 0;}
+\PYG{c+cm}{     dfs(1, \PYGZhy{}1);}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // Note: If values are large, do Coordinate Compression on `a` and updates first!}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // ... Reading Queries and Updates ...}
+\PYG{c+cm}{     int time\PYGZus{}counter = 0;}
+\PYG{c+cm}{     for (int i = 1; i \PYGZlt{}= q; i++) \PYGZob{}}
+\PYG{c+cm}{       int type; cin \PYGZgt{}\PYGZgt{} type;}
+\PYG{c+cm}{       if (type == 1) \PYGZob{} // Path Query}
+\PYG{c+cm}{         int u, v; cin \PYGZgt{}\PYGZgt{} u \PYGZgt{}\PYGZgt{} v;}
+\PYG{c+cm}{         if (tin[u] \PYGZgt{} tin[v]) swap(u, v); // Ensure tin[u] \PYGZlt{}= tin[v]}
+\PYG{c+cm}{         }
+\PYG{c+cm}{         int lca = get\PYGZus{}lca(u, v);}
+\PYG{c+cm}{         if (lca == u) \PYGZob{}}
+\PYG{c+cm}{           // u is ancestor of v \PYGZhy{}\PYGZgt{} LCA is already inside [tin[u], tin[v]]}
+\PYG{c+cm}{           queries.push\PYGZus{}back(\PYGZob{}tin[u], tin[v], \PYGZhy{}1, time\PYGZus{}counter, (int)queries.size() + 1\PYGZcb{});}
+\PYG{c+cm}{         \PYGZcb{} else \PYGZob{}}
+\PYG{c+cm}{           // u is NOT ancestor of v \PYGZhy{}\PYGZgt{} LCA is missing, need to add it manually}
+\PYG{c+cm}{           queries.push\PYGZus{}back(\PYGZob{}tout[u], tin[v], tin[lca], time\PYGZus{}counter, (int)queries.size() + 1\PYGZcb{});}
+\PYG{c+cm}{         \PYGZcb{}}
+\PYG{c+cm}{       \PYGZcb{} else \PYGZob{} // Point Update}
+\PYG{c+cm}{         int x, val; cin \PYGZgt{}\PYGZgt{} x \PYGZgt{}\PYGZgt{} val;}
+\PYG{c+cm}{         time\PYGZus{}counter++;}
+\PYG{c+cm}{         updates.push\PYGZus{}back(\PYGZob{}x, val, a[x]\PYGZcb{});}
+\PYG{c+cm}{         a[x] = val; // temporarily apply to get `old\PYGZus{}val` for future queries}
+\PYG{c+cm}{       \PYGZcb{}}
+\PYG{c+cm}{     \PYGZcb{}}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // Rollback the array `a` to its initial state before processing Mo}
+\PYG{c+cm}{     for (int i = (int)updates.size() \PYGZhy{} 1; i \PYGZgt{}= 0; i\PYGZhy{}\PYGZhy{}) \PYGZob{}}
+\PYG{c+cm}{       a[updates[i].x] = updates[i].old\PYGZus{}val;}
+\PYG{c+cm}{     \PYGZcb{}}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     sort(queries.begin(), queries.end());}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     int L = 1, R = 0, T = 0;}
+\PYG{c+cm}{     for (const auto\PYGZam{} q : queries) \PYGZob{}}
+\PYG{c+cm}{       while (R \PYGZlt{} q.r) toggle(++R);}
+\PYG{c+cm}{       while (L \PYGZgt{} q.l) toggle(\PYGZhy{}\PYGZhy{}L);}
+\PYG{c+cm}{       while (R \PYGZgt{} q.r) toggle(R\PYGZhy{}\PYGZhy{});}
+\PYG{c+cm}{       while (L \PYGZlt{} q.l) toggle(L++);}
+\PYG{c+cm}{       }
+\PYG{c+cm}{       while (T \PYGZlt{} q.t) \PYGZob{}}
+\PYG{c+cm}{         apply\PYGZus{}update(updates[T].x, updates[T].new\PYGZus{}val, updates[T].old\PYGZus{}val);}
+\PYG{c+cm}{         T++;}
+\PYG{c+cm}{       \PYGZcb{}}
+\PYG{c+cm}{       while (T \PYGZgt{} q.t) \PYGZob{}}
+\PYG{c+cm}{         T\PYGZhy{}\PYGZhy{};}
+\PYG{c+cm}{         apply\PYGZus{}update(updates[T].x, updates[T].old\PYGZus{}val, updates[T].new\PYGZus{}val);}
+\PYG{c+cm}{       \PYGZcb{}}
+\PYG{c+cm}{       }
+\PYG{c+cm}{       // Manually toggle LCA if needed}
+\PYG{c+cm}{       if (q.lca\PYGZus{}idx != \PYGZhy{}1) toggle(q.lca\PYGZus{}idx);}
+\PYG{c+cm}{       }
+\PYG{c+cm}{       ans[q.id] = distinct\PYGZus{}count;}
+\PYG{c+cm}{       }
+\PYG{c+cm}{       // Untoggle LCA to restore state}
+\PYG{c+cm}{       if (q.lca\PYGZus{}idx != \PYGZhy{}1) toggle(q.lca\PYGZus{}idx);}
+\PYG{c+cm}{     \PYGZcb{}}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     for (int i = 1; i \PYGZlt{}= queries.size(); i++) \PYGZob{}}
+\PYG{c+cm}{       cout \PYGZlt{}\PYGZlt{} ans[i] \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{};}
+\PYG{c+cm}{     \PYGZcb{}}
+\PYG{c+cm}{     return 0;}
+\PYG{c+cm}{   \PYGZcb{}}
+\PYG{c+cm}{*/}
+\end{MintedVerbatim}

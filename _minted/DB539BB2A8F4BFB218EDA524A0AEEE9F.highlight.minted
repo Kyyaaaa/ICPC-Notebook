@@ -1,0 +1,90 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   ALIEN\PYGZsq{}S TRICK (WQS BINARY SEARCH / LAGRANGE RELAXATION)}
+\PYG{c+cm}{   }
+\PYG{c+cm}{   Idea:}
+\PYG{c+cm}{   \PYGZhy{} Solves DP problems with an \PYGZdq{}exactly K items/partitions\PYGZdq{} constraint.}
+\PYG{c+cm}{   \PYGZhy{} We drop the K constraint and add a penalty `lambda` for each partition.}
+\PYG{c+cm}{   \PYGZhy{} We binary search on `lambda`. If we use \PYGZgt{} K partitions, we increase }
+\PYG{c+cm}{     the penalty. If we use \PYGZlt{} K partitions, we decrease it.}
+\PYG{c+cm}{   \PYGZhy{} To handle collinear points on the convex hull, we always prefer the }
+\PYG{c+cm}{     MAXIMUM (or MINIMUM) number of partitions for the same cost, and use }
+\PYG{c+cm}{     `cnt \PYGZgt{}= K` in the binary search.}
+\PYG{c+cm}{     }
+\PYG{c+cm}{   Condition:}
+\PYG{c+cm}{   \PYGZhy{} Let f(x) be the optimal cost using exactly x partitions.}
+\PYG{c+cm}{   \PYGZhy{} f(x) MUST be convex or concave.}
+\PYG{c+cm}{   }
+\PYG{c+cm}{   Complexity: O(N * log(MAX\PYGZus{}PENALTY)) instead of O(N * K).}
+\PYG{c+cm}{*/}
+\PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{LINF}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mf}{1e18}\PYG{p}{;}
+
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}
+\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{a}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// Input array}
+
+\PYG{c+c1}{// 1. The 1D DP function without the \PYGZsq{}K\PYGZsq{} constraint}
+\PYG{c+c1}{// Returns a pair: \PYGZob{}optimal\PYGZus{}cost\PYGZus{}with\PYGZus{}penalty, number\PYGZus{}of\PYGZus{}partitions\PYGZus{}used\PYGZcb{}}
+\PYG{n}{pair}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{solve\PYGZus{}dp}\PYG{p}{(}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{lambda}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{c+c1}{// dp[i] stores \PYGZob{}min\PYGZus{}cost, max\PYGZus{}partitions\PYGZus{}used\PYGZcb{} up to index i}
+\PYG{+w}{  }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{pair}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}\PYGZgt{}}\PYG{+w}{ }\PYG{n}{dp}\PYG{p}{(}\PYG{n}{n}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n}{LINF}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{\PYGZcb{});}
+\PYG{+w}{  }\PYG{n}{dp}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{\PYGZcb{};}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{// Iterate over all possible previous split points}
+\PYG{+w}{    }\PYG{c+c1}{// Note: In real problems, this inner loop is often optimized to O(1) }
+\PYG{+w}{    }\PYG{c+c1}{// using Convex Hull Trick, D\PYGZam{}C, or Monotone Queue.}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{j}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{c+c1}{// cost(j+1, i) is the cost of the segment from j+1 to i}
+\PYG{+w}{      }\PYG{c+c1}{// We ADD `lambda` as a penalty for creating this new segment}
+\PYG{+w}{      }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{segment\PYGZus{}cost}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{c+cm}{/* TODO: Calculate real cost */}
+\PYG{+w}{      }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{new\PYGZus{}cost}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{dp}\PYG{p}{[}\PYG{n}{j}\PYG{p}{].}\PYG{n}{first}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{segment\PYGZus{}cost}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{lambda}\PYG{p}{;}
+\PYG{+w}{      }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{new\PYGZus{}cnt}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{dp}\PYG{p}{[}\PYG{n}{j}\PYG{p}{].}\PYG{n}{second}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{      }
+\PYG{+w}{      }\PYG{c+c1}{// We want to MINIMIZE cost. }
+\PYG{+w}{      }\PYG{c+c1}{// TIE\PYGZhy{}BREAKER: If costs are equal, MAXIMIZE the number of partitions.}
+\PYG{+w}{      }\PYG{c+c1}{// This tie\PYGZhy{}breaker is CRUCIAL to handle collinear points on the convex hull!}
+\PYG{+w}{      }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{new\PYGZus{}cost}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{dp}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{first}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{new\PYGZus{}cost}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{dp}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{first}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{new\PYGZus{}cnt}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{dp}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{second}\PYG{p}{))}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{dp}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n}{new\PYGZus{}cost}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{new\PYGZus{}cnt}\PYG{p}{\PYGZcb{};}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{dp}\PYG{p}{[}\PYG{n}{n}\PYG{p}{];}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   USAGE EXAMPLE:}
+\PYG{c+cm}{   }
+\PYG{c+cm}{   signed main() \PYGZob{}}
+\PYG{c+cm}{     n = 1000;}
+\PYG{c+cm}{     int K = 50; // We need exactly K partitions}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // Binary search for the optimal penalty `lambda`}
+\PYG{c+cm}{     // The range depends on the maximum possible cost difference}
+\PYG{c+cm}{     long long l = \PYGZhy{}1e12, r = 1e12; }
+\PYG{c+cm}{     long long ans = \PYGZhy{}1;}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     while (l \PYGZlt{}= r) \PYGZob{}}
+\PYG{c+cm}{       long long mid = l + (r \PYGZhy{} l) / 2;}
+\PYG{c+cm}{       }
+\PYG{c+cm}{       pair\PYGZlt{}long long, int\PYGZgt{} res = solve\PYGZus{}dp(mid);}
+\PYG{c+cm}{       long long cost = res.first;}
+\PYG{c+cm}{       int cnt = res.second;}
+\PYG{c+cm}{       }
+\PYG{c+cm}{       // If we used \PYGZgt{}= K partitions, it means the penalty is small enough }
+\PYG{c+cm}{       // to allow at least K partitions. We record the answer and try to }
+\PYG{c+cm}{       // INCREASE the penalty to force fewer partitions.}
+\PYG{c+cm}{       if (cnt \PYGZgt{}= K) \PYGZob{}}
+\PYG{c+cm}{         // The real cost is the DP cost MINUS the penalty we added for K partitions}
+\PYG{c+cm}{         ans = cost \PYGZhy{} K * mid; }
+\PYG{c+cm}{         l = mid + 1; // Increase penalty}
+\PYG{c+cm}{       \PYGZcb{} else \PYGZob{}}
+\PYG{c+cm}{         r = mid \PYGZhy{} 1; // Decrease penalty}
+\PYG{c+cm}{       \PYGZcb{}}
+\PYG{c+cm}{     \PYGZcb{}}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}Minimum cost using exactly \PYGZdq{} \PYGZlt{}\PYGZlt{} K \PYGZlt{}\PYGZlt{} \PYGZdq{} partitions: \PYGZdq{} \PYGZlt{}\PYGZlt{} ans \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{};}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     return 0;}
+\PYG{c+cm}{   \PYGZcb{}}
+\PYG{c+cm}{*/}
+\end{MintedVerbatim}
