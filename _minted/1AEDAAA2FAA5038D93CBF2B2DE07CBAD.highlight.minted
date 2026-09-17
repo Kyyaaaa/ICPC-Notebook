@@ -1,0 +1,126 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   DP KNAPSACK ON TREE (Prerequisite DP / Connected Component Knapsack)}
+\PYG{c+cm}{   Idea:}
+\PYG{c+cm}{   \PYGZhy{} Problem: Choose a subset of nodes to maximize total value such that the }
+\PYG{c+cm}{     total weight \PYGZlt{}= W. }
+\PYG{c+cm}{     CONSTRAINT: If a node is chosen, its parent MUST also be chosen. }
+\PYG{c+cm}{     (e.g., Course selection with prerequisites, or picking a connected }
+\PYG{c+cm}{     component rooted at node 1).}
+\PYG{c+cm}{   \PYGZhy{} Naive DP merges subtrees taking O(N * W\PYGZca{}2).}
+\PYG{c+cm}{   OPTIMIZATION (DFS Flattening Trick): }
+\PYG{c+cm}{   \PYGZhy{} We flatten the tree using DFS Pre\PYGZhy{}Order traversal. }
+\PYG{c+cm}{   \PYGZhy{} For a node at pre\PYGZhy{}order index `i`, its entire subtree spans contiguously }
+\PYG{c+cm}{     from index `i` to `i + sz[u] \PYGZhy{} 1`.}
+\PYG{c+cm}{   \PYGZhy{} Transitions:}
+\PYG{c+cm}{     1. Skip node `i`: We CANNOT pick any node in its subtree. We jump }
+\PYG{c+cm}{        directly to index `i + sz[u]`.}
+\PYG{c+cm}{     2. Take node `i`: We pay `weight[u]`, gain `value[u]`, and move to }
+\PYG{c+cm}{        index `i + 1` (allowing us to pick its children).}
+\PYG{c+cm}{   Complexity:}
+\PYG{c+cm}{   \PYGZhy{} Time: O(N * W) }
+\PYG{c+cm}{   \PYGZhy{} Space: O(N * W)}
+\PYG{c+cm}{*/}
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{TreeKnapsack}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}\PYGZgt{}}\PYG{+w}{ }\PYG{n}{adj}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{weight}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{value}\PYG{p}{;}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{c+c1}{// DFS state}
+\PYG{+w}{  }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{sz}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{rev\PYGZus{}dfn}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// rev\PYGZus{}dfn[i] = node ID at DFS pre\PYGZhy{}order index \PYGZsq{}i\PYGZsq{}}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{timer}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{n}{TreeKnapsack}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{\PYGZus{}n}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{n}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{\PYGZus{}n}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{adj}\PYG{p}{.}\PYG{n}{assign}\PYG{p}{(}\PYG{n}{n}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{p}{());}
+\PYG{+w}{    }\PYG{n}{weight}\PYG{p}{.}\PYG{n}{assign}\PYG{p}{(}\PYG{n}{n}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{value}\PYG{p}{.}\PYG{n}{assign}\PYG{p}{(}\PYG{n}{n}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{sz}\PYG{p}{.}\PYG{n}{assign}\PYG{p}{(}\PYG{n}{n}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{rev\PYGZus{}dfn}\PYG{p}{.}\PYG{n}{assign}\PYG{p}{(}\PYG{n}{n}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{timer}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Add directed edge from parent to child}
+\PYG{+w}{  }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{add\PYGZus{}edge}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{v}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{adj}\PYG{p}{[}\PYG{n}{u}\PYG{p}{].}\PYG{n}{push\PYGZus{}back}\PYG{p}{(}\PYG{n}{v}\PYG{p}{);}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Build the Pre\PYGZhy{}Order array and calculate subtree sizes}
+\PYG{+w}{  }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{dfs}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{timer}\PYG{o}{++}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{rev\PYGZus{}dfn}\PYG{p}{[}\PYG{n}{timer}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{sz}\PYG{p}{[}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{    }
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{v}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{adj}\PYG{p}{[}\PYG{n}{u}\PYG{p}{])}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{n}{dfs}\PYG{p}{(}\PYG{n}{v}\PYG{p}{);}
+\PYG{+w}{      }\PYG{n}{sz}\PYG{p}{[}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{sz}\PYG{p}{[}\PYG{n}{v}\PYG{p}{];}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Solves the knapsack problem for a specific weight limit `W`}
+\PYG{+w}{  }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{solve}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{root}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{W}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{timer}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{dfs}\PYG{p}{(}\PYG{n}{root}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{// Flatten the tree}
+
+\PYG{+w}{    }\PYG{c+c1}{// dp[i][w] = max value considering nodes in pre\PYGZhy{}order from index `i` to `n`,}
+\PYG{+w}{    }\PYG{c+c1}{// having exactly `w` weight capacity available.}
+\PYG{+w}{    }\PYG{c+c1}{// We use size (n + 2) to safely handle the jump to `n + 1` when skipping the last nodes.}
+\PYG{+w}{    }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{o}{\PYGZgt{}\PYGZgt{}}\PYG{+w}{ }\PYG{n}{dp}\PYG{p}{(}\PYG{n}{n}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{o}{\PYGZgt{}}\PYG{p}{(}\PYG{n}{W}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{));}
+
+\PYG{+w}{    }\PYG{c+c1}{// Iterate backwards through the pre\PYGZhy{}order indices}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZgt{}=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{u}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{rev\PYGZus{}dfn}\PYG{p}{[}\PYG{n}{i}\PYG{p}{];}
+\PYG{+w}{      }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{jump}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{sz}\PYG{p}{[}\PYG{n}{u}\PYG{p}{];}\PYG{+w}{ }\PYG{c+c1}{// The index to jump to if we skip subtree of `u`}
+\PYG{+w}{      }
+\PYG{+w}{      }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{w}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{w}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{W}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{w}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{c+c1}{// Option 1: Skip this node (and entirely skip its subtree)}
+\PYG{+w}{        }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{skip}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{dp}\PYG{p}{[}\PYG{n}{jump}\PYG{p}{][}\PYG{n}{w}\PYG{p}{];}
+\PYG{+w}{        }
+\PYG{+w}{        }\PYG{c+c1}{// Option 2: Take this node (if current capacity allows)}
+\PYG{+w}{        }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{take}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{w}\PYG{+w}{ }\PYG{o}{\PYGZgt{}=}\PYG{+w}{ }\PYG{n}{weight}\PYG{p}{[}\PYG{n}{u}\PYG{p}{])}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{          }\PYG{n}{take}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{dp}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{][}\PYG{n}{w}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{weight}\PYG{p}{[}\PYG{n}{u}\PYG{p}{]]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{value}\PYG{p}{[}\PYG{n}{u}\PYG{p}{];}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }
+\PYG{+w}{        }\PYG{n}{dp}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{n}{w}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{max}\PYG{p}{(}\PYG{n}{skip}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{take}\PYG{p}{);}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }
+\PYG{+w}{    }\PYG{c+c1}{// The answer is the state starting at pre\PYGZhy{}order index 1 with full capacity W}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{dp}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{][}\PYG{n}{W}\PYG{p}{];}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{};}
+
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   USAGE EXAMPLE:}
+\PYG{c+cm}{   }
+\PYG{c+cm}{   signed main() \PYGZob{}}
+\PYG{c+cm}{     // Suppose we have 5 nodes (1 is the root)}
+\PYG{c+cm}{     int n = 5;}
+\PYG{c+cm}{     TreeKnapsack tk(n);}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // Values and weights for nodes 1 to 5}
+\PYG{c+cm}{     tk.weight = \PYGZob{}0, 1, 2, 3, 2, 1\PYGZcb{}; // 1\PYGZhy{}indexed (index 0 is unused)}
+\PYG{c+cm}{     tk.value  = \PYGZob{}0, 5, 10, 12, 4, 3\PYGZcb{};}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // Tree structure: 1 is parent of 2 and 3. 2 is parent of 4 and 5.}
+\PYG{c+cm}{     // Directed edges from parent to child!}
+\PYG{c+cm}{     tk.add\PYGZus{}edge(1, 2);}
+\PYG{c+cm}{     tk.add\PYGZus{}edge(1, 3);}
+\PYG{c+cm}{     tk.add\PYGZus{}edge(2, 4);}
+\PYG{c+cm}{     tk.add\PYGZus{}edge(2, 5);}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     int weight\PYGZus{}limit = 4;}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // Calculate max value if we root at 1 and have max weight 4}
+\PYG{c+cm}{     long long max\PYGZus{}val = tk.solve(1, weight\PYGZus{}limit);}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}Max value within weight \PYGZdq{} \PYGZlt{}\PYGZlt{} weight\PYGZus{}limit \PYGZlt{}\PYGZlt{} \PYGZdq{} is: \PYGZdq{} \PYGZlt{}\PYGZlt{} max\PYGZus{}val \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{};}
+\PYG{c+cm}{     // Output expected: node 1 (w=1, v=5) + node 2 (w=2, v=10) + node 5 (w=1, v=3)}
+\PYG{c+cm}{     // Total weight = 4, Total value = 18.}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     return 0;}
+\PYG{c+cm}{   \PYGZcb{}}
+\PYG{c+cm}{*/}
+\end{MintedVerbatim}

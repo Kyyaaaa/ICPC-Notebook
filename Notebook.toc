@@ -6,33 +6,41 @@
 \contentsline {subsection}{\numberline {2.4}Persistent Trie}{2}{}%
 \contentsline {subsection}{\numberline {2.5}Fenwick Tree}{3}{}%
 \contentsline {subsection}{\numberline {2.6}Fenwick Tree 2D}{3}{}%
-\contentsline {subsection}{\numberline {2.7}XOR Basis}{3}{}%
+\contentsline {subsection}{\numberline {2.7}XOR Basis}{4}{}%
 \contentsline {subsection}{\numberline {2.8}DSU Rollback}{5}{}%
 \contentsline {subsection}{\numberline {2.9}Ordered Set}{5}{}%
-\contentsline {section}{\numberline {3}Graphs}{6}{}%
-\contentsline {subsection}{\numberline {3.1}2 SAT}{6}{}%
-\contentsline {subsection}{\numberline {3.2}LCA O(1)}{7}{}%
-\contentsline {subsection}{\numberline {3.3}Centroid Decomposition}{7}{}%
-\contentsline {subsection}{\numberline {3.4}Heavy Light Decomposition}{7}{}%
-\contentsline {subsection}{\numberline {3.5}Bellman Ford}{8}{}%
-\contentsline {subsection}{\numberline {3.6}Floyd}{8}{}%
-\contentsline {subsection}{\numberline {3.7}Ford Fulkerson}{8}{}%
-\contentsline {subsection}{\numberline {3.8}Dinic}{10}{}%
-\contentsline {subsection}{\numberline {3.9}Min Cost Max Flow}{11}{}%
-\contentsline {subsection}{\numberline {3.10}Dsu On Tree(Sack)}{12}{}%
-\contentsline {subsection}{\numberline {3.11}MO On Tree}{13}{}%
-\contentsline {section}{\numberline {4}DP}{14}{}%
-\contentsline {subsection}{\numberline {4.1}DP Digit Optimization 1}{14}{}%
-\contentsline {subsection}{\numberline {4.2}DP Digit Optimization 2}{14}{}%
-\contentsline {subsection}{\numberline {4.3}DP SoS}{15}{}%
-\contentsline {subsection}{\numberline {4.4}DP Divide And Conquer}{15}{}%
-\contentsline {section}{\numberline {5}Strings}{16}{}%
-\contentsline {subsection}{\numberline {5.1}KMP}{16}{}%
-\contentsline {subsection}{\numberline {5.2}Z Function}{16}{}%
-\contentsline {subsection}{\numberline {5.3}Suffix Array}{16}{}%
-\contentsline {subsection}{\numberline {5.4}Aho Corasick}{17}{}%
-\contentsline {section}{\numberline {6}Math}{18}{}%
-\contentsline {subsection}{\numberline {6.1}Extended Euclid}{18}{}%
-\contentsline {section}{\numberline {7}Geometry}{18}{}%
-\contentsline {section}{\numberline {8}Miscellaneous}{18}{}%
-\contentsline {subsection}{\numberline {8.1}Alien Trick}{18}{}%
+\contentsline {subsection}{\numberline {2.10}Line Container}{6}{}%
+\contentsline {subsection}{\numberline {2.11}Deque CHT}{7}{}%
+\contentsline {section}{\numberline {3}Graphs}{7}{}%
+\contentsline {subsection}{\numberline {3.1}2 SAT}{7}{}%
+\contentsline {subsection}{\numberline {3.2}LCA O(1)}{8}{}%
+\contentsline {subsection}{\numberline {3.3}Centroid Decomposition}{8}{}%
+\contentsline {subsection}{\numberline {3.4}Heavy Light Decomposition}{8}{}%
+\contentsline {subsection}{\numberline {3.5}Bellman Ford}{9}{}%
+\contentsline {subsection}{\numberline {3.6}Floyd}{9}{}%
+\contentsline {subsection}{\numberline {3.7}Ford Fulkerson}{10}{}%
+\contentsline {subsection}{\numberline {3.8}Dinic}{11}{}%
+\contentsline {subsection}{\numberline {3.9}Min Cost Max Flow}{12}{}%
+\contentsline {subsection}{\numberline {3.10}Dsu On Tree(Sack)}{13}{}%
+\contentsline {subsection}{\numberline {3.11}MO On Tree}{14}{}%
+\contentsline {subsection}{\numberline {3.12}Knapsack On Tree}{15}{}%
+\contentsline {section}{\numberline {4}DP}{16}{}%
+\contentsline {subsection}{\numberline {4.1}DP Digit Optimization 1}{16}{}%
+\contentsline {subsection}{\numberline {4.2}DP Digit Optimization 2}{16}{}%
+\contentsline {subsection}{\numberline {4.3}DP SoS}{17}{}%
+\contentsline {subsection}{\numberline {4.4}DP Divide And Conquer}{17}{}%
+\contentsline {section}{\numberline {5}Strings}{18}{}%
+\contentsline {subsection}{\numberline {5.1}KMP}{18}{}%
+\contentsline {subsection}{\numberline {5.2}Z Function}{18}{}%
+\contentsline {subsection}{\numberline {5.3}Suffix Array}{18}{}%
+\contentsline {subsection}{\numberline {5.4}Aho Corasick}{19}{}%
+\contentsline {section}{\numberline {6}Math}{20}{}%
+\contentsline {subsection}{\numberline {6.1}Extended Euclid}{20}{}%
+\contentsline {subsection}{\numberline {6.2}CRT}{20}{}%
+\contentsline {subsection}{\numberline {6.3}Lucas Theorem}{21}{}%
+\contentsline {subsection}{\numberline {6.4}Euler Totient}{21}{}%
+\contentsline {subsection}{\numberline {6.5}Mobius Function}{22}{}%
+\contentsline {subsection}{\numberline {6.6}Miller Rabin}{23}{}%
+\contentsline {section}{\numberline {7}Geometry}{23}{}%
+\contentsline {section}{\numberline {8}Miscellaneous}{23}{}%
+\contentsline {subsection}{\numberline {8.1}Alien Trick}{23}{}%

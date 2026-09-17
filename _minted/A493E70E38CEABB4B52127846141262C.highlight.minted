@@ -1,5 +1,5 @@
 \begin{MintedVerbatim}[commandchars=\\\{\}]
-\PYG{c+cm}{/* =========================================================================}
+\PYG{c+cm}{/*}
 \PYG{c+cm}{   MIN COST MAX FLOW (Dijkstra with Johnson\PYGZsq{}s Potentials)}
 \PYG{c+cm}{   }
 \PYG{c+cm}{   Idea:}
@@ -8,7 +8,7 @@
 \PYG{c+cm}{     weight residual edges.}
 \PYG{c+cm}{   \PYGZhy{} Edge weights are reweighted: w\PYGZsq{}(u, v) = w(u, v) + pi[u] \PYGZhy{} pi[v] \PYGZgt{}= 0.}
 \PYG{c+cm}{   \PYGZhy{} Complexity: O(F * E log V) where F is the flow. Fast and safe!}
-\PYG{c+cm}{========================================================================= */}
+\PYG{c+cm}{*/}
 \PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{LINF}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mf}{1e18}\PYG{p}{;}
 
 \PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{MCMFEdge}\PYG{+w}{ }\PYG{p}{\PYGZob{}}

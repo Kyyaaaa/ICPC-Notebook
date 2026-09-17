@@ -1,4 +1,4 @@
-/* =========================================================================
+/*
    MIN COST MAX FLOW (Dijkstra with Johnson's Potentials)
    
    Idea:
@@ -7,7 +7,7 @@
      weight residual edges.
    - Edge weights are reweighted: w'(u, v) = w(u, v) + pi[u] - pi[v] >= 0.
    - Complexity: O(F * E log V) where F is the flow. Fast and safe!
-========================================================================= */
+*/
 const long long LINF = 1e18;
 
 struct MCMFEdge {
