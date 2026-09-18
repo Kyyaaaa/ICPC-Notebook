@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.8.26)  18 SEP 2026 08:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.8.26)  18 SEP 2026 09:40
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -473,10 +473,10 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \pydata@fh@0=\write5
 \openout5 = `_3A4F8D88EA1EAC117F98223609194CB9.data.minted'.
 
-runsystem(latexminted config  --timestamp 20260918082956 3A4F8D88EA1EAC117F98223609194CB9)...executed.
+runsystem(latexminted config  --timestamp 20260918094000 3A4F8D88EA1EAC117F98223609194CB9)...executed.
 
  (_3A4F8D88EA1EAC117F98223609194CB9.config.minted)
-runsystem(latexminted cleanconfig  --timestamp 20260918082956 3A4F8D88EA1EAC117F98223609194CB9)...executed.
+runsystem(latexminted cleanconfig  --timestamp 20260918094000 3A4F8D88EA1EAC117F98223609194CB9)...executed.
 
  (_minted/perldoc.style.minted) (_minted/3BB124293DAFB53D570FC292211B9634.highlight.minted
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <8> not available
@@ -544,7 +544,15 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-) (_minted/A4737D56D0C578506EA2FF173DA8845C.highlight.minted [21]) (_minted/DB539BB2A8F4BFB218EDA524A0AEEE9F.highlight.minted) [22] 
+) (_minted/A4737D56D0C578506EA2FF173DA8845C.highlight.minted [21]) (_minted/DB539BB2A8F4BFB218EDA524A0AEEE9F.highlight.minted) (_minted/4E361E7807ADB6E89AC776381819DD20.highlight.minted [22]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+) (_minted/526307C885117007FE2289D2733CCD7A.highlight.minted [23]) [24
+
+] 
 enddocument/afterlastpage (AED): lastpage setting LastPage.
 (Notebook.aux)
  ***********
@@ -553,17 +561,17 @@ L3 programming layer <2026-07-20>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 12665 strings out of 467501
- 278174 string characters out of 5408550
- 846426 words of memory out of 5000000
- 41602 multiletter control sequences out of 15000+600000
+ 12683 strings out of 467501
+ 279200 string characters out of 5408550
+ 847122 words of memory out of 5000000
+ 41614 multiletter control sequences out of 15000+600000
  637471 words of font info for 64 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  101i,12n,107p,840b,941s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tctt0800.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt0800.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1000.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx0800.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1095.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1000.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1200.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0800.pk>
-Output written on Notebook.pdf (22 pages, 177820 bytes).
+Output written on Notebook.pdf (24 pages, 184548 bytes).
 PDF statistics:
- 416 PDF objects out of 1000 (max. 8388607)
+ 424 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

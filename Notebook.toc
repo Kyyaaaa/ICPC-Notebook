@@ -43,3 +43,5 @@
 \contentsline {section}{\numberline {7}Geometry}{22}{}%
 \contentsline {section}{\numberline {8}Miscellaneous}{22}{}%
 \contentsline {subsection}{\numberline {8.1}Alien Trick}{22}{}%
+\contentsline {subsection}{\numberline {8.2}Interval Container}{22}{}%
+\contentsline {subsection}{\numberline {8.3}Ternary Search}{23}{}%

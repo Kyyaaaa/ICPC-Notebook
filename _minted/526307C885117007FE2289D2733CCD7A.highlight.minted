@@ -1,0 +1,95 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   Idea:}
+\PYG{c+cm}{   \PYGZhy{} Finds the minimum or maximum of a Unimodal function (a function that }
+\PYG{c+cm}{     strictly increases then strictly decreases, or vice\PYGZhy{}versa).}
+\PYG{c+cm}{   Two variants:}
+\PYG{c+cm}{   1. Floating\PYGZhy{}point: Iterate a fixed number of times (e.g., 200) instead }
+\PYG{c+cm}{      of testing (R \PYGZhy{} L \PYGZgt{} eps). 200 iterations shrink the search space by }
+\PYG{c+cm}{      (2/3)\PYGZca{}200, which is enough for any floating\PYGZhy{}point precision limit.}
+\PYG{c+cm}{   2. Integer: Search until the range [L, R] is small (e.g., length \PYGZlt{}= 3), }
+\PYG{c+cm}{      then use a simple linear scan. This avoids infinite loops caused by }
+\PYG{c+cm}{      integer division rounding.}
+\PYG{c+cm}{*/}
+\PYG{c+c1}{// The unimodal function we want to optimize.}
+\PYG{c+c1}{// Example: f(x) = (x \PYGZhy{} 5)\PYGZca{}2 + 10 (Minimum is at x = 5)}
+\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n+nf}{f\PYGZus{}double}\PYG{p}{(}\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{x}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mf}{5.0}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{x}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mf}{5.0}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mf}{10.0}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n+nf}{f\PYGZus{}int}\PYG{p}{(}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{x}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{x}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{10}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{TernarySearch}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{c+c1}{// 1. Ternary Search on Real Numbers (Floating\PYGZhy{}point)}
+\PYG{+w}{  }\PYG{c+c1}{// Returns the x\PYGZhy{}coordinate of the MINIMUM.}
+\PYG{+w}{  }\PYG{c+c1}{// To find MAXIMUM: change `if (f\PYGZus{}double(m1) \PYGZlt{} f\PYGZus{}double(m2))` to `\PYGZgt{}`}
+\PYG{+w}{  }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n+nf}{solve\PYGZus{}double}\PYG{p}{(}\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{L}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{R}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{// 200 iterations are ALWAYS enough to achieve maximum double precision}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{l+m+mi}{200}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{m1}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{L}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{R}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{L}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{l+m+mf}{3.0}\PYG{p}{;}
+\PYG{+w}{      }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{m2}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{R}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{R}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{L}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{l+m+mf}{3.0}\PYG{p}{;}
+\PYG{+w}{      }
+\PYG{+w}{      }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{f\PYGZus{}double}\PYG{p}{(}\PYG{n}{m1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{f\PYGZus{}double}\PYG{p}{(}\PYG{n}{m2}\PYG{p}{))}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{R}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{m2}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// The minimum is closer to m1, discard [m2, R]}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{k}{else}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{L}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{m1}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// The minimum is closer to m2, discard [L, m1]}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{L}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// L and R are practically identical now}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// 2. Ternary Search on Integers}
+\PYG{+w}{  }\PYG{c+c1}{// Returns the x\PYGZhy{}coordinate of the MINIMUM.}
+\PYG{+w}{  }\PYG{c+c1}{// To find MAXIMUM: change `\PYGZlt{}` to `\PYGZgt{}` in BOTH the ternary condition }
+\PYG{+w}{  }\PYG{c+c1}{// and the final linear scan.}
+\PYG{+w}{  }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n+nf}{solve\PYGZus{}int}\PYG{p}{(}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{L}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{R}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{// Stop when the range is small enough (3 points or fewer)}
+\PYG{+w}{    }\PYG{k}{while}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{R}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{L}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{m1}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{L}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{R}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{L}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{p}{;}
+\PYG{+w}{      }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{m2}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{R}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{R}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{L}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{p}{;}
+\PYG{+w}{      }
+\PYG{+w}{      }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{f\PYGZus{}int}\PYG{p}{(}\PYG{n}{m1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{f\PYGZus{}int}\PYG{p}{(}\PYG{n}{m2}\PYG{p}{))}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{R}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{m2}\PYG{p}{;}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{k}{else}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{L}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{m1}\PYG{p}{;}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }
+\PYG{+w}{    }\PYG{c+c1}{// Linear scan for the remaining elements to avoid integer rounding bugs}
+\PYG{+w}{    }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{best\PYGZus{}x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{L}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{best\PYGZus{}val}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{f\PYGZus{}int}\PYG{p}{(}\PYG{n}{L}\PYG{p}{);}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{L}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{R}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{current\PYGZus{}val}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{f\PYGZus{}int}\PYG{p}{(}\PYG{n}{i}\PYG{p}{);}
+\PYG{+w}{      }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{current\PYGZus{}val}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{best\PYGZus{}val}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{best\PYGZus{}val}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{current\PYGZus{}val}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{best\PYGZus{}x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{;}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{best\PYGZus{}x}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{};}
+
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   USAGE EXAMPLE:}
+\PYG{c+cm}{   signed main() \PYGZob{}}
+\PYG{c+cm}{     TernarySearch ts;}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // Floating point search in range [\PYGZhy{}1000.0, 1000.0]}
+\PYG{c+cm}{     double ans\PYGZus{}d = ts.solve\PYGZus{}double(\PYGZhy{}1000.0, 1000.0);}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} fixed \PYGZlt{}\PYGZlt{} setprecision(6);}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}Min (Double) at x = \PYGZdq{} \PYGZlt{}\PYGZlt{} ans\PYGZus{}d \PYGZlt{}\PYGZlt{} \PYGZdq{}, f(x) = \PYGZdq{} \PYGZlt{}\PYGZlt{} f\PYGZus{}double(ans\PYGZus{}d) \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{};}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // Integer search in range [\PYGZhy{}1000, 1000]}
+\PYG{c+cm}{     long long ans\PYGZus{}i = ts.solve\PYGZus{}int(\PYGZhy{}1000, 1000);}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}Min (Int) at x = \PYGZdq{} \PYGZlt{}\PYGZlt{} ans\PYGZus{}i \PYGZlt{}\PYGZlt{} \PYGZdq{}, f(x) = \PYGZdq{} \PYGZlt{}\PYGZlt{} f\PYGZus{}int(ans\PYGZus{}i) \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{};}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // Expected output for both: }
+\PYG{c+cm}{     // x = 5, f(x) = 10}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     return 0;}
+\PYG{c+cm}{   \PYGZcb{}}
+\PYG{c+cm}{*/}
+\end{MintedVerbatim}
