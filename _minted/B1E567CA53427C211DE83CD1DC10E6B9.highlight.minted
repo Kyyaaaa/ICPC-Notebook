@@ -27,17 +27,7 @@
 \PYG{p}{\PYGZcb{}}
 
 \PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{solve\PYGZus{}centroid}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{centroid}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
-\PYG{+w}{  }\PYG{c+c1}{// TODO: Add your logic here (e.g., DFS to collect all distances from the }
-\PYG{+w}{  }\PYG{c+c1}{// centroid to the nodes in its component, then count valid pairs).}
-\PYG{+w}{  }\PYG{c+c1}{// }
-\PYG{+w}{  }\PYG{c+c1}{// Example structure:}
-\PYG{+w}{  }\PYG{c+c1}{// for (int v : G[centroid]) \PYGZob{}}
-\PYG{+w}{  }\PYG{c+c1}{//   if (!deleted[v]) \PYGZob{}}
-\PYG{+w}{  }\PYG{c+c1}{//     // 1. DFS(v) to query answer with currently stored paths}
-\PYG{+w}{  }\PYG{c+c1}{//     // 2. DFS(v) again to add new paths to our data structure}
-\PYG{+w}{  }\PYG{c+c1}{//   \PYGZcb{}}
-\PYG{+w}{  }\PYG{c+c1}{// \PYGZcb{}}
-\PYG{+w}{  }\PYG{c+c1}{// // 3. Clear the data structure for the next centroid}
+\PYG{+w}{  }\PYG{c+c1}{// TODO: Add your logic here }
 \PYG{p}{\PYGZcb{}}
 
 \PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{build\PYGZus{}centroid}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{p}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{\PYGZhy{}1}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}

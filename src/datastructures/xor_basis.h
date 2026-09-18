@@ -14,10 +14,6 @@
    - Build RREF: O(LOG_D^2)
    - K-th Smallest/Largest: O(LOG_D)
 */
-
-#include <bits/stdc++.h>
-using namespace std;
-
 const int LOG_D = 60; // 60 for values up to 10^18, 30 for values up to 10^9
 
 struct XorBasis {

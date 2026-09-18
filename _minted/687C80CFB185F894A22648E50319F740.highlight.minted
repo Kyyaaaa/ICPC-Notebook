@@ -1,17 +1,4 @@
 \begin{MintedVerbatim}[commandchars=\\\{\}]
-\PYG{c+cm}{/*}
-\PYG{c+cm}{   DISJOINT SET UNION WITH ROLLBACK}
-\PYG{c+cm}{   Idea:}
-\PYG{c+cm}{   \PYGZhy{} Supports union of two sets and rolling back to a previous state.}
-\PYG{c+cm}{   \PYGZhy{} STRICT RULE: NO PATH COMPRESSION! Path compression destroys the tree }
-\PYG{c+cm}{     structure, making it impossible to undo operations efficiently.}
-\PYG{c+cm}{   \PYGZhy{} We only use \PYGZdq{}Union by Size\PYGZdq{}. This guarantees that the tree depth }
-\PYG{c+cm}{     never exceeds O(log N).}
-\PYG{c+cm}{   Complexity:}
-\PYG{c+cm}{   \PYGZhy{} find\PYGZus{}set: O(log N)}
-\PYG{c+cm}{   \PYGZhy{} union\PYGZus{}sets: O(log N)}
-\PYG{c+cm}{   \PYGZhy{} rollback: O(1) per undone operation}
-\PYG{c+cm}{*/}
 \PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{DSU\PYGZus{}Rollback}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
 \PYG{+w}{  }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{parent}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{sz}\PYG{p}{;}
 \PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{components}\PYG{p}{;}

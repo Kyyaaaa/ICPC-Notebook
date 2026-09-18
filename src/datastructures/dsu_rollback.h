@@ -1,16 +1,3 @@
-/*
-   DISJOINT SET UNION WITH ROLLBACK
-   Idea:
-   - Supports union of two sets and rolling back to a previous state.
-   - STRICT RULE: NO PATH COMPRESSION! Path compression destroys the tree 
-     structure, making it impossible to undo operations efficiently.
-   - We only use "Union by Size". This guarantees that the tree depth 
-     never exceeds O(log N).
-   Complexity:
-   - find_set: O(log N)
-   - union_sets: O(log N)
-   - rollback: O(1) per undone operation
-*/
 struct DSU_Rollback {
   vector<int> parent, sz;
   int components;

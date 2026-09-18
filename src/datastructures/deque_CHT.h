@@ -1,3 +1,8 @@
+/*
+Trick for MINIMUM QUERIES:
+   - Add lines as: add(-k, -m)
+   - Query as: -query_increasing_x(x) or -query_binary_search(x)
+*/
 struct Line {
   long long k, m;
   long long get(long long x) { return k * x + m; }

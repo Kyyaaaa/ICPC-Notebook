@@ -15,10 +15,6 @@
 \PYG{c+cm}{   \PYGZhy{} Build RREF: O(LOG\PYGZus{}D\PYGZca{}2)}
 \PYG{c+cm}{   \PYGZhy{} K\PYGZhy{}th Smallest/Largest: O(LOG\PYGZus{}D)}
 \PYG{c+cm}{*/}
-
-\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZlt{}bits/stdc++.h\PYGZgt{}}
-\PYG{k}{using}\PYG{+w}{ }\PYG{k}{namespace}\PYG{+w}{ }\PYG{n+nn}{std}\PYG{p}{;}
-
 \PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{LOG\PYGZus{}D}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{60}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// 60 for values up to 10\PYGZca{}18, 30 for values up to 10\PYGZca{}9}
 
 \PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{XorBasis}\PYG{+w}{ }\PYG{p}{\PYGZob{}}

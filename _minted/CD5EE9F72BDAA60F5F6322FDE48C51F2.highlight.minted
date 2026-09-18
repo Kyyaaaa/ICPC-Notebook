@@ -1,4 +1,9 @@
 \begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+cm}{/*}
+\PYG{c+cm}{Trick for MINIMUM QUERIES:}
+\PYG{c+cm}{   \PYGZhy{} Add lines as: add(\PYGZhy{}k, \PYGZhy{}m)}
+\PYG{c+cm}{   \PYGZhy{} Query as: \PYGZhy{}query\PYGZus{}increasing\PYGZus{}x(x) or \PYGZhy{}query\PYGZus{}binary\PYGZus{}search(x)}
+\PYG{c+cm}{*/}
 \PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{Line}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
 \PYG{+w}{  }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{k}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{m}\PYG{p}{;}
 \PYG{+w}{  }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n+nf}{get}\PYG{p}{(}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{k}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{m}\PYG{p}{;}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}

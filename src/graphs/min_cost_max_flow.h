@@ -1,7 +1,4 @@
 /*
-   MIN COST MAX FLOW (Dijkstra with Johnson's Potentials)
-   
-   Idea:
    - Uses Dijkstra instead of SPFA to find the cheapest augmenting path.
    - Maintains a potential function `pi` for each node to handle negative 
      weight residual edges.
@@ -128,7 +125,6 @@ struct MinCostMaxFlow {
 
       total_flow += push;
 
-      // Update potentials for the next iteration
       for (int i = 1; i <= n; i++) {
         if (dist[i] != LINF) {
           pi[i] += dist[i];
@@ -139,12 +135,9 @@ struct MinCostMaxFlow {
     return {total_flow, total_cost};
   }
 
-  // -----------------------------------------------------------------
   // PATH TRACING: Prints all edges that are actively carrying flow
-  // -----------------------------------------------------------------
   void print_flow_paths() {
     cout << "Edges with positive flow (Min Cost Max Flow):\n";
-    // Iterate by 2 to check only the original forward edges
     for (int i = 0; i < edges.size(); i += 2) {
       if (edges[i].flow > 0) {
         cout << edges[i].u << " -> " << edges[i].v 

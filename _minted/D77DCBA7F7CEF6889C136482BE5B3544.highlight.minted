@@ -1,12 +1,8 @@
 \begin{MintedVerbatim}[commandchars=\\\{\}]
 \PYG{c+cm}{/*}
-\PYG{c+cm}{   DSU ON TREE (SACK)}
-\PYG{c+cm}{   }
-\PYG{c+cm}{   Idea:}
 \PYG{c+cm}{   \PYGZhy{} Efficiently answers OFFLINE queries about subtrees in O(N log N) time.}
 \PYG{c+cm}{   \PYGZhy{} Solves problems like: \PYGZdq{}For each node U, how many nodes in its subtree }
 \PYG{c+cm}{     have a specific property?\PYGZdq{}}
-\PYG{c+cm}{     }
 \PYG{c+cm}{   Algorithm:}
 \PYG{c+cm}{   1. Find the \PYGZdq{}heavy\PYGZdq{} child (largest subtree) for each node.}
 \PYG{c+cm}{   2. DFS traversal:}

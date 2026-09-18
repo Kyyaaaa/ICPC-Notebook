@@ -1,11 +1,7 @@
 /*
-   DSU ON TREE (SACK)
-   
-   Idea:
    - Efficiently answers OFFLINE queries about subtrees in O(N log N) time.
    - Solves problems like: "For each node U, how many nodes in its subtree 
      have a specific property?"
-     
    Algorithm:
    1. Find the "heavy" child (largest subtree) for each node.
    2. DFS traversal:
