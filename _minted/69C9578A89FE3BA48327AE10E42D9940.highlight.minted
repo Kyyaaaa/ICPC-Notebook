@@ -7,4 +7,7 @@
 \PYG{n}{g}\PYG{o}{++}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{n}{std}\PYG{o}{=}\PYG{n}{c}\PYG{o}{++}\PYG{l+m+mi}{17}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{n}{O2}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{n}{pipe}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}\PYGZdl{}name.cpp\PYGZdq{}}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{n}{o}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}\PYGZdl{}name\PYGZdq{}}
 
 \PYG{c+cp}{\PYGZsh{} Cap quyen: chmod +x com.sh}
+\PYG{c+cp}{\PYGZsh{} Xem diff: diff \PYGZhy{}u file1 file2}
+\PYG{c+cp}{\PYGZsh{} Do time chay: time ./main \PYGZlt{} TestInput}
+\PYG{c+cp}{\PYGZsh{} Gioi han time chay: timeout 2s ./main \PYGZlt{} TestInput}
 \end{MintedVerbatim}
