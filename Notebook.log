@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.8.26)  8 OCT 2026 21:51
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.8.26)  8 OCT 2026 23:09
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -473,10 +473,10 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \pydata@fh@0=\write5
 \openout5 = `_3A4F8D88EA1EAC117F98223609194CB9.data.minted'.
 
-runsystem(latexminted config  --timestamp 20261008215158 3A4F8D88EA1EAC117F98223609194CB9)...executed.
+runsystem(latexminted config  --timestamp 20261008230927 3A4F8D88EA1EAC117F98223609194CB9)...executed.
 
  (_3A4F8D88EA1EAC117F98223609194CB9.config.minted)
-runsystem(latexminted cleanconfig  --timestamp 20261008215158 3A4F8D88EA1EAC117F98223609194CB9)...executed.
+runsystem(latexminted cleanconfig  --timestamp 20261008230927 3A4F8D88EA1EAC117F98223609194CB9)...executed.
 
  (_minted/perldoc.style.minted) (_minted/69C9578A89FE3BA48327AE10E42D9940.highlight.minted) (_minted/26FA8CCEA78404298C3A5F62D588C2C6.highlight.minted
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <8> not available
@@ -496,19 +496,19 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-) (_minted/56DAD0A2A33B078D8AEA8B154D42C6FC.highlight.minted [6]) (_minted/C6B69A28C8BD1EE3A19F156363D456E3.highlight.minted) (_minted/CD5EE9F72BDAA60F5F6322FDE48C51F2.highlight.minted [7]) (_minted/D3A98C670D106A179BD83D26D92D6DBB.highlight.minted) (_minted/DB6DD6EBADB1B583B040E827D183DC99.highlight.minted) (_minted/B1E567CA53427C211DE83CD1DC10E6B9.highlight.minted [8]) (_minted/10038BDF7B57BBFC5322D416E1605345.highlight.minted) (_minted/DFD205F159E4AA2ECB103254D788D1CE.highlight.minted) (_minted/9771158253BF7EA692ED1244E54A72B8.highlight.minted [9]
+) (_minted/56DAD0A2A33B078D8AEA8B154D42C6FC.highlight.minted [6]) (_minted/C6B69A28C8BD1EE3A19F156363D456E3.highlight.minted) (_minted/CD5EE9F72BDAA60F5F6322FDE48C51F2.highlight.minted [7]) (_minted/D3A98C670D106A179BD83D26D92D6DBB.highlight.minted) (_minted/DB6DD6EBADB1B583B040E827D183DC99.highlight.minted) (_minted/B1E567CA53427C211DE83CD1DC10E6B9.highlight.minted [8]) (_minted/10038BDF7B57BBFC5322D416E1605345.highlight.minted) (_minted/DFD205F159E4AA2ECB103254D788D1CE.highlight.minted [9]) (_minted/9771158253BF7EA692ED1244E54A72B8.highlight.minted) (_minted/45C642C4A5DB31EA4AC7EDDE7A9938D9.highlight.minted [10]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-) (_minted/45C642C4A5DB31EA4AC7EDDE7A9938D9.highlight.minted [10]
+) (_minted/FB2A280D37C2828D327AD4B7F0DA7293.highlight.minted
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-) (_minted/FB2A280D37C2828D327AD4B7F0DA7293.highlight.minted [11]) (_minted/4A441841BCF87BB7F881B38612600EBB.highlight.minted
+ [11]) (_minted/4A441841BCF87BB7F881B38612600EBB.highlight.minted
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
@@ -538,21 +538,19 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-) (_minted/26BC2A81D50AD471A17BFD88110C4D58.highlight.minted) (_minted/91471893A153C441312BC96C5E494A49.highlight.minted [18]) (_minted/A19FD1888CAEC5ECCB968C38794B9500.highlight.minted [19]) (_minted/45406D690D604825EFC3F8CB7DB8CA84.highlight.minted) (_minted/8C16156A31194EF4E1A9DE4A5424E256.highlight.minted [20]) (_minted/A4737D56D0C578506EA2FF173DA8845C.highlight.minted
+) (_minted/26BC2A81D50AD471A17BFD88110C4D58.highlight.minted [18]) (_minted/91471893A153C441312BC96C5E494A49.highlight.minted) (_minted/A19FD1888CAEC5ECCB968C38794B9500.highlight.minted [19]) (_minted/45406D690D604825EFC3F8CB7DB8CA84.highlight.minted) (_minted/8C16156A31194EF4E1A9DE4A5424E256.highlight.minted [20]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [21]) (_minted/DB539BB2A8F4BFB218EDA524A0AEEE9F.highlight.minted) (_minted/4E361E7807ADB6E89AC776381819DD20.highlight.minted [22]
+) (_minted/A4737D56D0C578506EA2FF173DA8845C.highlight.minted [21]) (_minted/8123009FCFD751B0E7E7D7494CF231FF.highlight.minted) (_minted/B03A8C3B815FD854C47287AAC2C52E04.highlight.minted) (_minted/AE3616C97802F3EFB7225C00F482F03E.highlight.minted [22]) (_minted/03DF33623D08B55FE04C9FA910748D12.highlight.minted) (_minted/DB539BB2A8F4BFB218EDA524A0AEEE9F.highlight.minted [23]) (_minted/4E361E7807ADB6E89AC776381819DD20.highlight.minted
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-) (_minted/526307C885117007FE2289D2733CCD7A.highlight.minted [23]) [24
-
-] 
+ [24]) (_minted/526307C885117007FE2289D2733CCD7A.highlight.minted) [25] 
 enddocument/afterlastpage (AED): lastpage setting LastPage.
 (Notebook.aux)
  ***********
@@ -561,17 +559,17 @@ L3 programming layer <2026-07-20>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 12710 strings out of 467501
- 280711 string characters out of 5408550
- 843620 words of memory out of 5000000
- 41632 multiletter control sequences out of 15000+600000
+ 12746 strings out of 467501
+ 282723 string characters out of 5408550
+ 844034 words of memory out of 5000000
+ 41656 multiletter control sequences out of 15000+600000
  637471 words of font info for 64 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  101i,12n,107p,840b,941s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tctt0800.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt0800.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1000.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx0800.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1095.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1000.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1200.pk> <C:\Users\ADMIN\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0800.pk>
-Output written on Notebook.pdf (24 pages, 185397 bytes).
+Output written on Notebook.pdf (25 pages, 191658 bytes).
 PDF statistics:
- 427 PDF objects out of 1000 (max. 8388607)
+ 433 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

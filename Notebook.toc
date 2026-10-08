@@ -21,9 +21,9 @@
 \contentsline {subsection}{\numberline {3.3}Centroid Decomposition}{8}{}%
 \contentsline {subsection}{\numberline {3.4}Heavy Light Decomposition}{9}{}%
 \contentsline {subsection}{\numberline {3.5}Bellman Ford}{9}{}%
-\contentsline {subsection}{\numberline {3.6}Dinic}{9}{}%
+\contentsline {subsection}{\numberline {3.6}Dinic}{10}{}%
 \contentsline {subsection}{\numberline {3.7}Min Cost Max Flow}{10}{}%
-\contentsline {subsection}{\numberline {3.8}Dsu On Tree(Sack)}{11}{}%
+\contentsline {subsection}{\numberline {3.8}Dsu On Tree(Sack)}{12}{}%
 \contentsline {subsection}{\numberline {3.9}MO On Tree}{12}{}%
 \contentsline {subsection}{\numberline {3.10}Dynamic Connectivity}{13}{}%
 \contentsline {section}{\numberline {4}DP}{14}{}%
@@ -44,7 +44,11 @@
 \contentsline {subsection}{\numberline {6.5}Mobius Function}{20}{}%
 \contentsline {subsection}{\numberline {6.6}Miller Rabin}{21}{}%
 \contentsline {section}{\numberline {7}Geometry}{22}{}%
-\contentsline {section}{\numberline {8}Miscellaneous}{22}{}%
-\contentsline {subsection}{\numberline {8.1}Alien Trick}{22}{}%
-\contentsline {subsection}{\numberline {8.2}Interval Container}{22}{}%
-\contentsline {subsection}{\numberline {8.3}Ternary Search}{23}{}%
+\contentsline {subsection}{\numberline {7.1}Geomtry Point}{22}{}%
+\contentsline {subsection}{\numberline {7.2}Convex Hull}{22}{}%
+\contentsline {subsection}{\numberline {7.3}Manhattan MST}{22}{}%
+\contentsline {subsection}{\numberline {7.4}Common Geometry Operations}{23}{}%
+\contentsline {section}{\numberline {8}Miscellaneous}{23}{}%
+\contentsline {subsection}{\numberline {8.1}Alien Trick}{23}{}%
+\contentsline {subsection}{\numberline {8.2}Interval Container}{24}{}%
+\contentsline {subsection}{\numberline {8.3}Ternary Search}{25}{}%
