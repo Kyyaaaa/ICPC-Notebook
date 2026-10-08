@@ -1,18 +1,4 @@
 \begin{MintedVerbatim}[commandchars=\\\{\}]
-\PYG{c+cm}{/*}
-\PYG{c+cm}{   Idea:}
-\PYG{c+cm}{   \PYGZhy{} 1\PYGZhy{}based indexing for a grid of size N x M.}
-\PYG{c+cm}{   \PYGZhy{} When we add `v` to a 2D difference array at (i, j), it contributes to }
-\PYG{c+cm}{     the prefix sum S(X, Y) (where X \PYGZgt{}= i and Y \PYGZgt{}= j) by:}
-\PYG{c+cm}{     v * (X \PYGZhy{} i + 1) * (Y \PYGZhy{} j + 1)}
-\PYG{c+cm}{     = v * [ (X+1)(Y+1) \PYGZhy{} (X+1)*j \PYGZhy{} (Y+1)*i + i*j ]}
-\PYG{c+cm}{   \PYGZhy{} To maintain this, we need 4 2D BITs to store the sum of:}
-\PYG{c+cm}{     1. v}
-\PYG{c+cm}{     2. v * i}
-\PYG{c+cm}{     3. v * j}
-\PYG{c+cm}{     4. v * i * j}
-\PYG{c+cm}{*/}
-
 \PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{Fenwick2D}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
 \PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{m}\PYG{p}{;}
 \PYG{+w}{  }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{o}{\PYGZgt{}\PYGZgt{}}\PYG{+w}{ }\PYG{n}{bit1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{bit2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{bit3}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{bit4}\PYG{p}{;}

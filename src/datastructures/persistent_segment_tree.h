@@ -62,28 +62,3 @@ void add_version(int l, int r, int u, int x) {
   nver++;
   ver[nver] = update(ver[nver - 1], l, r, u, x);
 }
-/*
-   USAGE EXAMPLE (Solving Distinct Values in Range - DQUERY):
-   
-   // 1. Initialize base tree
-   cnt = nver = 0;
-   ver[0] = build(1, n);
-   
-   // 2. Build versions tracking the latest occurrence of each value
-   for (int i = 1; i <= n; i++) {
-     // If value appeared before, remove its previous position
-     if (mark[a[i]] > 0) {
-       ver[nver] = update(ver[nver], 1, n, mark[a[i]], -1); 
-     }
-     
-     // Add current position
-     nver++;
-     ver[nver] = update(ver[nver - 1], 1, n, i, 1);
-     
-     iver[i] = ver[nver]; // iver[i] stores the version for prefix i
-     mark[a[i]] = i;
-   }
-   
-   // 3. Query distinct values in [L, R]
-   int ans = get(iver[R], 1, n, L, R);
-*/

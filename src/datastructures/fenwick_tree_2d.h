@@ -1,17 +1,3 @@
-/*
-   Idea:
-   - 1-based indexing for a grid of size N x M.
-   - When we add `v` to a 2D difference array at (i, j), it contributes to 
-     the prefix sum S(X, Y) (where X >= i and Y >= j) by:
-     v * (X - i + 1) * (Y - j + 1)
-     = v * [ (X+1)(Y+1) - (X+1)*j - (Y+1)*i + i*j ]
-   - To maintain this, we need 4 2D BITs to store the sum of:
-     1. v
-     2. v * i
-     3. v * j
-     4. v * i * j
-*/
-
 struct Fenwick2D {
   int n, m;
   vector<vector<long long>> bit1, bit2, bit3, bit4;

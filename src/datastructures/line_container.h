@@ -1,19 +1,3 @@
-/*
-   DYNAMIC CONVEX HULL TRICK (LINE CONTAINER 
-   Idea:
-   - Maintains the upper envelope of a set of lines y = k*x + m.
-   - Allows dynamically adding lines and querying the MAXIMUM y value at 
-     a given x in O(log N) time.
-   - For MINIMUM queries: insert(-k, -m) and negate the query result: -query(x).
-   How it works (KACTL approach):
-   - Uses std::multiset to keep lines sorted by slope 'k'.
-   - Maintains the intersection point 'p' with the next line.
-   - Uses C++14 heterogeneous lookup (less<>) to binary search by 'x' value 
-     using the 'p' attribute.
-   Complexity:
-   - Add line: Amortized O(log N)
-   - Query: O(log N)
-*/
 const long long LINF = 2e18;
 struct Line {
   mutable long long k, m, p;

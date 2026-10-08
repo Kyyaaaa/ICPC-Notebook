@@ -1,20 +1,4 @@
 \begin{MintedVerbatim}[commandchars=\\\{\}]
-\PYG{c+cm}{/*}
-\PYG{c+cm}{   DYNAMIC CONVEX HULL TRICK (LINE CONTAINER }
-\PYG{c+cm}{   Idea:}
-\PYG{c+cm}{   \PYGZhy{} Maintains the upper envelope of a set of lines y = k*x + m.}
-\PYG{c+cm}{   \PYGZhy{} Allows dynamically adding lines and querying the MAXIMUM y value at }
-\PYG{c+cm}{     a given x in O(log N) time.}
-\PYG{c+cm}{   \PYGZhy{} For MINIMUM queries: insert(\PYGZhy{}k, \PYGZhy{}m) and negate the query result: \PYGZhy{}query(x).}
-\PYG{c+cm}{   How it works (KACTL approach):}
-\PYG{c+cm}{   \PYGZhy{} Uses std::multiset to keep lines sorted by slope \PYGZsq{}k\PYGZsq{}.}
-\PYG{c+cm}{   \PYGZhy{} Maintains the intersection point \PYGZsq{}p\PYGZsq{} with the next line.}
-\PYG{c+cm}{   \PYGZhy{} Uses C++14 heterogeneous lookup (less\PYGZlt{}\PYGZgt{}) to binary search by \PYGZsq{}x\PYGZsq{} value }
-\PYG{c+cm}{     using the \PYGZsq{}p\PYGZsq{} attribute.}
-\PYG{c+cm}{   Complexity:}
-\PYG{c+cm}{   \PYGZhy{} Add line: Amortized O(log N)}
-\PYG{c+cm}{   \PYGZhy{} Query: O(log N)}
-\PYG{c+cm}{*/}
 \PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{LINF}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mf}{2e18}\PYG{p}{;}
 \PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{Line}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
 \PYG{+w}{  }\PYG{k}{mutable}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{k}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{m}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{p}\PYG{p}{;}

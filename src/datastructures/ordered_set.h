@@ -1,17 +1,6 @@
 /*
-   GNU PBDS ORDERED SET (Policy-Based Data Structure)
-   
-   Idea:
-   - A balanced binary search tree (Red-Black Tree) with order statistics.
-   - Works exactly like std::set but with two additional O(log N) functions:
      1. find_by_order(k): returns an iterator to the k-th smallest element (0-indexed).
      2. order_of_key(x): returns the number of elements strictly smaller than x.
-     
-   IMPORTANT FOR MULTISET:
-   - Do NOT use `less_equal<T>` for multiset if you need to use `.erase()`. 
-     It will delete ALL occurrences of the value, or break the tree structure.
-   - The best and safest way to implement an ordered_multiset is to use 
-     `pair<T, int>` where the second element is a unique counter/ID.
 */
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>

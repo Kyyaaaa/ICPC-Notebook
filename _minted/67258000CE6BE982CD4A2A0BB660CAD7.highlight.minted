@@ -1,19 +1,10 @@
 \begin{MintedVerbatim}[commandchars=\\\{\}]
 \PYG{c+cm}{/*}
-\PYG{c+cm}{   XOR BASIS (Linear Basis over GF(2))}
-\PYG{c+cm}{   }
-\PYG{c+cm}{   Idea:}
 \PYG{c+cm}{   \PYGZhy{} Represents a set of numbers using a minimal set of linearly independent }
 \PYG{c+cm}{     numbers (basis).}
 \PYG{c+cm}{   \PYGZhy{} Any XOR sum of a subset in the original set can be formed by a XOR sum }
 \PYG{c+cm}{     of a subset of the basis.}
 \PYG{c+cm}{   \PYGZhy{} The size of the basis never exceeds the number of bits (LOG\PYGZus{}D).}
-\PYG{c+cm}{   }
-\PYG{c+cm}{   Complexity:}
-\PYG{c+cm}{   \PYGZhy{} Insert / Check / Get Max: O(LOG\PYGZus{}D)}
-\PYG{c+cm}{   \PYGZhy{} Merge two bases: O(LOG\PYGZus{}D\PYGZca{}2)}
-\PYG{c+cm}{   \PYGZhy{} Build RREF: O(LOG\PYGZus{}D\PYGZca{}2)}
-\PYG{c+cm}{   \PYGZhy{} K\PYGZhy{}th Smallest/Largest: O(LOG\PYGZus{}D)}
 \PYG{c+cm}{*/}
 \PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{LOG\PYGZus{}D}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{60}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// 60 for values up to 10\PYGZca{}18, 30 for values up to 10\PYGZca{}9}
 
@@ -28,7 +19,6 @@
 \PYG{+w}{  }\PYG{p}{\PYGZcb{}}
 
 \PYG{+w}{  }\PYG{c+c1}{// 1. Insert a value. Returns true if successfully inserted }
-\PYG{+w}{  }\PYG{c+c1}{// (i.e., the value is linearly independent from the current basis).}
 \PYG{+w}{  }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{insert}\PYG{p}{(}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
 \PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{LOG\PYGZus{}D}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZgt{}=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
 \PYG{+w}{      }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{((}\PYG{n}{x}\PYG{+w}{ }\PYG{o}{\PYGZgt{}\PYGZgt{}}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
@@ -133,32 +123,4 @@
 \PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{res}\PYG{p}{;}
 \PYG{+w}{  }\PYG{p}{\PYGZcb{}}
 \PYG{p}{\PYGZcb{};}
-
-\PYG{c+cm}{/*}
-\PYG{c+cm}{   USAGE EXAMPLE:}
-\PYG{c+cm}{   }
-\PYG{c+cm}{   signed main() \PYGZob{}}
-\PYG{c+cm}{     int n = 3;}
-\PYG{c+cm}{     long long a[] = \PYGZob{}2, 4, 6\PYGZcb{}; // 2 (010), 4 (100), 6 (110)}
-\PYG{c+cm}{     }
-\PYG{c+cm}{     XorBasis xb;}
-\PYG{c+cm}{     for (int i = 0; i \PYGZlt{} n; i++) xb.insert(a[i]);}
-\PYG{c+cm}{     }
-\PYG{c+cm}{     // 1. Build the canonical form before calling k\PYGZhy{}th queries}
-\PYG{c+cm}{     xb.build();}
-\PYG{c+cm}{     }
-\PYG{c+cm}{     // The distinct XOR sums generated are: 0, 2, 4, 6}
-\PYG{c+cm}{     // Since 6 is just 2 \PYGZca{} 4, the basis size (sz) will be 2. (2\PYGZca{}2 = 4 combinations)}
-\PYG{c+cm}{     }
-\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}Max XOR sum: \PYGZdq{} \PYGZlt{}\PYGZlt{} xb.get\PYGZus{}max() \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // 6}
-\PYG{c+cm}{     }
-\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}1st smallest: \PYGZdq{} \PYGZlt{}\PYGZlt{} xb.get\PYGZus{}kth\PYGZus{}smallest(1) \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // 0}
-\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}2nd smallest: \PYGZdq{} \PYGZlt{}\PYGZlt{} xb.get\PYGZus{}kth\PYGZus{}smallest(2) \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // 2}
-\PYG{c+cm}{     }
-\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}1st largest: \PYGZdq{} \PYGZlt{}\PYGZlt{} xb.get\PYGZus{}kth\PYGZus{}largest(1) \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // 6}
-\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}3rd largest: \PYGZdq{} \PYGZlt{}\PYGZlt{} xb.get\PYGZus{}kth\PYGZus{}largest(3) \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // 2}
-\PYG{c+cm}{     }
-\PYG{c+cm}{     return 0;}
-\PYG{c+cm}{   \PYGZcb{}}
-\PYG{c+cm}{*/}
 \end{MintedVerbatim}

@@ -1,18 +1,9 @@
 /*
-   XOR BASIS (Linear Basis over GF(2))
-   
-   Idea:
    - Represents a set of numbers using a minimal set of linearly independent 
      numbers (basis).
    - Any XOR sum of a subset in the original set can be formed by a XOR sum 
      of a subset of the basis.
    - The size of the basis never exceeds the number of bits (LOG_D).
-   
-   Complexity:
-   - Insert / Check / Get Max: O(LOG_D)
-   - Merge two bases: O(LOG_D^2)
-   - Build RREF: O(LOG_D^2)
-   - K-th Smallest/Largest: O(LOG_D)
 */
 const int LOG_D = 60; // 60 for values up to 10^18, 30 for values up to 10^9
 
@@ -27,7 +18,6 @@ struct XorBasis {
   }
 
   // 1. Insert a value. Returns true if successfully inserted 
-  // (i.e., the value is linearly independent from the current basis).
   bool insert(long long x) {
     for (int i = LOG_D - 1; i >= 0; i--) {
       if ((x >> i) & 1) {
@@ -132,31 +122,3 @@ struct XorBasis {
     return res;
   }
 };
-
-/*
-   USAGE EXAMPLE:
-   
-   signed main() {
-     int n = 3;
-     long long a[] = {2, 4, 6}; // 2 (010), 4 (100), 6 (110)
-     
-     XorBasis xb;
-     for (int i = 0; i < n; i++) xb.insert(a[i]);
-     
-     // 1. Build the canonical form before calling k-th queries
-     xb.build();
-     
-     // The distinct XOR sums generated are: 0, 2, 4, 6
-     // Since 6 is just 2 ^ 4, the basis size (sz) will be 2. (2^2 = 4 combinations)
-     
-     cout << "Max XOR sum: " << xb.get_max() << "\n"; // 6
-     
-     cout << "1st smallest: " << xb.get_kth_smallest(1) << "\n"; // 0
-     cout << "2nd smallest: " << xb.get_kth_smallest(2) << "\n"; // 2
-     
-     cout << "1st largest: " << xb.get_kth_largest(1) << "\n"; // 6
-     cout << "3rd largest: " << xb.get_kth_largest(3) << "\n"; // 2
-     
-     return 0;
-   }
-*/

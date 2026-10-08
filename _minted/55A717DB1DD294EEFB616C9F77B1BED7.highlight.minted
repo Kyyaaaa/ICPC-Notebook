@@ -63,29 +63,4 @@
 \PYG{+w}{  }\PYG{n}{nver}\PYG{o}{++}\PYG{p}{;}
 \PYG{+w}{  }\PYG{n}{ver}\PYG{p}{[}\PYG{n}{nver}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{update}\PYG{p}{(}\PYG{n}{ver}\PYG{p}{[}\PYG{n}{nver}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{l}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{);}
 \PYG{p}{\PYGZcb{}}
-\PYG{c+cm}{/*}
-\PYG{c+cm}{   USAGE EXAMPLE (Solving Distinct Values in Range \PYGZhy{} DQUERY):}
-\PYG{c+cm}{   }
-\PYG{c+cm}{   // 1. Initialize base tree}
-\PYG{c+cm}{   cnt = nver = 0;}
-\PYG{c+cm}{   ver[0] = build(1, n);}
-\PYG{c+cm}{   }
-\PYG{c+cm}{   // 2. Build versions tracking the latest occurrence of each value}
-\PYG{c+cm}{   for (int i = 1; i \PYGZlt{}= n; i++) \PYGZob{}}
-\PYG{c+cm}{     // If value appeared before, remove its previous position}
-\PYG{c+cm}{     if (mark[a[i]] \PYGZgt{} 0) \PYGZob{}}
-\PYG{c+cm}{       ver[nver] = update(ver[nver], 1, n, mark[a[i]], \PYGZhy{}1); }
-\PYG{c+cm}{     \PYGZcb{}}
-\PYG{c+cm}{     }
-\PYG{c+cm}{     // Add current position}
-\PYG{c+cm}{     nver++;}
-\PYG{c+cm}{     ver[nver] = update(ver[nver \PYGZhy{} 1], 1, n, i, 1);}
-\PYG{c+cm}{     }
-\PYG{c+cm}{     iver[i] = ver[nver]; // iver[i] stores the version for prefix i}
-\PYG{c+cm}{     mark[a[i]] = i;}
-\PYG{c+cm}{   \PYGZcb{}}
-\PYG{c+cm}{   }
-\PYG{c+cm}{   // 3. Query distinct values in [L, R]}
-\PYG{c+cm}{   int ans = get(iver[R], 1, n, L, R);}
-\PYG{c+cm}{*/}
 \end{MintedVerbatim}
