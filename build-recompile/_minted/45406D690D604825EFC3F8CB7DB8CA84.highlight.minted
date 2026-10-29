@@ -1,0 +1,70 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   EULER\PYGZsq{}S TOTIENT FUNCTION (PHI FUNCTION)}
+\PYG{c+cm}{   Idea:}
+\PYG{c+cm}{   \PYGZhy{} phi(n) counts the number of integers between 1 and n inclusive }
+\PYG{c+cm}{     that are coprime to n (i.e., gcd(x, n) == 1).}
+\PYG{c+cm}{   Important Properties for CP:}
+\PYG{c+cm}{   1. If p is prime: phi(p) = p \PYGZhy{} 1}
+\PYG{c+cm}{   2. If p is prime and k \PYGZgt{}= 1: phi(p\PYGZca{}k) = p\PYGZca{}k \PYGZhy{} p\PYGZca{}(k\PYGZhy{}1)}
+\PYG{c+cm}{   3. Multiplicative: If gcd(a, b) == 1, then phi(a * b) = phi(a) * phi(b)}
+\PYG{c+cm}{   4. Euler\PYGZsq{}s Theorem: If gcd(a, m) == 1, then a\PYGZca{}phi(m) = 1 (mod m)}
+\PYG{c+cm}{   5. Sum of phi over divisors: The sum of phi(d) for all divisors d of n }
+\PYG{c+cm}{      is exactly equal to n. (Sum\PYGZus{}\PYGZob{}d|n\PYGZcb{} phi(d) = n)}
+\PYG{c+cm}{*/}
+\PYG{c+c1}{// 1. Single Computation}
+\PYG{c+c1}{// Computes phi(n) in O(sqrt(n)) time.}
+\PYG{c+c1}{// Uses the formula: phi(n) = n * (1 \PYGZhy{} 1/p1) * (1 \PYGZhy{} 1/p2) * ... }
+\PYG{c+c1}{// where p\PYGZus{}i are the distinct prime factors of n.}
+\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n+nf}{get\PYGZus{}phi}\PYG{p}{(}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{result}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{n}\PYG{+w}{ }\PYG{o}{\PYGZpc{}}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{k}{while}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{n}\PYG{+w}{ }\PYG{o}{\PYGZpc{}}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{n}\PYG{+w}{ }\PYG{o}{/=}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{;}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{      }\PYG{n}{result}\PYG{+w}{ }\PYG{o}{\PYGZhy{}=}\PYG{+w}{ }\PYG{n}{result}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{n}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{result}\PYG{+w}{ }\PYG{o}{\PYGZhy{}=}\PYG{+w}{ }\PYG{n}{result}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{result}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+c1}{// 2. Sieve Computation (Batch Computation)}
+\PYG{c+c1}{// Computes phi(i) for all 1 \PYGZlt{}= i \PYGZlt{}= N in O(N log log N) time.}
+\PYG{c+c1}{// Similar to the Sieve of Eratosthenes.}
+\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{phi\PYGZus{}sieve}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{phi}\PYG{p}{(}\PYG{n}{n}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{);}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{phi}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{phi}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{phi}\PYG{p}{[}\PYG{n}{j}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZhy{}=}\PYG{+w}{ }\PYG{n}{phi}\PYG{p}{[}\PYG{n}{j}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{;}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{phi}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   USAGE EXAMPLE:}
+\PYG{c+cm}{   signed main() \PYGZob{}}
+\PYG{c+cm}{     // 1. Single query for a large number}
+\PYG{c+cm}{     long long n = 12;}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}phi(\PYGZdq{} \PYGZlt{}\PYGZlt{} n \PYGZlt{}\PYGZlt{} \PYGZdq{}) = \PYGZdq{} \PYGZlt{}\PYGZlt{} get\PYGZus{}phi(n) \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; }
+\PYG{c+cm}{     // Output: 4 (Coprimes are 1, 5, 7, 11)}
+\PYG{c+cm}{     // 2. Precomputing phi for all numbers up to MAX\PYGZus{}N}
+\PYG{c+cm}{     int MAX\PYGZus{}N = 100000;}
+\PYG{c+cm}{     vector\PYGZlt{}int\PYGZgt{} phi = phi\PYGZus{}sieve(MAX\PYGZus{}N);}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}phi(10) = \PYGZdq{} \PYGZlt{}\PYGZlt{} phi[10] \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // Output: 4}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}phi(97) = \PYGZdq{} \PYGZlt{}\PYGZlt{} phi[97] \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // Output: 96 (Since 97 is prime)}
+\PYG{c+cm}{     return 0;}
+\PYG{c+cm}{   \PYGZcb{}}
+\PYG{c+cm}{*/}
+\end{MintedVerbatim}

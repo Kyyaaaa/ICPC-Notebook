@@ -1,0 +1,6 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{n}{mt19937}\PYG{+w}{ }\PYG{n+nf}{rng}\PYG{p}{(}\PYG{n}{chrono}\PYG{o}{::}\PYG{n}{steady\PYGZus{}clock}\PYG{o}{::}\PYG{n}{now}\PYG{p}{().}\PYG{n}{time\PYGZus{}since\PYGZus{}epoch}\PYG{p}{().}\PYG{n}{count}\PYG{p}{());}
+\PYG{n}{ll}\PYG{+w}{ }\PYG{n+nf}{rnd}\PYG{p}{(}\PYG{n}{ll}\PYG{+w}{ }\PYG{n}{l}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ll}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{uniform\PYGZus{}int\PYGZus{}distribution}\PYG{o}{\PYGZlt{}}\PYG{n}{ll}\PYG{o}{\PYGZgt{}}\PYG{p}{(}\PYG{n}{l}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{)(}\PYG{n}{rng}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+\end{MintedVerbatim}

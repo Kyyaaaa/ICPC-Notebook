@@ -70,24 +70,3 @@ struct TernarySearch {
     return best_x;
   }
 };
-
-/*
-   USAGE EXAMPLE:
-   signed main() {
-     TernarySearch ts;
-     
-     // Floating point search in range [-1000.0, 1000.0]
-     double ans_d = ts.solve_double(-1000.0, 1000.0);
-     cout << fixed << setprecision(6);
-     cout << "Min (Double) at x = " << ans_d << ", f(x) = " << f_double(ans_d) << "\n";
-     
-     // Integer search in range [-1000, 1000]
-     long long ans_i = ts.solve_int(-1000, 1000);
-     cout << "Min (Int) at x = " << ans_i << ", f(x) = " << f_int(ans_i) << "\n";
-     
-     // Expected output for both: 
-     // x = 5, f(x) = 10
-     
-     return 0;
-   }
-*/

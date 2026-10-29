@@ -1,0 +1,135 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   SUFFIX ARRAY \PYGZam{} LCP ARRAY (O(N log N) Construction)}
+\PYG{c+cm}{   Idea:}
+\PYG{c+cm}{   \PYGZhy{} Suffix Array (sa): Sorts all suffixes of a string lexicographically. }
+\PYG{c+cm}{     sa[i] stores the starting index of the i\PYGZhy{}th lexicographically }
+\PYG{c+cm}{     smallest suffix.}
+\PYG{c+cm}{   \PYGZhy{} LCP Array (lcp): Stores the Longest Common Prefix between consecutive }
+\PYG{c+cm}{     suffixes in the sorted Suffix Array. lcp[i] = LCP(sa[i], sa[i\PYGZhy{}1]).}
+\PYG{c+cm}{   Algorithm:}
+\PYG{c+cm}{   \PYGZhy{} Appends a special character \PYGZsq{}\PYGZdl{}\PYGZsq{} (strictly smaller than all other characters) }
+\PYG{c+cm}{     to the end of the string.}
+\PYG{c+cm}{   \PYGZhy{} Sorts substrings of length 2\PYGZca{}k using Radix Sort in O(N).}
+\PYG{c+cm}{   \PYGZhy{} Repeats log(N) times \PYGZhy{}\PYGZgt{} Total time O(N log N).}
+\PYG{c+cm}{   \PYGZhy{} Computes LCP in O(N) using Kasai\PYGZsq{}s Algorithm.}
+\PYG{c+cm}{*/}
+
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{SuffixArray}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{string}\PYG{+w}{ }\PYG{n}{s}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{sa}\PYG{p}{;}\PYG{+w}{  }\PYG{c+c1}{// Suffix Array}
+\PYG{+w}{  }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{c}\PYG{p}{;}\PYG{+w}{   }\PYG{c+c1}{// Equivalence classes}
+\PYG{+w}{  }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{lcp}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// Longest Common Prefix array}
+
+\PYG{+w}{  }\PYG{c+c1}{// Constructor automatically builds SA and LCP}
+\PYG{+w}{  }\PYG{n}{SuffixArray}\PYG{p}{(}\PYG{n}{string}\PYG{+w}{ }\PYG{k}{const}\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{n}{\PYGZus{}s}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{s}\PYG{p}{(}\PYG{n}{\PYGZus{}s}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}\PYGZdl{}\PYGZdq{}}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{n}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{s}\PYG{p}{.}\PYG{n}{length}\PYG{p}{();}
+\PYG{+w}{    }\PYG{n}{sa}\PYG{p}{.}\PYG{n}{assign}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{c}\PYG{p}{.}\PYG{n}{assign}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{lcp}\PYG{p}{.}\PYG{n}{assign}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{+w}{    }
+\PYG{+w}{    }\PYG{n}{build\PYGZus{}sa}\PYG{p}{();}
+\PYG{+w}{    }\PYG{n}{build\PYGZus{}lcp}\PYG{p}{();}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{build\PYGZus{}sa}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{alphabet}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{256}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{cnt}\PYG{p}{(}\PYG{n}{max}\PYG{p}{(}\PYG{n}{alphabet}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{),}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{p}\PYG{p}{(}\PYG{n}{n}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{pn}\PYG{p}{(}\PYG{n}{n}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{cn}\PYG{p}{(}\PYG{n}{n}\PYG{p}{);}
+\PYG{+w}{    }
+\PYG{+w}{    }\PYG{c+c1}{// 1. Initial sort for length 1 (k = 0)}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{cnt}\PYG{p}{[}\PYG{n}{s}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]]}\PYG{o}{++}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{alphabet}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{cnt}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{cnt}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{];}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{p}\PYG{p}{[}\PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{n}{cnt}\PYG{p}{[}\PYG{n}{s}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]]]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{;}
+\PYG{+w}{    }
+\PYG{+w}{    }\PYG{n}{c}\PYG{p}{[}\PYG{n}{p}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{classes}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{s}\PYG{p}{[}\PYG{n}{p}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]]}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{s}\PYG{p}{[}\PYG{n}{p}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{]])}\PYG{+w}{ }\PYG{n}{classes}\PYG{o}{++}\PYG{p}{;}
+\PYG{+w}{      }\PYG{n}{c}\PYG{p}{[}\PYG{n}{p}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{classes}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }
+\PYG{+w}{    }\PYG{c+c1}{// 2. Transitions for length 2\PYGZca{}h}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{h}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{n}{h}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{h}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{c+c1}{// Shift by 2\PYGZca{}h}
+\PYG{+w}{      }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{pn}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{p}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{n}{h}\PYG{p}{);}
+\PYG{+w}{        }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{pn}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{pn}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{      }
+\PYG{+w}{      }\PYG{c+c1}{// Radix Sort on the first half}
+\PYG{+w}{      }\PYG{n}{fill}\PYG{p}{(}\PYG{n}{cnt}\PYG{p}{.}\PYG{n}{begin}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{cnt}\PYG{p}{.}\PYG{n}{begin}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{classes}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{+w}{      }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{cnt}\PYG{p}{[}\PYG{n}{c}\PYG{p}{[}\PYG{n}{pn}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]]]}\PYG{o}{++}\PYG{p}{;}
+\PYG{+w}{      }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{classes}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{cnt}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{cnt}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{];}
+\PYG{+w}{      }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{n}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZgt{}=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{p}\PYG{p}{[}\PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{n}{cnt}\PYG{p}{[}\PYG{n}{c}\PYG{p}{[}\PYG{n}{pn}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]]]]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{pn}\PYG{p}{[}\PYG{n}{i}\PYG{p}{];}
+\PYG{+w}{      }
+\PYG{+w}{      }\PYG{c+c1}{// Update equivalence classes}
+\PYG{+w}{      }\PYG{n}{cn}\PYG{p}{[}\PYG{n}{p}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{      }\PYG{n}{classes}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{      }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{pair}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{cur}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n}{c}\PYG{p}{[}\PYG{n}{p}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]],}\PYG{+w}{ }\PYG{n}{c}\PYG{p}{[(}\PYG{n}{p}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{n}{h}\PYG{p}{))}\PYG{+w}{ }\PYG{o}{\PYGZpc{}}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{]\PYGZcb{};}
+\PYG{+w}{        }\PYG{n}{pair}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{prev}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n}{c}\PYG{p}{[}\PYG{n}{p}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{]],}\PYG{+w}{ }\PYG{n}{c}\PYG{p}{[(}\PYG{n}{p}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{n}{h}\PYG{p}{))}\PYG{+w}{ }\PYG{o}{\PYGZpc{}}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{]\PYGZcb{};}
+\PYG{+w}{        }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{cur}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{prev}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{classes}\PYG{o}{++}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{cn}\PYG{p}{[}\PYG{n}{p}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{classes}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{      }\PYG{n}{c}\PYG{p}{.}\PYG{n}{swap}\PYG{p}{(}\PYG{n}{cn}\PYG{p}{);}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{n}{sa}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{p}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Kasai\PYGZsq{}s algorithm to build LCP array in O(N)}
+\PYG{+w}{  }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{build\PYGZus{}lcp}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{rank}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{n}{rank}\PYG{p}{[}\PYG{n}{sa}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{k}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{    }\PYG{c+c1}{// Iterate through original string indices (excluding the appended \PYGZsq{}\PYGZdl{}\PYGZsq{})}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{n}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{pi}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{rank}\PYG{p}{[}\PYG{n}{i}\PYG{p}{];}
+\PYG{+w}{      }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{sa}\PYG{p}{[}\PYG{n}{pi}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{];}\PYG{+w}{ }\PYG{c+c1}{// The suffix preceding the current one in SA}
+\PYG{+w}{      }
+\PYG{+w}{      }\PYG{c+c1}{// Expand the matching prefix}
+\PYG{+w}{      }\PYG{k}{while}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{k}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{n}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{k}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{n}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{s}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{k}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{s}\PYG{p}{[}\PYG{n}{j}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{k}\PYG{p}{])}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{k}\PYG{o}{++}\PYG{p}{;}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{      }
+\PYG{+w}{      }\PYG{n}{lcp}\PYG{p}{[}\PYG{n}{pi}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{k}\PYG{p}{;}
+\PYG{+w}{      }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{k}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{k}\PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// Move to the next suffix, LCP decreases by at most 1}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{};}
+
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   USAGE EXAMPLES:}
+\PYG{c+cm}{   }
+\PYG{c+cm}{   signed main() \PYGZob{}}
+\PYG{c+cm}{     string str = \PYGZdq{}ababba\PYGZdq{};}
+\PYG{c+cm}{     SuffixArray sa(str);}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // 1. Number of Distinct Substrings}
+\PYG{c+cm}{     // Formula: Total substrings \PYGZhy{} sum of LCP array}
+\PYG{c+cm}{     // Total substrings of length N is N * (N + 1) / 2}
+\PYG{c+cm}{     long long N = str.length();}
+\PYG{c+cm}{     long long distinct\PYGZus{}substrings = N * (N + 1) / 2;}
+\PYG{c+cm}{     for (int i = 1; i \PYGZlt{}= N; i++) \PYGZob{}}
+\PYG{c+cm}{       distinct\PYGZus{}substrings \PYGZhy{}= sa.lcp[i];}
+\PYG{c+cm}{     \PYGZcb{}}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}Distinct substrings: \PYGZdq{} \PYGZlt{}\PYGZlt{} distinct\PYGZus{}substrings \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{};}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // 2. Printing Suffix Array \PYGZam{} LCP Array}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}i\PYGZbs{}tSA[i]\PYGZbs{}tLCP[i]\PYGZbs{}tSuffix\PYGZbs{}n\PYGZdq{};}
+\PYG{c+cm}{     // Note: sa.sa[0] is always the appended \PYGZsq{}\PYGZdl{}\PYGZsq{} (length 0 suffix)}
+\PYG{c+cm}{     for (int i = 1; i \PYGZlt{}= N; i++) \PYGZob{} }
+\PYG{c+cm}{       cout \PYGZlt{}\PYGZlt{} i \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}t\PYGZdq{} }
+\PYG{c+cm}{            \PYGZlt{}\PYGZlt{} sa.sa[i] \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}t\PYGZdq{} }
+\PYG{c+cm}{            \PYGZlt{}\PYGZlt{} sa.lcp[i] \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}t\PYGZdq{} }
+\PYG{c+cm}{            \PYGZlt{}\PYGZlt{} str.substr(sa.sa[i]) \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{};}
+\PYG{c+cm}{     \PYGZcb{}}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     return 0;}
+\PYG{c+cm}{   \PYGZcb{}}
+\PYG{c+cm}{*/}
+\end{MintedVerbatim}

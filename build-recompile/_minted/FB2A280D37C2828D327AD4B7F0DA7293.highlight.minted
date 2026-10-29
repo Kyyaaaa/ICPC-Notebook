@@ -1,0 +1,70 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{N}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mf}{2e5}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{p}{;}
+\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{G}\PYG{p}{[}\PYG{n}{N}\PYG{p}{];}
+
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{in}\PYG{p}{[}\PYG{n}{N}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{out}\PYG{p}{[}\PYG{n}{N}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{rn}\PYG{p}{[}\PYG{n}{N}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{timer}\PYG{p}{;}
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{sz}\PYG{p}{[}\PYG{n}{N}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{big}\PYG{p}{[}\PYG{n}{N}\PYG{p}{];}
+
+\PYG{c+c1}{// 1. First DFS: Precompute subtree sizes, Euler tour, and heavy children}
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{dfs\PYGZus{}sz}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{par}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{n}{in}\PYG{p}{[}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{o}{++}\PYG{n}{timer}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{rn}\PYG{p}{[}\PYG{n}{timer}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{sz}\PYG{p}{[}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{big}\PYG{p}{[}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{v}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{G}\PYG{p}{[}\PYG{n}{u}\PYG{p}{])}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{v}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{par}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{n}{dfs\PYGZus{}sz}\PYG{p}{(}\PYG{n}{v}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{);}
+\PYG{+w}{      }\PYG{n}{sz}\PYG{p}{[}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{sz}\PYG{p}{[}\PYG{n}{v}\PYG{p}{];}
+\PYG{+w}{      }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{sz}\PYG{p}{[}\PYG{n}{big}\PYG{p}{[}\PYG{n}{u}\PYG{p}{]]}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{sz}\PYG{p}{[}\PYG{n}{v}\PYG{p}{])}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{big}\PYG{p}{[}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{v}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// Update heavy child}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{n}{out}\PYG{p}{[}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{timer}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+c1}{// Struct to manage the global state (Modify this according to the problem!)}
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{GlobalState}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{freq}\PYG{p}{[}\PYG{n}{N}\PYG{p}{];}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{count\PYGZus{}of\PYGZus{}freq}\PYG{p}{[}\PYG{n}{N}\PYG{p}{];}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{add}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{node}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{remove}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{node}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }
+\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{n}{state}\PYG{p}{;}
+
+
+\PYG{c+c1}{// 2. Second DFS: DSU on Tree (Sack)}
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{dsu\PYGZus{}on\PYGZus{}tree}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{par}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{keep}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{v}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{G}\PYG{p}{[}\PYG{n}{u}\PYG{p}{])}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{v}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{par}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{v}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{big}\PYG{p}{[}\PYG{n}{u}\PYG{p}{])}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{n}{dsu\PYGZus{}on\PYGZus{}tree}\PYG{p}{(}\PYG{n}{v}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{false}\PYG{p}{);}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{big}\PYG{p}{[}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{dsu\PYGZus{}on\PYGZus{}tree}\PYG{p}{(}\PYG{n}{big}\PYG{p}{[}\PYG{n}{u}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{true}\PYG{p}{);}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{v}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{G}\PYG{p}{[}\PYG{n}{u}\PYG{p}{])}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{v}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{par}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{v}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{big}\PYG{p}{[}\PYG{n}{u}\PYG{p}{])}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{in}\PYG{p}{[}\PYG{n}{v}\PYG{p}{];}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{out}\PYG{p}{[}\PYG{n}{v}\PYG{p}{];}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{state}\PYG{p}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{rn}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]);}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{n}{state}\PYG{p}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{u}\PYG{p}{);}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{c+c1}{// ANSWER QUERIES for node `u` here}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{keep}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{in}\PYG{p}{[}\PYG{n}{u}\PYG{p}{];}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{out}\PYG{p}{[}\PYG{n}{u}\PYG{p}{];}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{n}{state}\PYG{p}{.}\PYG{n}{remove}\PYG{p}{(}\PYG{n}{rn}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]);}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{MintedVerbatim}

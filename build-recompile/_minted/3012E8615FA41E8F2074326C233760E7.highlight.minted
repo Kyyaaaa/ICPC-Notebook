@@ -1,0 +1,4 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{err}{@}\PYG{n}{echo}\PYG{+w}{ }\PYG{n}{off}
+\PYG{n}{g}\PYG{o}{++}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{n}{std}\PYG{o}{=}\PYG{n}{c}\PYG{o}{++}\PYG{l+m+mi}{17}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{n}{O2}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{n}{Wl}\PYG{p}{,}\PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{n}{stack}\PYG{p}{,}\PYG{l+m+mi}{536870912}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}\PYGZpc{}\PYGZti{}1.cpp\PYGZdq{}}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{n}{o}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}\PYGZpc{}\PYGZti{}1.exe\PYGZdq{}}
+\end{MintedVerbatim}

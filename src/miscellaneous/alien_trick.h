@@ -1,6 +1,5 @@
 /*
    ALIEN'S TRICK (WQS BINARY SEARCH / LAGRANGE RELAXATION)
-   
    Idea:
    - Solves DP problems with an "exactly K items/partitions" constraint.
    - We drop the K constraint and add a penalty `lambda` for each partition.
@@ -9,17 +8,15 @@
    - To handle collinear points on the convex hull, we always prefer the 
      MAXIMUM (or MINIMUM) number of partitions for the same cost, and use 
      `cnt >= K` in the binary search.
-     
    Condition:
    - Let f(x) be the optimal cost using exactly x partitions.
    - f(x) MUST be convex or concave.
-   
    Complexity: O(N * log(MAX_PENALTY)) instead of O(N * K).
 */
 const long long LINF = 1e18;
 
 int n;
-vector<long long> a; // Input array
+vector<long long> a;
 
 // 1. The 1D DP function without the 'K' constraint
 // Returns a pair: {optimal_cost_with_penalty, number_of_partitions_used}
@@ -29,19 +26,14 @@ pair<long long, int> solve_dp(long long lambda) {
   dp[0] = {0, 0};
   
   for (int i = 1; i <= n; i++) {
-    // Iterate over all possible previous split points
-    // Note: In real problems, this inner loop is often optimized to O(1) 
-    // using Convex Hull Trick, D&C, or Monotone Queue.
     for (int j = 0; j < i; j++) {
       // cost(j+1, i) is the cost of the segment from j+1 to i
       // We ADD `lambda` as a penalty for creating this new segment
       long long segment_cost = 0; /* TODO: Calculate real cost */
       long long new_cost = dp[j].first + segment_cost + lambda;
-      int new_cnt = dp[j].second + 1;
-      
+      int new_cnt = dp[j].second + 1; 
       // We want to MINIMIZE cost. 
       // TIE-BREAKER: If costs are equal, MAXIMIZE the number of partitions.
-      // This tie-breaker is CRUCIAL to handle collinear points on the convex hull!
       if (new_cost < dp[i].first || (new_cost == dp[i].first && new_cnt > dp[i].second)) {
         dp[i] = {new_cost, new_cnt};
       }
@@ -52,7 +44,6 @@ pair<long long, int> solve_dp(long long lambda) {
 
 /*
    USAGE EXAMPLE:
-   
    signed main() {
      n = 1000;
      int K = 50; // We need exactly K partitions
@@ -82,7 +73,6 @@ pair<long long, int> solve_dp(long long lambda) {
      }
      
      cout << "Minimum cost using exactly " << K << " partitions: " << ans << "\n";
-     
      return 0;
    }
 */

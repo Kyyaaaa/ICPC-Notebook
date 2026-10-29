@@ -115,7 +115,7 @@ void toggle(int idx) {
   else sub(a[x]);
 }
 
-// Apply point update dynamically
+// Apply point update dynamically 
 void apply_update(int x, int val, int old_val) {
   if (f[x]) {
     add(val);
@@ -123,79 +123,3 @@ void apply_update(int x, int val, int old_val) {
   }
   a[x] = val;
 }
-
-/*
-   USAGE EXAMPLE:
-   
-   signed main() {
-     // ... Read N, Q, array `a`, and tree edges ...
-     
-     timer = 0;
-     memset(up, -1, sizeof(up));
-     depth[1] = 0;
-     dfs(1, -1);
-     
-     // Note: If values are large, do Coordinate Compression on `a` and updates first!
-     
-     // ... Reading Queries and Updates ...
-     int time_counter = 0;
-     for (int i = 1; i <= q; i++) {
-       int type; cin >> type;
-       if (type == 1) { // Path Query
-         int u, v; cin >> u >> v;
-         if (tin[u] > tin[v]) swap(u, v); // Ensure tin[u] <= tin[v]
-         
-         int lca = get_lca(u, v);
-         if (lca == u) {
-           // u is ancestor of v -> LCA is already inside [tin[u], tin[v]]
-           queries.push_back({tin[u], tin[v], -1, time_counter, (int)queries.size() + 1});
-         } else {
-           // u is NOT ancestor of v -> LCA is missing, need to add it manually
-           queries.push_back({tout[u], tin[v], tin[lca], time_counter, (int)queries.size() + 1});
-         }
-       } else { // Point Update
-         int x, val; cin >> x >> val;
-         time_counter++;
-         updates.push_back({x, val, a[x]});
-         a[x] = val; // temporarily apply to get `old_val` for future queries
-       }
-     }
-     
-     // Rollback the array `a` to its initial state before processing Mo
-     for (int i = (int)updates.size() - 1; i >= 0; i--) {
-       a[updates[i].x] = updates[i].old_val;
-     }
-     
-     sort(queries.begin(), queries.end());
-     
-     int L = 1, R = 0, T = 0;
-     for (const auto& q : queries) {
-       while (R < q.r) toggle(++R);
-       while (L > q.l) toggle(--L);
-       while (R > q.r) toggle(R--);
-       while (L < q.l) toggle(L++);
-       
-       while (T < q.t) {
-         apply_update(updates[T].x, updates[T].new_val, updates[T].old_val);
-         T++;
-       }
-       while (T > q.t) {
-         T--;
-         apply_update(updates[T].x, updates[T].old_val, updates[T].new_val);
-       }
-       
-       // Manually toggle LCA if needed
-       if (q.lca_idx != -1) toggle(q.lca_idx);
-       
-       ans[q.id] = distinct_count;
-       
-       // Untoggle LCA to restore state
-       if (q.lca_idx != -1) toggle(q.lca_idx);
-     }
-     
-     for (int i = 1; i <= queries.size(); i++) {
-       cout << ans[i] << "\n";
-     }
-     return 0;
-   }
-*/

@@ -1,0 +1,107 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   GENERALIZED CHINESE REMAINDER THEOREM (CRT)}
+\PYG{c+cm}{   Idea:}
+\PYG{c+cm}{   \PYGZhy{} Solves a system of linear congruences:}
+\PYG{c+cm}{       x = a\PYGZus{}1 (mod m\PYGZus{}1)}
+\PYG{c+cm}{       x = a\PYGZus{}2 (mod m\PYGZus{}2)}
+\PYG{c+cm}{       ...}
+\PYG{c+cm}{       x = a\PYGZus{}n (mod m\PYGZus{}n)}
+\PYG{c+cm}{   \PYGZhy{} Unlike the standard CRT, this GENERALIZED version does NOT require }
+\PYG{c+cm}{     the moduli (m\PYGZus{}i) to be pairwise coprime.}
+\PYG{c+cm}{   \PYGZhy{} It works by iteratively merging two congruences into one.}
+\PYG{c+cm}{   Math:}
+\PYG{c+cm}{   \PYGZhy{} Merging x = a1 (mod m1) and x = a2 (mod m2):}
+\PYG{c+cm}{     We need x = a1 + k1 * m1 = a2 + k2 * m2}
+\PYG{c+cm}{     =\PYGZgt{} k1 * m1 \PYGZhy{} k2 * m2 = a2 \PYGZhy{} a1}
+\PYG{c+cm}{     This is a linear Diophantine equation. Let g = gcd(m1, m2).}
+\PYG{c+cm}{     If (a2 \PYGZhy{} a1) is not divisible by g, there is NO SOLUTION.}
+\PYG{c+cm}{     Otherwise, we solve for k1 and find the new merged congruence:}
+\PYG{c+cm}{     x = new\PYGZus{}a (mod lcm(m1, m2)).}
+\PYG{c+cm}{   Complexity: O(N log(LCM))}
+\PYG{c+cm}{   Note: Uses \PYGZus{}\PYGZus{}int128\PYGZus{}t to prevent overflow during intermediate multiplications.}
+\PYG{c+cm}{*/}
+\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n+nf}{extgcd}\PYG{p}{(}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{a}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{b}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{y}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{b}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{y}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{a}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{x1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y1}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{d}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{extgcd}\PYG{p}{(}\PYG{n}{b}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{a}\PYG{+w}{ }\PYG{o}{\PYGZpc{}}\PYG{+w}{ }\PYG{n}{b}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{x1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y1}\PYG{p}{);}
+\PYG{+w}{  }\PYG{n}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{y1}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{y}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{x1}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{y1}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{a}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{n}{b}\PYG{p}{);}
+\PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{d}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+c1}{// Generalized CRT}
+\PYG{c+c1}{// Inputs: vector of remainders `a`, vector of moduli `m`.}
+\PYG{c+c1}{// Returns: A pair \PYGZob{}ans\PYGZus{}a, ans\PYGZus{}m\PYGZcb{} such that x = ans\PYGZus{}a (mod ans\PYGZus{}m).}
+\PYG{c+c1}{// If no solution exists, returns \PYGZob{}\PYGZhy{}1, \PYGZhy{}1\PYGZcb{}.}
+\PYG{n}{pair}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{crt}\PYG{p}{(}\PYG{k}{const}\PYG{+w}{ }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{o}{\PYGZgt{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{a}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{const}\PYG{+w}{ }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{o}{\PYGZgt{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{m}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{n}{assert}\PYG{p}{(}\PYG{n}{a}\PYG{p}{.}\PYG{n}{size}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{m}\PYG{p}{.}\PYG{n}{size}\PYG{p}{());}
+\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{a}\PYG{p}{.}\PYG{n}{empty}\PYG{p}{())}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{\PYGZcb{};}\PYG{+w}{ }\PYG{c+c1}{// Trivial case}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{ans\PYGZus{}a}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{a}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{];}
+\PYG{+w}{  }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{ans\PYGZus{}m}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{m}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{];}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)}\PYG{n}{a}\PYG{p}{.}\PYG{n}{size}\PYG{p}{();}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{cur\PYGZus{}a}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{a}\PYG{p}{[}\PYG{n}{i}\PYG{p}{];}
+\PYG{+w}{    }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{cur\PYGZus{}m}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{m}\PYG{p}{[}\PYG{n}{i}\PYG{p}{];}
+\PYG{+w}{    }
+\PYG{+w}{    }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{v}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{g}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{extgcd}\PYG{p}{(}\PYG{n}{ans\PYGZus{}m}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{cur\PYGZus{}m}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{v}\PYG{p}{);}
+\PYG{+w}{    }
+\PYG{+w}{    }\PYG{c+c1}{// Check if a solution exists for this pair}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{((}\PYG{n}{cur\PYGZus{}a}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{ans\PYGZus{}a}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZpc{}}\PYG{+w}{ }\PYG{n}{g}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+m+mi}{\PYGZhy{}1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{\PYGZhy{}1}\PYG{p}{\PYGZcb{};}\PYG{+w}{ }\PYG{c+c1}{// No solution}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }
+\PYG{+w}{    }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{lcm}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{ans\PYGZus{}m}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{cur\PYGZus{}m}\PYG{p}{;}
+\PYG{+w}{    }
+\PYG{+w}{    }\PYG{c+c1}{// Calculate k1 = (a2 \PYGZhy{} a1) / g * u (mod m2 / g)}
+\PYG{+w}{    }\PYG{c+c1}{// Using \PYGZus{}\PYGZus{}int128\PYGZus{}t to avoid overflow when multiplying (cur\PYGZus{}a \PYGZhy{} ans\PYGZus{}a) / g and u}
+\PYG{+w}{    }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{n}{diff}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{cur\PYGZus{}a}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{ans\PYGZus{}a}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{\PYGZus{}\PYGZus{}int128\PYGZus{}t}\PYG{+w}{ }\PYG{n}{k}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{\PYGZus{}\PYGZus{}int128\PYGZus{}t}\PYG{p}{)}\PYG{n}{diff}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{n}{g}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{k}\PYG{+w}{ }\PYG{o}{\PYGZpc{}=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{cur\PYGZus{}m}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{);}
+\PYG{+w}{    }
+\PYG{+w}{    }\PYG{c+c1}{// Substitute k back to find the new remainder}
+\PYG{+w}{    }\PYG{n}{ans\PYGZus{}a}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{ans\PYGZus{}a}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{p}{)}\PYG{n}{k}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{ans\PYGZus{}m}\PYG{p}{;}
+\PYG{+w}{    }
+\PYG{+w}{    }\PYG{c+c1}{// Normalize ans\PYGZus{}a to be positive and within [0, lcm \PYGZhy{} 1]}
+\PYG{+w}{    }\PYG{n}{ans\PYGZus{}a}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{ans\PYGZus{}a}\PYG{+w}{ }\PYG{o}{\PYGZpc{}}\PYG{+w}{ }\PYG{n}{lcm}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{lcm}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZpc{}}\PYG{+w}{ }\PYG{n}{lcm}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{ans\PYGZus{}m}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{lcm}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }
+\PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n}{ans\PYGZus{}a}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ans\PYGZus{}m}\PYG{p}{\PYGZcb{};}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   USAGE EXAMPLE:}
+\PYG{c+cm}{   }
+\PYG{c+cm}{   signed main() \PYGZob{}}
+\PYG{c+cm}{     // System of equations:}
+\PYG{c+cm}{     // x = 2 (mod 3)}
+\PYG{c+cm}{     // x = 3 (mod 5)}
+\PYG{c+cm}{     // x = 2 (mod 7)}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     vector\PYGZlt{}long long\PYGZgt{} a = \PYGZob{}2, 3, 2\PYGZcb{};}
+\PYG{c+cm}{     vector\PYGZlt{}long long\PYGZgt{} m = \PYGZob{}3, 5, 7\PYGZcb{};}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     pair\PYGZlt{}long long, long long\PYGZgt{} res = crt(a, m);}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     if (res.first == \PYGZhy{}1) \PYGZob{}}
+\PYG{c+cm}{       cout \PYGZlt{}\PYGZlt{} \PYGZdq{}No solution exists.\PYGZbs{}n\PYGZdq{};}
+\PYG{c+cm}{     \PYGZcb{} else \PYGZob{}}
+\PYG{c+cm}{       cout \PYGZlt{}\PYGZlt{} \PYGZdq{}Smallest positive solution: x = \PYGZdq{} \PYGZlt{}\PYGZlt{} res.first \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{};}
+\PYG{c+cm}{       cout \PYGZlt{}\PYGZlt{} \PYGZdq{}General solution: x = \PYGZdq{} \PYGZlt{}\PYGZlt{} res.first \PYGZlt{}\PYGZlt{} \PYGZdq{} (mod \PYGZdq{} \PYGZlt{}\PYGZlt{} res.second \PYGZlt{}\PYGZlt{} \PYGZdq{})\PYGZbs{}n\PYGZdq{};}
+\PYG{c+cm}{     \PYGZcb{}}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     // Output: }
+\PYG{c+cm}{     // Smallest positive solution: x = 23}
+\PYG{c+cm}{     // General solution: x = 23 (mod 105)}
+\PYG{c+cm}{     }
+\PYG{c+cm}{     return 0;}
+\PYG{c+cm}{   \PYGZcb{}}
+\PYG{c+cm}{*/}
+\end{MintedVerbatim}

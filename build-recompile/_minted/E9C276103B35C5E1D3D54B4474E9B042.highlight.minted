@@ -1,0 +1,50 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+cm}{/*   }
+\PYG{c+cm}{  DIGIT DP OPTIMIZATION 2: ONE\PYGZhy{}TIME MEMSET FOR MULTI\PYGZhy{}TEST CASES}
+\PYG{c+cm}{*/}
+
+\PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{mod}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mf}{1e9}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{7}\PYG{p}{;}
+
+\PYG{n}{string}\PYG{+w}{ }\PYG{n}{R}\PYG{p}{;}
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{dp}\PYG{p}{[}\PYG{l+m+mi}{51}\PYG{p}{][}\PYG{l+m+mi}{51}\PYG{p}{][}\PYG{l+m+mi}{51}\PYG{p}{][}\PYG{l+m+mi}{51}\PYG{p}{];}
+
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n+nf}{calc}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{pos}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{c3}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{c6}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{c9}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{fr}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{pos}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{\PYGZhy{}1}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{c3}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{c3}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{c6}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{c6}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{c9}\PYG{p}{);}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }
+\PYG{+w}{  }\PYG{k}{auto}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{res}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{dp}\PYG{p}{[}\PYG{n}{pos}\PYG{p}{][}\PYG{n}{c3}\PYG{p}{][}\PYG{n}{c6}\PYG{p}{][}\PYG{n}{c9}\PYG{p}{];}
+\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{fr}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{res}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{l+m+mi}{\PYGZhy{}1}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{res}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{ll}\PYG{+w}{ }\PYG{n}{val}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{lim\PYGZus{}r}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{fr}\PYG{+w}{ }\PYG{o}{?}\PYG{+w}{ }\PYG{l+m+mi}{9}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{R}\PYG{p}{[}\PYG{n}{pos}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{lim\PYGZus{}r}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{val}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{calc}\PYG{p}{(}\PYG{n}{pos}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{c3}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{c6}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{6}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{c9}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{9}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{fr}\PYG{+w}{ }\PYG{o}{|}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{lim\PYGZus{}r}\PYG{p}{));}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{val}\PYG{+w}{ }\PYG{o}{\PYGZgt{}=}\PYG{+w}{ }\PYG{n}{mod}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{val}\PYG{+w}{ }\PYG{o}{\PYGZhy{}=}\PYG{+w}{ }\PYG{n}{mod}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{fr}\PYG{+w}{ }\PYG{o}{?}\PYG{+w}{ }\PYG{n}{res}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{val}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{val}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n+nf}{solve}\PYG{p}{(}\PYG{n}{string}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{n}{reverse}\PYG{p}{(}\PYG{n}{x}\PYG{p}{.}\PYG{n}{begin}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{.}\PYG{n}{end}\PYG{p}{());}
+\PYG{+w}{  }\PYG{n}{R}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{calc}\PYG{p}{((}\PYG{k+kt}{int}\PYG{p}{)}\PYG{n}{R}\PYG{p}{.}\PYG{n}{size}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n+nf}{check}\PYG{p}{(}\PYG{n}{string}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{c3}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{c6}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{c9}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{auto}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{c3}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}3\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{c6}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}6\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{c9}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}9\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{c3}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{c3}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{c6}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{c6}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{c9}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cm}{/*}
+\PYG{c+cm}{// Usage in main():}
+\PYG{c+cm}{// memset(dp, \PYGZhy{}1, sizeof dp); // Call this ONLY ONCE}
+\PYG{c+cm}{// while (test\PYGZhy{}\PYGZhy{}) \PYGZob{}}
+\PYG{c+cm}{//   string a, b; cin \PYGZgt{}\PYGZgt{} a \PYGZgt{}\PYGZgt{} b;}
+\PYG{c+cm}{//   cout \PYGZlt{}\PYGZlt{} (1LL * solve(b) \PYGZhy{} solve(a) + check(a) + mod) \PYGZpc{} mod \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{};}
+\PYG{c+cm}{// \PYGZcb{}}
+\PYG{c+cm}{*/}
+\end{MintedVerbatim}

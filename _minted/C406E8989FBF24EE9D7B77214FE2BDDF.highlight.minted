@@ -1,0 +1,188 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   REQUIREMENT:}
+\PYG{c+cm}{   \PYGZhy{} Paste the Dinic template (Edge + Dinic + LINF) BEFORE this template.}
+\PYG{c+cm}{   \PYGZhy{} Original vertices are numbered from 1 to n.}
+\PYG{c+cm}{   \PYGZhy{} Each edge has a lower bound l and upper bound r: l \PYGZlt{}= flow \PYGZlt{}= r.}
+\PYG{c+cm}{   \PYGZhy{} Each LowerBoundFlow object supports ONE solve call only.}
+\PYG{c+cm}{   \PYGZhy{} max\PYGZus{}flow/min\PYGZus{}flow consider non\PYGZhy{}negative s \PYGZhy{}\PYGZgt{} t flow values.}
+
+\PYG{c+cm}{   Complexity:}
+\PYG{c+cm}{   \PYGZhy{} General Graph: O(V\PYGZca{}2 * E), up to 2 Max Flow runs.}
+\PYG{c+cm}{*/}
+
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{LowerBoundFlow}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{OriginalEdge}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{v}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{id}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{ll}\PYG{+w}{ }\PYG{n}{lower}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{upper}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{};}
+
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ss}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{tt}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{Dinic}\PYG{+w}{ }\PYG{n}{dinic}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{ll}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{demand}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{OriginalEdge}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{original\PYGZus{}edges}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{used}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nb}{false}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{feasible}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nb}{false}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{ll}\PYG{+w}{ }\PYG{n}{base\PYGZus{}flow}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{n}{LowerBoundFlow}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{\PYGZus{}n}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{(}\PYG{n}{\PYGZus{}n}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{ss}\PYG{p}{(}\PYG{n}{n}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{tt}\PYG{p}{(}\PYG{n}{n}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{dinic}\PYG{p}{(}\PYG{n}{n}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{demand}\PYG{p}{.}\PYG{n}{assign}\PYG{p}{(}\PYG{n}{n}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Add edge u \PYGZhy{}\PYGZgt{} v with l \PYGZlt{}= flow \PYGZlt{}= r.}
+\PYG{+w}{  }\PYG{c+c1}{// Return an ID (0\PYGZhy{}based) for get\PYGZus{}flow().}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{add\PYGZus{}edge}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{u}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{v}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ll}\PYG{+w}{ }\PYG{n}{l}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ll}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{assert}\PYG{p}{(}\PYG{o}{!}\PYG{n}{used}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{u}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{u}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{n}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{v}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{v}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{assert}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{l}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{l}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{id}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{edges}\PYG{p}{.}\PYG{n}{size}\PYG{p}{();}
+\PYG{+w}{    }\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{add\PYGZus{}edge}\PYG{p}{(}\PYG{n}{u}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{v}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{r}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{l}\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{n}{demand}\PYG{p}{[}\PYG{n}{u}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZhy{}=}\PYG{+w}{ }\PYG{n}{l}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{demand}\PYG{p}{[}\PYG{n}{v}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{l}\PYG{p}{;}
+
+\PYG{+w}{    }\PYG{n}{original\PYGZus{}edges}\PYG{p}{.}\PYG{n}{push\PYGZus{}back}\PYG{p}{(\PYGZob{}}\PYG{n}{u}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{v}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{id}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{l}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{\PYGZcb{});}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)}\PYG{n}{original\PYGZus{}edges}\PYG{p}{.}\PYG{n}{size}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Actual flow on an original edge, INCLUDING its lower bound.}
+\PYG{+w}{  }\PYG{c+c1}{// Call only after a successful solve.}
+\PYG{+w}{  }\PYG{n}{ll}\PYG{+w}{ }\PYG{n}{get\PYGZus{}flow}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{edge\PYGZus{}id}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{const}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{assert}\PYG{p}{(}\PYG{n}{feasible}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{edge\PYGZus{}id}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{edge\PYGZus{}id}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)}\PYG{n}{original\PYGZus{}edges}\PYG{p}{.}\PYG{n}{size}\PYG{p}{());}
+\PYG{+w}{    }\PYG{k}{const}\PYG{+w}{ }\PYG{k}{auto}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{e}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{original\PYGZus{}edges}\PYG{p}{[}\PYG{n}{edge\PYGZus{}id}\PYG{p}{];}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{e}\PYG{p}{.}\PYG{n}{lower}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{edges}\PYG{p}{[}\PYG{n}{e}\PYG{p}{.}\PYG{n}{id}\PYG{p}{].}\PYG{n}{flow}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Disable both directions of an auxiliary edge in the residual graph.}
+\PYG{+w}{  }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{disable\PYGZus{}edge}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{id}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{edges}\PYG{p}{[}\PYG{n}{id}\PYG{p}{].}\PYG{n}{cap}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{edges}\PYG{p}{[}\PYG{n}{id}\PYG{p}{].}\PYG{n}{flow}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{edges}\PYG{p}{[}\PYG{n}{id}\PYG{+w}{ }\PYG{o}{\PYGZca{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{].}\PYG{n}{cap}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{edges}\PYG{p}{[}\PYG{n}{id}\PYG{+w}{ }\PYG{o}{\PYGZca{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{].}\PYG{n}{flow}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Internal: build and check feasible circulation.}
+\PYG{+w}{  }\PYG{c+c1}{// If s,t are supplied, temporarily add t \PYGZhy{}\PYGZgt{} s with capacity LINF.}
+\PYG{+w}{  }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{prepare}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{s}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{\PYGZhy{}1}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{t}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{\PYGZhy{}1}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{assert}\PYG{p}{(}\PYG{o}{!}\PYG{n}{used}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{used}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nb}{true}\PYG{p}{;}
+
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{back\PYGZus{}edge}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{\PYGZhy{}1}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{s}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{l+m+mi}{\PYGZhy{}1}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{n}{assert}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{s}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{s}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{n}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{t}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{t}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{n}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{s}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{);}
+\PYG{+w}{      }\PYG{n}{back\PYGZus{}edge}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{edges}\PYG{p}{.}\PYG{n}{size}\PYG{p}{();}
+\PYG{+w}{      }\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{add\PYGZus{}edge}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{s}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{LINF}\PYG{p}{);}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{    }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{int}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{auxiliary\PYGZus{}edges}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{ll}\PYG{+w}{ }\PYG{n}{required}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{v}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{v}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{v}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{demand}\PYG{p}{[}\PYG{n}{v}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{id}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{edges}\PYG{p}{.}\PYG{n}{size}\PYG{p}{();}
+\PYG{+w}{        }\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{add\PYGZus{}edge}\PYG{p}{(}\PYG{n}{ss}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{v}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{demand}\PYG{p}{[}\PYG{n}{v}\PYG{p}{]);}
+\PYG{+w}{        }\PYG{n}{auxiliary\PYGZus{}edges}\PYG{p}{.}\PYG{n}{push\PYGZus{}back}\PYG{p}{(}\PYG{n}{id}\PYG{p}{);}
+\PYG{+w}{        }\PYG{n}{required}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{demand}\PYG{p}{[}\PYG{n}{v}\PYG{p}{];}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{k}{else}\PYG{+w}{ }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{demand}\PYG{p}{[}\PYG{n}{v}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{id}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{edges}\PYG{p}{.}\PYG{n}{size}\PYG{p}{();}
+\PYG{+w}{        }\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{add\PYGZus{}edge}\PYG{p}{(}\PYG{n}{v}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{tt}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{n}{demand}\PYG{p}{[}\PYG{n}{v}\PYG{p}{]);}
+\PYG{+w}{        }\PYG{n}{auxiliary\PYGZus{}edges}\PYG{p}{.}\PYG{n}{push\PYGZus{}back}\PYG{p}{(}\PYG{n}{id}\PYG{p}{);}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{max\PYGZus{}flow}\PYG{p}{(}\PYG{n}{ss}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{tt}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{required}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{n+nb}{false}\PYG{p}{;}
+
+\PYG{+w}{    }\PYG{n}{feasible}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nb}{true}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{back\PYGZus{}edge}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{l+m+mi}{\PYGZhy{}1}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{n}{base\PYGZus{}flow}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{edges}\PYG{p}{[}\PYG{n}{back\PYGZus{}edge}\PYG{p}{].}\PYG{n}{flow}\PYG{p}{;}
+\PYG{+w}{      }\PYG{n}{disable\PYGZus{}edge}\PYG{p}{(}\PYG{n}{back\PYGZus{}edge}\PYG{p}{);}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{id}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{auxiliary\PYGZus{}edges}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{disable\PYGZus{}edge}\PYG{p}{(}\PYG{n}{id}\PYG{p}{);}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{n+nb}{true}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Max flow with a limit, using the EXISTING Dinic bfs() and dfs().}
+\PYG{+w}{  }\PYG{n}{ll}\PYG{+w}{ }\PYG{n}{max\PYGZus{}flow\PYGZus{}limited}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{s}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ll}\PYG{+w}{ }\PYG{n}{limit}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{ll}\PYG{+w}{ }\PYG{n}{ans}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{while}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{ans}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{limit}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{bfs}\PYG{p}{(}\PYG{n}{s}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{))}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{n}{fill}\PYG{p}{(}\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{ptr}\PYG{p}{.}\PYG{n}{begin}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{ptr}\PYG{p}{.}\PYG{n}{end}\PYG{p}{(),}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{+w}{      }\PYG{k}{while}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{ans}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{limit}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{ll}\PYG{+w}{ }\PYG{n}{pushed}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{dfs}\PYG{p}{(}\PYG{n}{s}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{min}\PYG{p}{(}\PYG{n}{LINF}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{limit}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{ans}\PYG{p}{));}
+\PYG{+w}{        }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{pushed}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{break}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{ans}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{pushed}\PYG{p}{;}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{ans}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// No source/sink: conservation at ALL vertices.}
+\PYG{+w}{  }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{feasible\PYGZus{}circulation}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{prepare}\PYG{p}{();}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Check existence of a non\PYGZhy{}negative s \PYGZhy{}\PYGZgt{} t flow.}
+\PYG{+w}{  }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{feasible\PYGZus{}flow}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{s}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{prepare}\PYG{p}{(}\PYG{n}{s}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{);}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Return \PYGZob{}exists, maximum flow value\PYGZcb{}.}
+\PYG{+w}{  }\PYG{n}{pair}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{bool}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ll}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{max\PYGZus{}flow}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{s}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{prepare}\PYG{p}{(}\PYG{n}{s}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{))}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n+nb}{false}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{\PYGZcb{};}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n+nb}{true}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{base\PYGZus{}flow}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{dinic}\PYG{p}{.}\PYG{n}{max\PYGZus{}flow}\PYG{p}{(}\PYG{n}{s}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{)\PYGZcb{};}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Return \PYGZob{}exists, minimum NON\PYGZhy{}NEGATIVE flow value\PYGZcb{}.}
+\PYG{+w}{  }\PYG{n}{pair}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{bool}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ll}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{min\PYGZus{}flow}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{s}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{prepare}\PYG{p}{(}\PYG{n}{s}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{))}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n+nb}{false}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{\PYGZcb{};}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n+nb}{true}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{base\PYGZus{}flow}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{max\PYGZus{}flow\PYGZus{}limited}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{s}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{base\PYGZus{}flow}\PYG{p}{)\PYGZcb{};}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Tracing: print all original edges carrying positive flow.}
+\PYG{+w}{  }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{print\PYGZus{}flow\PYGZus{}paths}\PYG{p}{()}\PYG{+w}{ }\PYG{k}{const}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{assert}\PYG{p}{(}\PYG{n}{feasible}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{cout}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Edges with positive flow:}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)}\PYG{n}{original\PYGZus{}edges}\PYG{p}{.}\PYG{n}{size}\PYG{p}{();}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{n}{ll}\PYG{+w}{ }\PYG{n}{f}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{get\PYGZus{}flow}\PYG{p}{(}\PYG{n}{i}\PYG{p}{);}
+\PYG{+w}{      }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{f}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k}{const}\PYG{+w}{ }\PYG{k}{auto}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{e}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{original\PYGZus{}edges}\PYG{p}{[}\PYG{n}{i}\PYG{p}{];}
+\PYG{+w}{        }\PYG{n}{cout}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{n}{e}\PYG{p}{.}\PYG{n}{u}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{} \PYGZhy{}\PYGZgt{} \PYGZdq{}}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{n}{e}\PYG{p}{.}\PYG{n}{v}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{} : \PYGZdq{}}
+\PYG{+w}{             }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{n}{f}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{} / [\PYGZdq{}}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{n}{e}\PYG{p}{.}\PYG{n}{lower}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}, \PYGZdq{}}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{n}{e}\PYG{p}{.}\PYG{n}{upper}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}]}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{};}
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   USAGE EXAMPLES:}
+
+\PYG{c+cm}{   // 1. Maximum s \PYGZhy{}\PYGZgt{} t flow:}
+\PYG{c+cm}{   LowerBoundFlow f(n);}
+\PYG{c+cm}{   int id = f.add\PYGZus{}edge(1, 2, 2, 5);}
+\PYG{c+cm}{   f.add\PYGZus{}edge(2, 3, 1, 7);}
+
+\PYG{c+cm}{   auto [ok, ans] = f.max\PYGZus{}flow(1, 3);}
+\PYG{c+cm}{   if (!ok) cout \PYGZlt{}\PYGZlt{} \PYGZhy{}1 \PYGZlt{}\PYGZlt{} \PYGZsq{}\PYGZbs{}n\PYGZsq{};}
+\PYG{c+cm}{   else \PYGZob{}}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}Max Flow: \PYGZdq{} \PYGZlt{}\PYGZlt{} ans \PYGZlt{}\PYGZlt{} \PYGZsq{}\PYGZbs{}n\PYGZsq{};}
+\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}Flow on edge id: \PYGZdq{} \PYGZlt{}\PYGZlt{} f.get\PYGZus{}flow(id) \PYGZlt{}\PYGZlt{} \PYGZsq{}\PYGZbs{}n\PYGZsq{};}
+\PYG{c+cm}{     f.print\PYGZus{}flow\PYGZus{}paths();}
+\PYG{c+cm}{   \PYGZcb{}}
+
+\PYG{c+cm}{   // 2. Minimum NON\PYGZhy{}NEGATIVE s \PYGZhy{}\PYGZgt{} t flow (use a NEW object):}
+\PYG{c+cm}{   LowerBoundFlow g(n);}
+\PYG{c+cm}{   // g.add\PYGZus{}edge(u, v, l, r);}
+\PYG{c+cm}{   auto [ok2, min\PYGZus{}ans] = g.min\PYGZus{}flow(s, t);}
+
+\PYG{c+cm}{   // 3. Feasible circulation (no designated source/sink):}
+\PYG{c+cm}{   LowerBoundFlow h(n);}
+\PYG{c+cm}{   // h.add\PYGZus{}edge(u, v, l, r);}
+\PYG{c+cm}{   bool possible = h.feasible\PYGZus{}circulation();}
+
+\PYG{c+cm}{   // 4. Just check whether a non\PYGZhy{}negative s \PYGZhy{}\PYGZgt{} t flow exists:}
+\PYG{c+cm}{   LowerBoundFlow k(n);}
+\PYG{c+cm}{   // k.add\PYGZus{}edge(u, v, l, r);}
+\PYG{c+cm}{   bool possible\PYGZus{}st = k.feasible\PYGZus{}flow(s, t);}
+
+\PYG{c+cm}{   NOTES:}
+\PYG{c+cm}{   \PYGZhy{} Do NOT call two solve methods on the same object.}
+\PYG{c+cm}{   \PYGZhy{} Do NOT add t \PYGZhy{}\PYGZgt{} s yourself when using max\PYGZus{}flow/min\PYGZus{}flow/feasible\PYGZus{}flow.}
+\PYG{c+cm}{   \PYGZhy{} get\PYGZus{}flow(id) is available only after a successful solve.}
+\PYG{c+cm}{*/}
+\end{MintedVerbatim}

@@ -1,0 +1,23 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// Andrew\PYGZsq{}s monotone chain: O(N log N).}
+\PYG{c+c1}{// Returns distinct extreme vertices in CCW order, without a repeated first vertex.}
+\PYG{c+c1}{// Collinear points on hull edges are removed; all\PYGZhy{}collinear input \PYGZhy{}\PYGZgt{} 2 endpoints.}
+\PYG{c+c1}{// For a hull containing EVERY boundary point, a different collinear policy is needed.}
+\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{Point}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{convex\PYGZus{}hull}\PYG{p}{(}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{Point}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{dots}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{n}{sort}\PYG{p}{(}\PYG{n}{dots}\PYG{p}{.}\PYG{n}{begin}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{dots}\PYG{p}{.}\PYG{n}{end}\PYG{p}{());}
+\PYG{+w}{  }\PYG{n}{dots}\PYG{p}{.}\PYG{n}{erase}\PYG{p}{(}\PYG{n}{unique}\PYG{p}{(}\PYG{n}{dots}\PYG{p}{.}\PYG{n}{begin}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{dots}\PYG{p}{.}\PYG{n}{end}\PYG{p}{()),}\PYG{+w}{ }\PYG{n}{dots}\PYG{p}{.}\PYG{n}{end}\PYG{p}{());}
+\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{dots}\PYG{p}{.}\PYG{n}{size}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{dots}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{Point}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{A}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{dots}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]);}
+\PYG{+w}{  }\PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{n}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)}\PYG{n}{dots}\PYG{p}{.}\PYG{n}{size}\PYG{p}{();}
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{c}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{c}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{reverse}\PYG{p}{(}\PYG{n}{dots}\PYG{p}{.}\PYG{n}{begin}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{dots}\PYG{p}{.}\PYG{n}{end}\PYG{p}{()),}\PYG{+w}{ }\PYG{n}{c}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{t}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)}\PYG{n}{A}\PYG{p}{.}\PYG{n}{size}\PYG{p}{();}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{A}\PYG{p}{.}\PYG{n}{emplace\PYGZus{}back}\PYG{p}{(}\PYG{n}{dots}\PYG{p}{[}\PYG{n}{i}\PYG{o}{++}\PYG{p}{]))}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{k}{while}\PYG{+w}{ }\PYG{p}{((}\PYG{k+kt}{int}\PYG{p}{)}\PYG{n}{A}\PYG{p}{.}\PYG{n}{size}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{t}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{ccw}\PYG{p}{(}\PYG{n}{A}\PYG{p}{[}\PYG{n}{A}\PYG{p}{.}\PYG{n}{size}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{A}\PYG{p}{.}\PYG{n}{back}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{dots}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{A}\PYG{p}{.}\PYG{n}{pop\PYGZus{}back}\PYG{p}{();}
+\PYG{+w}{      }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{n}{A}\PYG{p}{.}\PYG{n}{pop\PYGZus{}back}\PYG{p}{();}
+\PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{A}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\end{MintedVerbatim}

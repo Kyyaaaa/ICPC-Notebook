@@ -1,0 +1,83 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{LOG\PYGZus{}MAX}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{29}\PYG{p}{;}
+\PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{N}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mf}{1e5}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{p}{;}
+\PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{MAX\PYGZus{}NODES}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{N}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m+mi}{32}\PYG{p}{;}
+
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{MAX\PYGZus{}NODES}\PYG{p}{][}\PYG{l+m+mi}{2}\PYG{p}{];}
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{num}\PYG{p}{[}\PYG{n}{MAX\PYGZus{}NODES}\PYG{p}{];}
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{root}\PYG{p}{[}\PYG{n}{N}\PYG{p}{];}
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{cnt}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{init\PYGZus{}trie}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{cnt}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{t}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{num}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{n}{cnt}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{root}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n+nf}{newnode}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{n}{cnt}\PYG{o}{++}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{t}\PYG{p}{[}\PYG{n}{cnt}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{cnt}\PYG{p}{][}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{num}\PYG{p}{[}\PYG{n}{cnt}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{cnt}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n+nf}{add\PYGZus{}version}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{prev\PYGZus{}root}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{val}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{cur\PYGZus{}root}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{newnode}\PYG{p}{();}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{cur}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{cur\PYGZus{}root}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{old}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{prev\PYGZus{}root}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{LOG\PYGZus{}MAX}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZgt{}=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{val}\PYG{+w}{ }\PYG{o}{\PYGZgt{}\PYGZgt{}}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{t}\PYG{p}{[}\PYG{n}{cur}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{old}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{];}
+\PYG{+w}{    }\PYG{n}{t}\PYG{p}{[}\PYG{n}{cur}\PYG{p}{][}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{old}\PYG{p}{][}\PYG{l+m+mi}{1}\PYG{p}{];}
+\PYG{+w}{    }\PYG{n}{t}\PYG{p}{[}\PYG{n}{cur}\PYG{p}{][}\PYG{n}{x}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{newnode}\PYG{p}{();}
+\PYG{+w}{    }\PYG{n}{cur}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{cur}\PYG{p}{][}\PYG{n}{x}\PYG{p}{];}
+\PYG{+w}{    }\PYG{n}{old}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{old}\PYG{p}{][}\PYG{n}{x}\PYG{p}{];}
+\PYG{+w}{    }\PYG{n}{t}\PYG{p}{[}\PYG{n}{cur}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{old}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{];}
+\PYG{+w}{    }\PYG{n}{t}\PYG{p}{[}\PYG{n}{cur}\PYG{p}{][}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{old}\PYG{p}{][}\PYG{l+m+mi}{1}\PYG{p}{];}
+\PYG{+w}{    }\PYG{n}{num}\PYG{p}{[}\PYG{n}{cur}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{num}\PYG{p}{[}\PYG{n}{old}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{cur\PYGZus{}root}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+c1}{// 4. Query Maximum XOR with \PYGZsq{}val\PYGZsq{} using combinations of versions.}
+\PYG{c+c1}{// Example: Query on a tree path from u to v with LCA p, parent of p is pp.}
+\PYG{c+c1}{// The effective count of a node is: num[x] + num[y] \PYGZhy{} num[p] \PYGZhy{} num[pp].}
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n+nf}{query\PYGZus{}max\PYGZus{}xor}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{rootX}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{rootY}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{rootP}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{rootPP}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{val}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{res}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{rootX}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{rootY}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{p}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{rootP}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{pp}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{rootPP}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{LOG\PYGZus{}MAX}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZgt{}=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{v}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{val}\PYG{+w}{ }\PYG{o}{\PYGZgt{}\PYGZgt{}}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{count\PYGZus{}opposite}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{num}\PYG{p}{[}\PYG{n}{t}\PYG{p}{[}\PYG{n}{x}\PYG{p}{][}\PYG{n}{v}\PYG{+w}{ }\PYG{o}{\PYGZca{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{]]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{num}\PYG{p}{[}\PYG{n}{t}\PYG{p}{[}\PYG{n}{y}\PYG{p}{][}\PYG{n}{v}\PYG{+w}{ }\PYG{o}{\PYGZca{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{]]}\PYG{+w}{ }
+\PYG{+w}{                       }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{num}\PYG{p}{[}\PYG{n}{t}\PYG{p}{[}\PYG{n}{p}\PYG{p}{][}\PYG{n}{v}\PYG{+w}{ }\PYG{o}{\PYGZca{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{]]}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{num}\PYG{p}{[}\PYG{n}{t}\PYG{p}{[}\PYG{n}{pp}\PYG{p}{][}\PYG{n}{v}\PYG{+w}{ }\PYG{o}{\PYGZca{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{]];}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{count\PYGZus{}opposite}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{n}{res}\PYG{+w}{ }\PYG{o}{|=}\PYG{+w}{ }\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{);}
+\PYG{+w}{      }\PYG{n}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{x}\PYG{p}{][}\PYG{n}{v}\PYG{+w}{ }\PYG{o}{\PYGZca{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{];}
+\PYG{+w}{      }\PYG{n}{y}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{y}\PYG{p}{][}\PYG{n}{v}\PYG{+w}{ }\PYG{o}{\PYGZca{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{];}
+\PYG{+w}{      }\PYG{n}{p}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{p}\PYG{p}{][}\PYG{n}{v}\PYG{+w}{ }\PYG{o}{\PYGZca{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{];}
+\PYG{+w}{      }\PYG{n}{pp}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{pp}\PYG{p}{][}\PYG{n}{v}\PYG{+w}{ }\PYG{o}{\PYGZca{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{];}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{k}{else}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{n}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{x}\PYG{p}{][}\PYG{n}{v}\PYG{p}{];}
+\PYG{+w}{      }\PYG{n}{y}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{y}\PYG{p}{][}\PYG{n}{v}\PYG{p}{];}
+\PYG{+w}{      }\PYG{n}{p}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{p}\PYG{p}{][}\PYG{n}{v}\PYG{p}{];}
+\PYG{+w}{      }\PYG{n}{pp}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{[}\PYG{n}{pp}\PYG{p}{][}\PYG{n}{v}\PYG{p}{];}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{res}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cm}{/*}
+\PYG{c+cm}{   USAGE EXAMPLE (Max XOR in an array from L to R):}
+\PYG{c+cm}{   }
+\PYG{c+cm}{   // 1. Build prefix versions}
+\PYG{c+cm}{   init\PYGZus{}trie();}
+\PYG{c+cm}{   for (int i = 1; i \PYGZlt{}= n; i++) \PYGZob{}}
+\PYG{c+cm}{     root[i] = add\PYGZus{}version(root[i \PYGZhy{} 1], a[i]);}
+\PYG{c+cm}{   \PYGZcb{}}
+\PYG{c+cm}{   }
+\PYG{c+cm}{   // 2. Query Max XOR with \PYGZsq{}val\PYGZsq{} in subarray [L, R]}
+\PYG{c+cm}{   // For arrays, the effective tree is root[R] \PYGZhy{} root[L\PYGZhy{}1].}
+\PYG{c+cm}{   // You can use a modified query function that only takes 2 roots:}
+\PYG{c+cm}{   // count\PYGZus{}opposite = num[t[rootR][v \PYGZca{} 1]] \PYGZhy{} num[t[rootL\PYGZus{}minus\PYGZus{}1][v \PYGZca{} 1]];}
+\PYG{c+cm}{*/}
+\end{MintedVerbatim}
