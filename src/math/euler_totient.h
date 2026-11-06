@@ -50,19 +50,3 @@ vector<int> phi_sieve(int n) {
   }
   return phi;
 }
-
-/*
-   USAGE EXAMPLE:
-   signed main() {
-     // 1. Single query for a large number
-     long long n = 12;
-     cout << "phi(" << n << ") = " << get_phi(n) << "\n"; 
-     // Output: 4 (Coprimes are 1, 5, 7, 11)
-     // 2. Precomputing phi for all numbers up to MAX_N
-     int MAX_N = 100000;
-     vector<int> phi = phi_sieve(MAX_N);
-     cout << "phi(10) = " << phi[10] << "\n"; // Output: 4
-     cout << "phi(97) = " << phi[97] << "\n"; // Output: 96 (Since 97 is prime)
-     return 0;
-   }
-*/

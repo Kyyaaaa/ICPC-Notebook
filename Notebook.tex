@@ -38,6 +38,12 @@
     {cpp}{src/template/fastio.h}
     \noindent\hrulefill
 
+    \Algorithm{Run Time}
+    {}
+    {}
+    {cpp}{src/template/runtime.h}
+    \noindent\hrulefill
+
     \Algorithm{com.sh}
     {}
     {}
@@ -50,17 +56,17 @@
     {cpp}{src/template/check(linux).cpp}
     \noindent\hrulefill
 
-    \Algorithm{com.bat}
-    {}
-    {}
-    {cpp}{src/template/com.bat}
-    \noindent\hrulefill
+    % \Algorithm{com.bat}
+    % {}
+    % {}
+    % {cpp}{src/template/com.bat}
+    % \noindent\hrulefill
 
-    \Algorithm{check.cpp (Window)}
-    {}
-    {}
-    {cpp}{src/template/check(window).cpp}
-    \noindent\hrulefill
+    % \Algorithm{check.cpp (Window)}
+    % {}
+    % {}
+    % {cpp}{src/template/check(window).cpp}
+    % \noindent\hrulefill
 
 \section{Data Structure}
     % \Algorithm{Segment Tree 2n}
@@ -283,11 +289,11 @@
     {cpp}{src/math/CRT.h}
     \noindent\hrulefill
 
-    \Algorithm{Lucas Theorem}
-    {}
-    {}
-    {cpp}{src/math/lucas_theorem.h}
-    \noindent\hrulefill
+    % \Algorithm{Lucas Theorem}
+    % {}
+    % {}
+    % {cpp}{src/math/lucas_theorem.h}
+    % \noindent\hrulefill
 
     \Algorithm{Euler Totient}
     {}
@@ -295,11 +301,11 @@
     {cpp}{src/math/euler_totient.h}
     \noindent\hrulefill
 
-    \Algorithm{Mobius Function}
-    {}
-    {}
-    {cpp}{src/math/mobius_function.h}
-    \noindent\hrulefill
+    % \Algorithm{Mobius Function}
+    % {}
+    % {}
+    % {cpp}{src/math/mobius_function.h}
+    % \noindent\hrulefill
 
     \Algorithm{Miller Rabin}
     {}
@@ -350,5 +356,175 @@
 	{}
 	{cpp}{src/miscellaneous/ternary_search.h}
 	\noindent\hrulefill
+
+\section{Math Extra}
+
+\subsection{Combinatorial formulas}
+\begin{align*}
+\sum_{k=0}^{n}k^2 &= \frac{n(n+1)(2n+1)}{6},\\
+\sum_{k=0}^{n}k^3 &= \frac{n^2(n+1)^2}{4},\\
+\sum_{k=0}^{n}k^4 &= \frac{6n^5+15n^4+10n^3-n}{30},\\
+\sum_{k=0}^{n}k^5 &= \frac{2n^6+6n^5+5n^4-n^2}{12},\\
+\sum_{k=0}^{n}x^k &= \frac{x^{n+1}-1}{x-1}\quad(x\ne1),\\
+\sum_{k=0}^{n}kx^k &= \frac{x-(n+1)x^{n+1}+nx^{n+2}}{(x-1)^2}\quad(x\ne1).
+\end{align*}
+
+\subsection{Binomial coefficients}
+\textbf{Basic identities:}
+\begin{align*}
+\binom{n}{k} &= \frac{n!}{k!(n-k)!}=\binom{n}{n-k},\\
+\binom{n}{k} &= \binom{n-1}{k}+\binom{n-1}{k-1},\\
+\binom{n}{k} &= \frac{n}{k}\binom{n-1}{k-1}\quad(k\ge1),\\
+\binom{n}{k} &= \frac{n}{n-k}\binom{n-1}{k}\quad(k<n),\\
+\binom{n}{k} &= \frac{n-k+1}{k}\binom{n}{k-1}\quad(k\ge1),\\
+\binom{n}{k+1} &= \frac{n-k}{k+1}\binom{n}{k},\\
+\binom{n}{k} &= \prod_{i=1}^{k}\frac{n-k+i}{i}.
+\end{align*}
+\textbf{Summation identities:}
+\begin{align*}
+\sum_{k=0}^{n}\binom{n}{k} &=2^n,\\
+\sum_{j=k}^{n}\binom{j}{k} &=\binom{n+1}{k+1}\quad\text{(Hockey-stick)},\\
+\sum_{k=0}^{m}\binom{n+k}{k} &=\binom{n+m+1}{m},\\
+\sum_{k=0}^{n}\binom{n}{k}^2 &=\binom{2n}{n},\\
+\sum_{k=0}^{r}\binom{a}{k}\binom{b}{r-k} &=\binom{a+b}{r}\quad\text{(Vandermonde)},\\
+\sum_{k=0}^{n}k\binom{n}{k} &=n2^{n-1},\\
+\sum_{k=0}^{n}k^2\binom{n}{k} &=n(n+1)2^{n-2},\\
+\sum_{k=0}^{n}k^3\binom{n}{k} &=n^2(n+3)2^{n-3},\\
+\sum_{k=0}^{n}\binom{n}{k}k! &=n!\sum_{k=0}^{n}\frac{1}{k!},\\
+\sum_{k=0}^{\lfloor n/2\rfloor}\binom{n-k}{k} &=F_{n+1}.
+\end{align*}
+Here $F_0=0,F_1=1$. Convention: $\binom{n}{k}=0$ if $k<0$ or $k>n$.
+
+\subsection{Catalan numbers}
+\textbf{Recursive:} $C_0=1$ and
+\[
+C_{n+1}=\sum_{i=0}^{n}C_iC_{n-i}.
+\]
+\textbf{Analytical:}
+\[
+C_n=\frac{1}{n+1}\binom{2n}{n}
+=\binom{2n}{n}-\binom{2n}{n+1}.
+\]
+$C_0,C_1,C_2,C_3,C_4,C_5=1,1,2,5,14,42$.
+Counts balanced parentheses with $n$ pairs and binary tree shapes with $n$ nodes.
+
+\subsection{Inclusion-Exclusion Principle}
+Let $A_1,\ldots,A_n\subseteq U$ and $[n]=\{1,\ldots,n\}$.
+\textbf{Union:}
+\[
+\left|\bigcup_{i=1}^{n}A_i\right|
+=\sum_{m=1}^{n}(-1)^{m-1}
+\sum_{\substack{X\subseteq[n]\\|X|=m}}
+\left|\bigcap_{i\in X}A_i\right|.
+\]
+\textbf{Exactly zero sets:}
+\[
+\left|\bigcap_{i=1}^{n}\overline{A_i}\right|
+=\sum_{m=0}^{n}(-1)^m
+\sum_{\substack{X\subseteq[n]\\|X|=m}}
+\left|\bigcap_{i\in X}A_i\right|.
+\]
+\textbf{Exactly $r$ sets:} Let $E_r$ count elements in exactly $r$ of $A_1,\ldots,A_n$.
+\[
+\boxed{E_r=\sum_{m=r}^{n}(-1)^{m-r}\binom{m}{r}
+\sum_{\substack{X\subseteq[n]\\|X|=m}}
+\left|\bigcap_{i\in X}A_i\right|.}
+\]
+\textbf{Proof idea:} An element occurring in exactly $t$ sets contributes
+\[
+\sum_{m=r}^{t}(-1)^{m-r}\binom{m}{r}\binom{t}{m}
+=\binom{t}{r}(1-1)^{t-r}=[t=r]
+\]
+for $t\ge r$ (contribution $0$ when $t<r$).
+The empty intersection is $U$.
+
+\subsection{Derangements}
+$D_n$: number of permutations of $n$ elements with no fixed points.
+\begin{align*}
+D_0&=1,\quad D_1=0,\\
+D_n&=(n-1)(D_{n-1}+D_{n-2})\quad(n\ge2),\\
+D_n&=nD_{n-1}+(-1)^n\quad(n\ge1),\\
+D_n&=n!\sum_{k=0}^{n}\frac{(-1)^k}{k!}.
+\end{align*}
+For $n\ge1$: $D_n=\left\lfloor n!/e+1/2\right\rfloor$.
+First values: $1,0,1,2,9,44$.
+
+\subsection{Stars and Bars}
+Count integer solutions of $x_1+\cdots+x_n=S$ ($n\ge1$).
+\begin{align*}
+x_i\ge0 &: \quad \binom{S+n-1}{n-1},\\
+x_i\ge1 &: \quad \binom{S-1}{n-1}.
+\end{align*}
+\textbf{Lower bounds $x_i\ge L_i$:}
+Set $T=S-\sum_iL_i$, $y_i=x_i-L_i\ge0$. Answer:
+\[
+\binom{T+n-1}{n-1}.
+\]
+\textbf{Both bounds $L_i\le x_i\le R_i$:}
+Set $U_i=R_i-L_i$ and $T=S-\sum_iL_i$.
+Use inclusion-exclusion on $y_i\ge U_i+1$:
+\[
+\boxed{\sum_{B\subseteq[n]}(-1)^{|B|}
+\binom{T-\sum_{i\in B}(U_i+1)+n-1}{n-1}.}
+\]
+If $T<0$ or any $L_i>R_i$, answer $0$.
+For $\sum_i x_i\le S$ instead of equality, replace the bottom $n-1$ by $n$ in the respective formulas.
+Use $\binom{a}{b}=0$ for $a<0$ or $a<b$, with $b\ge0$.
+
+\subsection{Stirling Numbers of the Second Kind}
+$\left\{\begin{smallmatrix}n\\k\end{smallmatrix}\right\}$ counts partitions of $n$ distinct elements into $k$ nonempty unlabeled groups.
+\[
+\left\{\begin{matrix}n\\k\end{matrix}\right\}
+=k\left\{\begin{matrix}n-1\\k\end{matrix}\right\}
++\left\{\begin{matrix}n-1\\k-1\end{matrix}\right\}.
+\]
+$\left\{\begin{smallmatrix}0\\0\end{smallmatrix}\right\}=1$;
+$\left\{\begin{smallmatrix}n\\0\end{smallmatrix}\right\}
+=\left\{\begin{smallmatrix}0\\n\end{smallmatrix}\right\}=0$ for $n>0$.
+\textbf{Inclusion-Exclusion:}
+\[
+\left\{\begin{matrix}n\\k\end{matrix}\right\}
+=\frac1{k!}\sum_{j=0}^{k}(-1)^{k-j}\binom{k}{j}j^n.
+\]
+\textbf{Falling factorial:}
+$x^{\underline{k}}=x(x-1)\cdots(x-k+1)$, $x^{\underline0}=1$.
+\textbf{Power expansion:}
+\[
+x^n=\sum_{k=0}^{n}
+\left\{\begin{matrix}n\\k\end{matrix}\right\}x^{\underline{k}}.
+\]
+\textbf{Weighted binomial sum:}
+\[
+\sum_{i=0}^{n}\binom{n}{i}i^k
+=\sum_{j=0}^{\min(n,k)}
+\left\{\begin{matrix}k\\j\end{matrix}\right\}
+n^{\underline j}2^{n-j}.
+\]
+Use $0^0=1$ in these combinatorial identities.
+
+\subsection{Number theory identities}
+\textbf{Lucas' Theorem:} If $p$ is prime,
+$m=\sum_i m_ip^i$ and $n=\sum_i n_ip^i$, then
+\[
+\binom{m}{n}\equiv\prod_i\binom{m_i}{n_i}\pmod p.
+\]
+
+\subsection{Burnside's Lemma}
+Let a finite group $G$ act on a finite set $X$;
+$X^g=\{x\in X:g(x)=x\}$.
+Then the number of orbits is
+\[
+|X/G|=\frac{1}{|G|}\sum_{g\in G}|X^g|.
+\]
+
+\subsection{Numerical integration}
+\textbf{RK4:} For $\dot y=f(t,y)$, step size $h$:
+\begin{align*}
+k_1&=f(t_n,y_n),\\
+k_2&=f(t_n+h/2,y_n+hk_1/2),\\
+k_3&=f(t_n+h/2,y_n+hk_2/2),\\
+k_4&=f(t_n+h,y_n+hk_3),\\
+y_{n+1}&=y_n+\frac h6(k_1+2k_2+2k_3+k_4).
+\end{align*}
 
 \end{document}

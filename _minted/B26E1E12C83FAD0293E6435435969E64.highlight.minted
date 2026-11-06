@@ -51,20 +51,4 @@
 \PYG{+w}{  }\PYG{p}{\PYGZcb{}}
 \PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{phi}\PYG{p}{;}
 \PYG{p}{\PYGZcb{}}
-
-\PYG{c+cm}{/*}
-\PYG{c+cm}{   USAGE EXAMPLE:}
-\PYG{c+cm}{   signed main() \PYGZob{}}
-\PYG{c+cm}{     // 1. Single query for a large number}
-\PYG{c+cm}{     long long n = 12;}
-\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}phi(\PYGZdq{} \PYGZlt{}\PYGZlt{} n \PYGZlt{}\PYGZlt{} \PYGZdq{}) = \PYGZdq{} \PYGZlt{}\PYGZlt{} get\PYGZus{}phi(n) \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; }
-\PYG{c+cm}{     // Output: 4 (Coprimes are 1, 5, 7, 11)}
-\PYG{c+cm}{     // 2. Precomputing phi for all numbers up to MAX\PYGZus{}N}
-\PYG{c+cm}{     int MAX\PYGZus{}N = 100000;}
-\PYG{c+cm}{     vector\PYGZlt{}int\PYGZgt{} phi = phi\PYGZus{}sieve(MAX\PYGZus{}N);}
-\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}phi(10) = \PYGZdq{} \PYGZlt{}\PYGZlt{} phi[10] \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // Output: 4}
-\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}phi(97) = \PYGZdq{} \PYGZlt{}\PYGZlt{} phi[97] \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // Output: 96 (Since 97 is prime)}
-\PYG{c+cm}{     return 0;}
-\PYG{c+cm}{   \PYGZcb{}}
-\PYG{c+cm}{*/}
 \end{MintedVerbatim}
