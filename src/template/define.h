@@ -1,0 +1,11 @@
+#define rep(i, l, r) for(int i = l; i <= r; i++)
+#define rep2(i, l, r) for(int i = l; i >= r; i--)
+#define ll long long
+#define all(x) (x).begin(), (x).end()
+#define UNIQUE(x) (x).resize(unique((x).begin(), (x).end()) - x.begin())
+#define SZ(x) (int)(x).size()
+#define bit(i, x) (x >> i & 1)
+#define LOG2(x) (31 - __builtin_clz(x))
+#define MASK(x) ((1 << x) - 1)
+#define BIT(x) (1 << x)
+#define BITCOUNT(x) (__builtin_popcount(x))

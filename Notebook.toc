@@ -1,15 +1,16 @@
 \contentsline {section}{\numberline {1}Template}{1}{}%
-\contentsline {subsection}{\numberline {1.1}Random}{1}{}%
-\contentsline {subsection}{\numberline {1.2}Fast IO}{1}{}%
-\contentsline {subsection}{\numberline {1.3}Run Time}{1}{}%
-\contentsline {subsection}{\numberline {1.4}com.sh}{1}{}%
-\contentsline {subsection}{\numberline {1.5}check.cpp (Linux)}{1}{}%
+\contentsline {subsection}{\numberline {1.1}Define}{1}{}%
+\contentsline {subsection}{\numberline {1.2}Random}{1}{}%
+\contentsline {subsection}{\numberline {1.3}Fast IO}{1}{}%
+\contentsline {subsection}{\numberline {1.4}Run Time}{1}{}%
+\contentsline {subsection}{\numberline {1.5}com.sh}{1}{}%
+\contentsline {subsection}{\numberline {1.6}check.cpp (Linux)}{2}{}%
 \contentsline {section}{\numberline {2}Data Structure}{2}{}%
 \contentsline {subsection}{\numberline {2.1}Segment Tree Walk}{2}{}%
 \contentsline {subsection}{\numberline {2.2}Persistent Segment Tree}{2}{}%
-\contentsline {subsection}{\numberline {2.3}Trie}{2}{}%
+\contentsline {subsection}{\numberline {2.3}Trie}{3}{}%
 \contentsline {subsection}{\numberline {2.4}Persistent Trie}{3}{}%
-\contentsline {subsection}{\numberline {2.5}Fenwick Tree}{3}{}%
+\contentsline {subsection}{\numberline {2.5}Fenwick Tree Walk}{4}{}%
 \contentsline {subsection}{\numberline {2.6}Fenwick Tree 2D}{4}{}%
 \contentsline {subsection}{\numberline {2.7}XOR Basis}{4}{}%
 \contentsline {subsection}{\numberline {2.8}Bipartite DSU Rollback}{5}{}%
@@ -49,14 +50,15 @@
 \contentsline {subsection}{\numberline {7.3}Manhattan MST}{21}{}%
 \contentsline {subsection}{\numberline {7.4}Common Geometry Operations}{21}{}%
 \contentsline {section}{\numberline {8}Miscellaneous}{22}{}%
-\contentsline {subsection}{\numberline {8.1}Alien Trick}{22}{}%
-\contentsline {subsection}{\numberline {8.2}Interval Container}{22}{}%
-\contentsline {subsection}{\numberline {8.3}Ternary Search}{23}{}%
+\contentsline {subsection}{\numberline {8.1}Pair Counting Sort}{22}{}%
+\contentsline {subsection}{\numberline {8.2}Alien Trick}{22}{}%
+\contentsline {subsection}{\numberline {8.3}Interval Container}{23}{}%
+\contentsline {subsection}{\numberline {8.4}Ternary Search}{23}{}%
 \contentsline {section}{\numberline {9}Math Extra}{24}{}%
 \contentsline {subsection}{\numberline {9.1}Combinatorial formulas}{24}{}%
 \contentsline {subsection}{\numberline {9.2}Binomial coefficients}{24}{}%
-\contentsline {subsection}{\numberline {9.3}Catalan numbers}{24}{}%
-\contentsline {subsection}{\numberline {9.4}Inclusion-Exclusion Principle}{24}{}%
+\contentsline {subsection}{\numberline {9.3}Catalan numbers}{25}{}%
+\contentsline {subsection}{\numberline {9.4}Inclusion-Exclusion Principle}{25}{}%
 \contentsline {subsection}{\numberline {9.5}Derangements}{25}{}%
 \contentsline {subsection}{\numberline {9.6}Stars and Bars}{25}{}%
 \contentsline {subsection}{\numberline {9.7}Stirling Numbers of the Second Kind}{25}{}%

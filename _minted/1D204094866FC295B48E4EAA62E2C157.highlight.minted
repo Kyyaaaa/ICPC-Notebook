@@ -1,0 +1,13 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}define rep(i, l, r) for(int i = l; i \PYGZlt{}= r; i++)}
+\PYG{c+cp}{\PYGZsh{}define rep2(i, l, r) for(int i = l; i \PYGZgt{}= r; i\PYGZhy{}\PYGZhy{})}
+\PYG{c+cp}{\PYGZsh{}define ll long long}
+\PYG{c+cp}{\PYGZsh{}define all(x) (x).begin(), (x).end()}
+\PYG{c+cp}{\PYGZsh{}define UNIQUE(x) (x).resize(unique((x).begin(), (x).end()) \PYGZhy{} x.begin())}
+\PYG{c+cp}{\PYGZsh{}define SZ(x) (int)(x).size()}
+\PYG{c+cp}{\PYGZsh{}define bit(i, x) (x \PYGZgt{}\PYGZgt{} i \PYGZam{} 1)}
+\PYG{c+cp}{\PYGZsh{}define LOG2(x) (31 \PYGZhy{} \PYGZus{}\PYGZus{}builtin\PYGZus{}clz(x))}
+\PYG{c+cp}{\PYGZsh{}define MASK(x) ((1 \PYGZlt{}\PYGZlt{} x) \PYGZhy{} 1)}
+\PYG{c+cp}{\PYGZsh{}define BIT(x) (1 \PYGZlt{}\PYGZlt{} x)}
+\PYG{c+cp}{\PYGZsh{}define BITCOUNT(x) (\PYGZus{}\PYGZus{}builtin\PYGZus{}popcount(x))}
+\end{MintedVerbatim}
