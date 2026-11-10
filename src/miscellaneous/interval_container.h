@@ -81,29 +81,3 @@ struct IntervalContainer {
     return total_length;
   }
 };
-
-/*
-   USAGE EXAMPLE:
-   signed main() {
-     IntervalContainer ic;
-     
-     ic.add_interval(1, 5);
-     ic.add_interval(7, 10);
-     cout << "Length: " << ic.get_length() << "\n"; // (5-1+1) + (10-7+1) = 5 + 4 = 9
-     
-     // Merge adjacent and overlapping segments
-     // Adding [4, 8] will merge [1, 5] and [7, 10] into [1, 10]
-     ic.add_interval(4, 8);
-     cout << "Length: " << ic.get_length() << "\n"; // Output: 10
-     
-     // Punch a hole in the middle
-     ic.remove_interval(3, 6);
-     cout << "Length: " << ic.get_length() << "\n"; // Remainder: [1, 2] and [7, 10] -> Length: 6
-     
-     // Check points
-     cout << "Contains 2? " << ic.contains(2) << "\n"; // Output: 1 (true)
-     cout << "Contains 5? " << ic.contains(5) << "\n"; // Output: 0 (false)
-     
-     return 0;
-   }
-*/

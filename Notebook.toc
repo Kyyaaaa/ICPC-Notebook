@@ -3,7 +3,7 @@
 \contentsline {subsection}{\numberline {1.2}Random}{1}{}%
 \contentsline {subsection}{\numberline {1.3}Fast IO}{1}{}%
 \contentsline {subsection}{\numberline {1.4}Run Time}{1}{}%
-\contentsline {subsection}{\numberline {1.5}com.sh}{1}{}%
+\contentsline {subsection}{\numberline {1.5}com.sh}{2}{}%
 \contentsline {subsection}{\numberline {1.6}check.cpp (Linux)}{2}{}%
 \contentsline {section}{\numberline {2}Data Structure}{2}{}%
 \contentsline {subsection}{\numberline {2.1}Segment Tree Walk}{2}{}%
@@ -57,11 +57,14 @@
 \contentsline {section}{\numberline {9}Math Extra}{24}{}%
 \contentsline {subsection}{\numberline {9.1}Combinatorial formulas}{24}{}%
 \contentsline {subsection}{\numberline {9.2}Binomial coefficients}{24}{}%
-\contentsline {subsection}{\numberline {9.3}Catalan numbers}{25}{}%
-\contentsline {subsection}{\numberline {9.4}Inclusion-Exclusion Principle}{25}{}%
+\contentsline {subsection}{\numberline {9.3}Catalan numbers}{24}{}%
+\contentsline {subsection}{\numberline {9.4}Inclusion-Exclusion Principle}{24}{}%
 \contentsline {subsection}{\numberline {9.5}Derangements}{25}{}%
 \contentsline {subsection}{\numberline {9.6}Stars and Bars}{25}{}%
 \contentsline {subsection}{\numberline {9.7}Stirling Numbers of the Second Kind}{25}{}%
 \contentsline {subsection}{\numberline {9.8}Number theory identities}{25}{}%
 \contentsline {subsection}{\numberline {9.9}Burnside's Lemma}{25}{}%
 \contentsline {subsection}{\numberline {9.10}Numerical integration}{25}{}%
+\contentsline {section}{\numberline {10}Probability and Expected Value}{25}{}%
+\contentsline {subsection}{\numberline {10.1}Probability}{25}{}%
+\contentsline {subsection}{\numberline {10.2}Expected Value}{25}{}%

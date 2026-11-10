@@ -82,30 +82,4 @@
 \PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{total\PYGZus{}length}\PYG{p}{;}
 \PYG{+w}{  }\PYG{p}{\PYGZcb{}}
 \PYG{p}{\PYGZcb{};}
-
-\PYG{c+cm}{/*}
-\PYG{c+cm}{   USAGE EXAMPLE:}
-\PYG{c+cm}{   signed main() \PYGZob{}}
-\PYG{c+cm}{     IntervalContainer ic;}
-\PYG{c+cm}{     }
-\PYG{c+cm}{     ic.add\PYGZus{}interval(1, 5);}
-\PYG{c+cm}{     ic.add\PYGZus{}interval(7, 10);}
-\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}Length: \PYGZdq{} \PYGZlt{}\PYGZlt{} ic.get\PYGZus{}length() \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // (5\PYGZhy{}1+1) + (10\PYGZhy{}7+1) = 5 + 4 = 9}
-\PYG{c+cm}{     }
-\PYG{c+cm}{     // Merge adjacent and overlapping segments}
-\PYG{c+cm}{     // Adding [4, 8] will merge [1, 5] and [7, 10] into [1, 10]}
-\PYG{c+cm}{     ic.add\PYGZus{}interval(4, 8);}
-\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}Length: \PYGZdq{} \PYGZlt{}\PYGZlt{} ic.get\PYGZus{}length() \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // Output: 10}
-\PYG{c+cm}{     }
-\PYG{c+cm}{     // Punch a hole in the middle}
-\PYG{c+cm}{     ic.remove\PYGZus{}interval(3, 6);}
-\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}Length: \PYGZdq{} \PYGZlt{}\PYGZlt{} ic.get\PYGZus{}length() \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // Remainder: [1, 2] and [7, 10] \PYGZhy{}\PYGZgt{} Length: 6}
-\PYG{c+cm}{     }
-\PYG{c+cm}{     // Check points}
-\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}Contains 2? \PYGZdq{} \PYGZlt{}\PYGZlt{} ic.contains(2) \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // Output: 1 (true)}
-\PYG{c+cm}{     cout \PYGZlt{}\PYGZlt{} \PYGZdq{}Contains 5? \PYGZdq{} \PYGZlt{}\PYGZlt{} ic.contains(5) \PYGZlt{}\PYGZlt{} \PYGZdq{}\PYGZbs{}n\PYGZdq{}; // Output: 0 (false)}
-\PYG{c+cm}{     }
-\PYG{c+cm}{     return 0;}
-\PYG{c+cm}{   \PYGZcb{}}
-\PYG{c+cm}{*/}
 \end{MintedVerbatim}

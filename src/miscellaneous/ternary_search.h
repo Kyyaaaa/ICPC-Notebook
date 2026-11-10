@@ -1,17 +1,3 @@
-/*
-   Idea:
-   - Finds the minimum or maximum of a Unimodal function (a function that 
-     strictly increases then strictly decreases, or vice-versa).
-   Two variants:
-   1. Floating-point: Iterate a fixed number of times (e.g., 200) instead 
-      of testing (R - L > eps). 200 iterations shrink the search space by 
-      (2/3)^200, which is enough for any floating-point precision limit.
-   2. Integer: Search until the range [L, R] is small (e.g., length <= 3), 
-      then use a simple linear scan. This avoids infinite loops caused by 
-      integer division rounding.
-*/
-// The unimodal function we want to optimize.
-// Example: f(x) = (x - 5)^2 + 10 (Minimum is at x = 5)
 double f_double(double x) {
   return (x - 5.0) * (x - 5.0) + 10.0;
 }

@@ -539,4 +539,58 @@ k_4&=f(t_n+h,y_n+hk_3),\\
 y_{n+1}&=y_n+\frac h6(k_1+2k_2+2k_3+k_4).
 \end{align*}
 
+\section{Probability and Expected Value}
+
+\subsection{Probability}
+
+Let $A,B$ be events. $\overline A$ is the complement of $A$.
+
+\begin{align*}
+P(\overline A) &= 1-P(A),\\
+P(A\cup B) &= P(A)+P(B)-P(A\cap B),\\
+P(A\setminus B) &= P(A)-P(A\cap B),\\
+P(A\mid B) &= \frac{P(A\cap B)}{P(B)} \quad (P(B)>0),\\
+P(A\cap B) &= P(A\mid B)P(B)\\
+              &= P(B\mid A)P(A).
+\end{align*}
+
+If $A,B$ are independent: $P(A\cap B)=P(A)P(B)$.
+
+\textbf{Total probability:} If $B_1,\ldots,B_m$ partition the sample space,
+\[
+P(A)=\sum_{i=1}^{m}P(A\mid B_i)P(B_i).
+\]
+\textbf{Bayes' rule:}
+\[
+P(B_i\mid A)=\frac{P(A\mid B_i)P(B_i)}{P(A)} \quad (P(A)>0).
+\]
+
+\subsection{Expected Value}
+
+For discrete $X$, let $p_x=P(X=x)$.
+\begin{align*}
+E[X] &= \sum_x x\,p_x,\\
+E[f(X)] &= \sum_x f(x)\,p_x,\\
+E[c] &= c,\\
+E[aX+b] &= aE[X]+b,\\
+E[X+Y] &= E[X]+E[Y],\\
+E\left[\sum_{i=1}^{m}X_i\right] &= \sum_{i=1}^{m}E[X_i].
+\end{align*}
+Linearity does \textbf{not} require independence.
+If $X,Y$ are independent: $E[XY]=E[X]E[Y]$.
+
+\textbf{Indicator:} $I_A=1$ if $A$ occurs, otherwise $0$.
+\[
+E[I_A]=P(A),\qquad E\left[\sum_i I_{A_i}\right]=\sum_i P(A_i).
+\]
+\textbf{Conditional expectation:} If $B_1,\ldots,B_m$ partition the sample space,
+\[
+E[X]=\sum_{i=1}^{m}P(B_i)E[X\mid B_i].
+\]
+\textbf{Tail sum:} For nonnegative integer-valued $X$,
+\[
+E[X]=\sum_{k=1}^{\infty}P(X\ge k).
+\]
+
+
 \end{document}
