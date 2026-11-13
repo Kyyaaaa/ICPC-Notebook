@@ -6,6 +6,25 @@
   - We assign TRUE to x if its SCC is topologically sorted AFTER NOT(x)'s SCC.
     (Tarjan assigns SCC IDs in reverse topological order, so col[x] < col[NOT(x)])
 */
+/*
+2-SAT Implication Graph (x, y are literals):
+
+x OR y        : NOT(x) -> y,      NOT(y) -> x
+x AND y       : NOT(x) -> x,      NOT(y) -> y
+x => y        : x -> y,           NOT(y) -> NOT(x)
+x == y        : x -> y,           y -> x,
+                NOT(x) -> NOT(y), NOT(y) -> NOT(x)
+x != y (XOR)  : x -> NOT(y),      y -> NOT(x),
+                NOT(x) -> y,      NOT(y) -> x
+NOT(x AND y)  : x -> NOT(y),      y -> NOT(x)
+
+Force x = 1   : NOT(x) -> x
+Force x = 0   : x -> NOT(x)
+
+IMPORTANT:
+- Each implication a -> b must also have NOT(b) -> NOT(a).
+- SAT iff col[x] != col[NOT(x)] for every variable x.
+*/
 
 const int N = 2e4 + 5;
 

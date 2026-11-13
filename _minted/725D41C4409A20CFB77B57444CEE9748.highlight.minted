@@ -7,6 +7,25 @@
 \PYG{c+cm}{  \PYGZhy{} We assign TRUE to x if its SCC is topologically sorted AFTER NOT(x)\PYGZsq{}s SCC.}
 \PYG{c+cm}{    (Tarjan assigns SCC IDs in reverse topological order, so col[x] \PYGZlt{} col[NOT(x)])}
 \PYG{c+cm}{*/}
+\PYG{c+cm}{/*}
+\PYG{c+cm}{2\PYGZhy{}SAT Implication Graph (x, y are literals):}
+
+\PYG{c+cm}{x OR y        : NOT(x) \PYGZhy{}\PYGZgt{} y,      NOT(y) \PYGZhy{}\PYGZgt{} x}
+\PYG{c+cm}{x AND y       : NOT(x) \PYGZhy{}\PYGZgt{} x,      NOT(y) \PYGZhy{}\PYGZgt{} y}
+\PYG{c+cm}{x =\PYGZgt{} y        : x \PYGZhy{}\PYGZgt{} y,           NOT(y) \PYGZhy{}\PYGZgt{} NOT(x)}
+\PYG{c+cm}{x == y        : x \PYGZhy{}\PYGZgt{} y,           y \PYGZhy{}\PYGZgt{} x,}
+\PYG{c+cm}{                NOT(x) \PYGZhy{}\PYGZgt{} NOT(y), NOT(y) \PYGZhy{}\PYGZgt{} NOT(x)}
+\PYG{c+cm}{x != y (XOR)  : x \PYGZhy{}\PYGZgt{} NOT(y),      y \PYGZhy{}\PYGZgt{} NOT(x),}
+\PYG{c+cm}{                NOT(x) \PYGZhy{}\PYGZgt{} y,      NOT(y) \PYGZhy{}\PYGZgt{} x}
+\PYG{c+cm}{NOT(x AND y)  : x \PYGZhy{}\PYGZgt{} NOT(y),      y \PYGZhy{}\PYGZgt{} NOT(x)}
+
+\PYG{c+cm}{Force x = 1   : NOT(x) \PYGZhy{}\PYGZgt{} x}
+\PYG{c+cm}{Force x = 0   : x \PYGZhy{}\PYGZgt{} NOT(x)}
+
+\PYG{c+cm}{IMPORTANT:}
+\PYG{c+cm}{\PYGZhy{} Each implication a \PYGZhy{}\PYGZgt{} b must also have NOT(b) \PYGZhy{}\PYGZgt{} NOT(a).}
+\PYG{c+cm}{\PYGZhy{} SAT iff col[x] != col[NOT(x)] for every variable x.}
+\PYG{c+cm}{*/}
 
 \PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{N}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mf}{2e4}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{p}{;}
 

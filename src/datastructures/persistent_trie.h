@@ -39,43 +39,12 @@ int add_version(int prev_root, int val) {
   return cur_root;
 }
 
-// 4. Query Maximum XOR with 'val' using combinations of versions.
-// Example: Query on a tree path from u to v with LCA p, parent of p is pp.
-// The effective count of a node is: num[x] + num[y] - num[p] - num[pp].
-int query_max_xor(int rootX, int rootY, int rootP, int rootPP, int val) {
-  int res = 0;
-  int x = rootX, y = rootY, p = rootP, pp = rootPP;
-  for (int i = LOG_MAX; i >= 0; i--) {
-    int v = (val >> i) & 1;
-    int count_opposite = num[t[x][v ^ 1]] + num[t[y][v ^ 1]] 
-                       - num[t[p][v ^ 1]] - num[t[pp][v ^ 1]];
-    if (count_opposite > 0) {
-      res |= (1 << i);
-      x = t[x][v ^ 1];
-      y = t[y][v ^ 1];
-      p = t[p][v ^ 1];
-      pp = t[pp][v ^ 1];
-    } else {
-      x = t[x][v];
-      y = t[y][v];
-      p = t[p][v];
-      pp = t[pp][v];
-    }
-  }
-  return res;
-}
-
 /*
-   USAGE EXAMPLE (Max XOR in an array from L to R):
+   USAGE EXAMPLE:
    
    // 1. Build prefix versions
    init_trie();
    for (int i = 1; i <= n; i++) {
      root[i] = add_version(root[i - 1], a[i]);
    }
-   
-   // 2. Query Max XOR with 'val' in subarray [L, R]
-   // For arrays, the effective tree is root[R] - root[L-1].
-   // You can use a modified query function that only takes 2 roots:
-   // count_opposite = num[t[rootR][v ^ 1]] - num[t[rootL_minus_1][v ^ 1]];
 */

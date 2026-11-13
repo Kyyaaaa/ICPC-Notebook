@@ -10,7 +10,7 @@
 \contentsline {subsection}{\numberline {2.2}Persistent Segment Tree}{2}{}%
 \contentsline {subsection}{\numberline {2.3}Trie}{3}{}%
 \contentsline {subsection}{\numberline {2.4}Persistent Trie}{3}{}%
-\contentsline {subsection}{\numberline {2.5}Fenwick Tree Walk}{4}{}%
+\contentsline {subsection}{\numberline {2.5}Fenwick Tree Walk}{3}{}%
 \contentsline {subsection}{\numberline {2.6}Fenwick Tree 2D}{4}{}%
 \contentsline {subsection}{\numberline {2.7}XOR Basis}{4}{}%
 \contentsline {subsection}{\numberline {2.8}Bipartite DSU Rollback}{5}{}%
@@ -33,7 +33,7 @@
 \contentsline {subsection}{\numberline {4.1}DP Digit Optimization 1}{15}{}%
 \contentsline {subsection}{\numberline {4.2}DP Digit Optimization 2}{15}{}%
 \contentsline {subsection}{\numberline {4.3}DP SoS}{15}{}%
-\contentsline {subsection}{\numberline {4.4}DP Divide And Conquer}{16}{}%
+\contentsline {subsection}{\numberline {4.4}DP Divide And Conquer}{15}{}%
 \contentsline {section}{\numberline {5}Strings}{16}{}%
 \contentsline {subsection}{\numberline {5.1}KMP}{16}{}%
 \contentsline {subsection}{\numberline {5.2}Z Function}{16}{}%
